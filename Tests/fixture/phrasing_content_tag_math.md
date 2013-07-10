@@ -1,0 +1,1 @@
+Lorem ipsum<math xmlns='http://www.w3.org/1998/Math/MathML'><mi>t2</mi><mo>=</mo><mfrac><mi>t1</mi><msqrt><mrow><mn>1</mn><mo>-</mo><mfrac><msup><mi>v</mi><mn>2</mn></msup><msup><mi>C</mi><mn>2</mn></msup></mfrac></mrow></msqrt></mfrac></math> dolor sit amet,

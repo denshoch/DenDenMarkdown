@@ -44,9 +44,15 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
         parent::__construct();
     }
 
+    # Option for adding epub:type attribute.
+    public $epubtype = true;
+
     # Optional class attribute for footnote links and backlinks.
     public $fn_link_class = "noteref";
     public $fn_backlink_class = "";
+
+    # Optionsl class attribute for pagebreak.
+    public $pagebreak_class = "pagenum";
 
     # Tags that are always treated as block tags:
     protected $block_tags_re = 'address|article|aside|blockquote|body|center|dd|details|dialog|dir|div|dl|dt|figcaption|figure|footer|h[1-6]|header|hgroup|hr|html|legend|listing|menu|nav|ol|p|plaintext|pre|section|summary|style|table|ul|xmp';
@@ -104,8 +110,22 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
         } else {
             $content = '';
         }
+        $title = $this->encodeAttribute($title);
 
-        $result = "<div class=\"pagenum\" epub:type=\"pagebreak\" title=\"$title\">";
+        $attr = "";
+        $id = "pagenum_$title";
+        $attr .= " id=\"$id\"";
+        if ($this->pagebreak_class != "") {
+            $class = $this->pagebreak_class;
+            $class = $this->encodeAttribute($class);
+            $attr .= " class=\"$class\"";
+        }
+        $attr .= " title=\"$title\"";
+        if($this->epubtype) {
+            $attr .= " epub:type=\"pagebreak\"";
+        }
+
+        $result = "<div$attr>";
         $result .=  $content;
         $result .= "</div>";
 
@@ -121,8 +141,22 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
         } else {
             $content = '';
         }
+        $title = $this->encodeAttribute($title);
 
-        $result = "<span class=\"pagenum\" epub:type=\"pagebreak\" title=\"$title\">";
+        $attr = "";
+        $id = "pagenum_$title";
+        $attr .= " id=\"$id\"";
+        if ($this->pagebreak_class != "") {
+            $class = $this->pagebreak_class;
+            $class = $this->encodeAttribute($class);
+            $attr .= " class=\"$class\"";
+        }
+        $attr .= " title=\"$title\"";
+        if($this->epubtype) {
+            $attr .= " epub:type=\"pagebreak\"";
+        }
+
+        $result = "<span$attr>";
         $result .=  $content;
         $result .= "</span>";
 
@@ -258,7 +292,11 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
 
         if (!empty($this->footnotes_ordered)) {
             $text .= "\n\n";
-            $text .= "<div class=\"footnotes\" epub:type=\"footnotes\">\n"; // add epub:type
+            $text .= "<div class=\"footnotes\"";
+            if($this->epubtype) {
+                $text .= " epub:type=\"footnotes\"";
+            }
+            $text .= ">\n";
             $text .= "<hr". $this->empty_element_suffix ."\n";
             $text .= "<ol>\n\n";
 
@@ -305,7 +343,11 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
                 }
 
                 $text .= "<li>\n";
-                $text .= "<div id=\"fn_$note_id\" class=\"footnote\" epub:type=\"footnote\">\n"; //add epub:type
+                $text .= "<div id=\"fn_$note_id\" class=\"footnote\"";
+                if($this->epubtype){
+                    $text .= " epub:type=\"footnote\"";
+                }
+                $text .= ">\n";
                 $text .= $footnote . "\n";
                 $text .= "</div>\n";
                 $text .= "</li>\n\n";
@@ -337,7 +379,11 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
                 $ref_count_mark = $this->footnotes_ref_count[$node_id] += 1;
             }
 
-            $attr = " rel=\"footnote\"";
+            $attr = "";
+            $node_id = $this->encodeAttribute($node_id);
+            $attr .= " id=\"fnref_$node_id\"";
+            $attr .= " href=\"#fn_$node_id\"";
+            $attr .= " rel=\"footnote\"";
             if ($this->fn_link_class != "") {
                 $class = $this->fn_link_class;
                 $class = $this->encodeAttribute($class);
@@ -348,12 +394,14 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
                 $title = $this->encodeAttribute($title);
                 $attr .= " title=\"$title\"";
             }
+            if ($this->epubtype){
+                $attr .= " epub:type=\"noteref\"";
+            }
 
             $attr = str_replace("%%", $num, $attr);
-            $node_id = $this->encodeAttribute($node_id);
 
             return
-                "<a id=\"fnref_$node_id\" href=\"#fn_$node_id\"$attr epub:type=\"noteref\">$num</a>"
+                "<a$attr>$num</a>"
                 ;
         }
 

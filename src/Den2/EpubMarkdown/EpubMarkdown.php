@@ -19,7 +19,7 @@ namespace Den2\EpubMarkdown;
 class EpubMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const EPUBMARKDOWN_VERSION = "1.0";
+    const EPUBMARKDOWN_VERSION = "1.0.0";
 
     public function __construct()
     {

@@ -9,7 +9,7 @@ by Hiroshi Takase
 
 *Densho-chan the spirit of ebook will help your creation!*
 
-<!--![](densho-chan.png)  -->
+![](densho-chan.png)  
 Illustration (c) JCN Inc. & Garakuta.
 
 based on:

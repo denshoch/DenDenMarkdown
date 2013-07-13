@@ -33,11 +33,12 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
         $this->document_gamut += array(
             );
         $this->block_gamut += array(
-            "doDocBreaks"        =>  20,
+            "doOptionalHeaders" => 11,
+            "doDocBreaks"       => 20,
             );
         $this->span_gamut += array(
             "doPageNums"         =>  9,
-            "doRubies"            => 50,
+            "doRubies"           => 50,
             "doTcys"             => 50,
             );
 
@@ -51,7 +52,10 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
     public $fn_link_class = "noteref";
     public $fn_backlink_class = "";
 
-    # Optionsl class attribute for pagebreak.
+    # Optional class attribute for optional headers.
+    public $optionalheader_class = "bridgehead";
+
+    # Optional class attribute for pagebreaks.
     public $pagebreak_class = "pagenum";
 
     # Tags that are always treated as block tags:
@@ -64,6 +68,38 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
     # they appear:
     protected $clean_tags_re = 'script|math|svg|style';
 
+    protected function doOptionalHeaders($text)
+    {
+        # optional headers:
+        #   .Optional HEADER1 {#header1}
+        #
+        $text = preg_replace_callback('{
+                ^(\.)       # $1 = string of \.
+                [ ]*
+                (.+?)       # $2 = Header text
+                [ ]*
+                (?:[ ]+ '.$this->id_class_attr_catch_re.' )?     # $3 = id/class attributes
+                [ ]*
+                \n+
+            }xm',
+            array(&$this, '_doOptionalHeaders_callback'), $text);
+
+        return $text;
+    }
+    protected function _doOptionalHeaders_callback($matches) {
+        $level = strlen($matches[1]);
+        $dummy =& $matches[3];
+        //$str = $matches[3];
+        if($this->optionalheader_class != ""){
+            $dummy .= ".$this->optionalheader_class";
+        }
+        $attr  = $this->doExtraAttributes("p", $dummy);
+        if($this->epubtype){
+            $attr  .= " epub:type=\"bridgehead\"";
+        }
+        $block = "<p$attr><b>".$this->runSpanGamut($matches[2])."</b></p>";
+        return "\n" . $this->hashBlock($block) . "\n\n";
+    }
 
     protected function doDocBreaks($text)
     {

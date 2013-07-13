@@ -26,6 +26,7 @@ Features
 This library is implementing some features that make writing EPUB content documents easier.
 
 * GFM style line break
+* Optional headers(bridgehead)
 * Global Language Support
     - Japanese Ruby Annotation
     - Tate-Chu-Yoko

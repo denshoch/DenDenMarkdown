@@ -39,6 +39,11 @@ class EpumMarkdownTest extends PHPUnit_Framework_TestCase
         $this->assertTransformation('headings-setext');
     }
 
+    public function testOptionalHeaders()
+    {
+        $this->assertTransformation('optional-headers');
+    }
+
     public function testHeadingsSetextNumHyphens()
     {
         $this->assertTransformedFile('headings-setext.html', 'headings-setext-hyphens.md');

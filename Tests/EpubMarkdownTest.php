@@ -9,6 +9,11 @@ class EpumMarkdownTest extends PHPUnit_Framework_TestCase
         $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixture';
     }
 
+    public function testAbbr()
+    {
+        $this->assertTransformation('abbr');
+    }
+
     public function testParagraph()
     {
         $this->assertTransformation('paragraph');

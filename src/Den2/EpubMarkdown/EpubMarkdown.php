@@ -33,7 +33,7 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
         $this->document_gamut += array(
             );
         $this->block_gamut += array(
-            "doOptionalHeaders" => 11,
+            "doBlockTitles" => 11,
             "doDocBreaks"       => 20,
             );
         $this->span_gamut += array(
@@ -68,28 +68,28 @@ class EpubMarkdown extends \Michelf\MarkdownExtra
     # they appear:
     protected $clean_tags_re = 'script|math|svg|style';
 
-    protected function doOptionalHeaders($text)
+    protected function doBlockTitles($text)
     {
-        # optional headers:
-        #   .Optional HEADER1 {#header1}
+        # block titles:
+        #   .BLOCK TITLE {#title1}
         #
         $text = preg_replace_callback('{
                 ^(\.)       # $1 = string of \.
                 [ ]*
-                (.+?)       # $2 = Header text
+                (.+?)       # $2 = TITLE text
                 [ ]*
                 (?:[ ]+ '.$this->id_class_attr_catch_re.' )?     # $3 = id/class attributes
                 [ ]*
                 \n+
             }xm',
-            array(&$this, '_doOptionalHeaders_callback'), $text);
+            array(&$this, '_doBlockTitles_callback'), $text);
 
         return $text;
     }
-    protected function _doOptionalHeaders_callback($matches) {
+    protected function _doBlockTitles_callback($matches) {
         $level = strlen($matches[1]);
         $dummy =& $matches[3];
-        //$str = $matches[3];
+
         if($this->optionalheader_class != ""){
             $dummy .= ".$this->optionalheader_class";
         }

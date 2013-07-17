@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>EPUB Markdown</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/font-awesome-ie7.min.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/docs.css" rel="stylesheet">
+    <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+
+    <style type="text/css">
+    @font-face {
+      font-family: "densho-chan";
+      src: url("assets/font/den2font.otf");
+      font-style: normal;
+    }
+    .den2 {font-family: "densho-chan";
+    font-style: normal;
+    }
+    .den2:before { 
+      content: "\e000";
+    }
+    #den2 {
+      //margin: 0;
+      font-size: 280px;
+      line-height: 1;
+    }
+    .jumbotron {
+      background: #f8f8f8;
+      //box-shadow: none;
+    }
+    .jumbotron {
+      color: #666;
+    }
+    .bridgehead {
+      font-weight: bold;
+    }
+
+    
+        .color-inherit {color:inherit;font-weight:bold;}
+        .color-inherit:hover {text-decoration: none;}
+        #social-buttons {margin-top: 20px;}
+        #social-buttons li {margin-right: 8px;}
+
+    </style>
+
+  </head>
+
+    <body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+            <div class="jumbotron jumbotron-index hidden-print">
+              <div class="container">
+                <div class="row">
+                  <div class="span4">
+                    <div>
+                    <p id="den2" class="den2"></p>
+                  </div>
+                  </div>
+                  <div class="span6">
+                    <div class="hero-content">
+                      <h1>EPUB Markdown</h1>
+                      <p>Just a little help for them</p>
+                      <p><a href="/lostandfound/EpubMarkdown/archive/master.zip" class="btn btn-large btn-primary" title="Download this repository as a zip file" rel="nofollow">
+                    <span class="octicon octicon-cloud-download"></span>
+                    Download ZIP
+                  </a></p>
+                    </div>
+                  </div>
+                </div>
+            
+              </div>
+            </div>
+
+
+
+            <div class="container">
+              <section>
+
+            <!-- <p><a class="btn" href="https://github.com/lostandfound/EpubMarkdown" target="_blank"><i class="icon-github icon-fixed-width"></i> lostandfound/EpubMarkdown</a></p> -->
+
+
+            <h2>Syntax guide</h2>
+
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+
+            <p>
+
+            <nav id="toc">
+                <h3 class="page-header"><i class="icon-check-sign"></i> Contents</h3>
+                <ol class="nav nav-list">
+                    <li><a href="#ruby"><i class="icon-chevron-right"></i> Ruby Annotations</a></li>
+                    <li><a href="#tcy"><i class="icon-chevron-right"></i> Tate-Chu-Yoko</a></li>
+                    <li><a href="#footnotes"><i class="icon-chevron-right"></i> Footnotes</a></li>
+                    <li><a href="#pagenum"><i class="icon-chevron-right"></i> Page Numbers</a></li>
+                </ol>
+            </nav>
+
+            <section>
+
+            <h3 id="ruby" class="page-header"><i class="icon-check-sign"></i> Ruby Annotations</h3>
+
+            <p>EPUB Markdown supports <a href="http://www.w3.org/TR/html5/text-level-semantics.html#the-ruby-element"> HTML5 ruby <i class="icon-external-link"></i></a>.</p>
+
+            <h4><i class="icon-circle-blank"></i> Mono-ruby</h4>
+
+            <p class="bridgehead">What you write</p>
+
+            <pre><code>{君|くん}{子|し}は{和|わ}して{同|どう}ぜず
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+ 
+            <pre class="prettyprint lang-ml linenums"><code>&lt;ruby&gt;君&lt;rt&gt;くん&lt;/ruby&gt;&lt;ruby&gt;子&lt;rt&gt;し&lt;/ruby&gt;は&lt;ruby&gt;和&lt;rt&gt;わ&lt;/ruby&gt;して&lt;ruby&gt;同&lt;rt&gt;どう&lt;/ruby&gt;ぜず
+</code></pre>
+
+            <p class="bridgehead">What you see</p>
+
+            <div class="well">
+                <ruby>君<rt>くん</ruby><ruby>子<rt>し</ruby>は<ruby>和<rt>わ</ruby>して<ruby>同<rt>どう</ruby>ぜず
+            </div>
+
+            <h4><i class="icon-circle-blank"></i> Mono-ruby for compound words</h4>
+
+            <p class="bridgehead">What you write</p>
+
+            <pre><code>{鬼門|き|もん}の{方角|ほう|がく}を{凝視|ぎょう|し}しする
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+
+            <pre class="prettyprint lang-ml linenums"><code>&lt;ruby&gt;鬼&lt;rt&gt;き&lt;/rt&gt;門&lt;rt&gt;もん&lt;/rt&gt;&lt;/ruby&gt;の&lt;ruby&gt;方&lt;rt&gt;ほう&lt;/rt&gt;角&lt;rt&gt;がく&lt;/rt&gt;&lt;/ruby&gt;を&lt;ruby&gt;凝&lt;rt&gt;ぎょう&lt;/rt&gt;視&lt;rt&gt;し&lt;/rt&gt;&lt;/ruby&gt;する
+</code></pre>
+
+            <p class="bridgehead">What you see</p>
+
+            <div class="well">
+                 <ruby>鬼<rt>き</rt>門<rt>もん</rt></ruby>の<ruby>方<rt>ほう</rt>角<rt>がく</rt></ruby>を<ruby>凝<rt>ぎょう</rt>視<rt>し</rt></ruby>する
+            </div>
+
+            <h4><i class="icon-circle-blank"></i> Bopomofo</h4>
+
+            <p class="bridgehead">What you write</p>
+
+            <pre><code>{漢字|ㄏㄢˋ|ㄗˋ}
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+
+            <pre class="prettyprint lang-ml linenums"><code>&lt;ruby&gt;漢&lt;rt&gt;ㄏㄢˋ&lt;/rt&gt;字&lt;rt&gt;ㄗˋ&lt;/rt&gt;&lt;/ruby&gt;
+</code></pre>
+
+            <p class="bridgehead">What you see</p>
+
+            <div class="well">
+                <ruby>漢<rt>ㄏㄢˋ</rt>字<rt>ㄗˋ</rt></ruby>
+            </div>
+
+            <h4><i class="icon-circle-blank"></i> Group ruby</h4>
+
+            <p class="bridgehead">What you write</p>
+
+            <pre><code>{境界面|インターフェース}
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+            
+            <pre class="prettyprint lang-ml linenums"><code>&lt;ruby&gt;境界面&lt;rt&gt;インターフェース&lt;/rt&gt;&lt;/ruby&gt;
+</code></pre>
+
+            <div class="well">
+                <ruby>境界面<rt>インターフェース</rt></ruby>
+            </div>
+
+            <pre><code>{編集者|editor}
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+            
+            <pre class="prettyprint lang-ml linenums"><code>&lt;ruby&gt;編集者&lt;rt&gt;editor&lt;/rt&gt;&lt;/ruby&gt;
+</code></pre>
+
+            <p class="bridgehead">What you see</p>
+
+            <div class="well">
+                <ruby>編集者<rt>editor</rt></ruby>
+            </div>
+
+          </section>
+
+          <section>
+
+            <h3 id="tcy" class="page-header"><i class="icon-check-sign"></i> Tate-Chu-Yoko</h3>
+
+            <p class="bridgehead">What you write</p>
+
+            <pre><code>平成^20^年^4^月^16^日に
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+
+            <pre class="prettyprint lang-ml linenums"><code>&lt;p&gt;平成&lt;span class="tcy"&gt;20&lt;/span&gt;年&lt;span class="tcy"&gt;4&lt;/span&gt;月&lt;span class="tcy"&gt;16&lt;/span&gt;日に&lt;/p&gt;
+</code></pre>
+
+            <p class="bridgehead">What you see</p>
+
+            <div class="well" style="font-size:20px;line-height:2em;-epub-writing-mode:vertical-rl;-webkit-writing-mode:vertical-rl;"> 
+            <p style="line-height:2">平成<span class="tcy" style="-epub-text-combine:horizontal;-webkit-text-combine:horizontal;text-combine-horizontal:all;">20</span>年<span class="tcy" style="-epub-text-combine:horizontal;-webkit-text-combine:horizontal;text-combine-horizontal:all;">4</span>月<span class="tcy" style="-epub-text-combine:horizontal;-webkit-text-combine:horizontal;text-combine-horizontal:all;">16</span>日に</p>
+            </div>
+
+            <pre class="prettyprint lang-css linenums"><code>.tcy {
+  -epub-text-combine: horizontal;
+  text-combine-horizontal: all;
+}
+</code></pre>
+
+             </section>
+
+             <section>
+
+             <h3 id="footnotes" class="page-header"><i class="icon-check-sign"></i> Footnotes</h3>
+
+             <p class="bridgehead">What you write</p>
+
+             <pre><code>That's some text with a footnote.[^1]
+
+[^1]: And that's the footnote.
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+
+            <pre class="prettyprint lang-ml linenums"><code>&lt;div class="footnotes" epub:type="footnotes"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+
+&lt;li&gt;
+&lt;div id="fn_1" class="footnote" epub:type="footnote"&gt;
+&lt;p&gt;And that's the footnote.
+   &lt;a href="#fnref_1"&gt;&amp;#9166;&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+
+&lt;/ol&gt;
+&lt;/div&gt;
+</code></pre>
+
+          <p class="bridgehead">What you write</p>
+
+<div class="well"> 
+<p>That's some text with a footnote.
+   <a id="fnref_1" href="#fn_1" class="noteref" epub:type="noteref">1</a></p>
+
+<div class="footnotes" epub:type="footnotes">
+<hr />
+<ol>
+
+<li>
+<div id="fn_1" class="footnote" epub:type="footnote">
+<p>And that's the footnote.
+   <a href="#fnref_1">&#9166;</a></p>
+</div>
+</li>
+
+</ol>
+</div>
+</div>
+
+          </section>
+
+          <section>
+
+          <h3 id="pagenum" class="page-header"><i class="icon-check-sign"></i> Page Numbers</h3>
+
+          <h4><i class="icon-circle-blank"></i> Page number as content element</h4>
+
+          <p class="bridgehead">What you write</p>
+
+          <pre><code>Lorem ipsum dolor sit amet, [%%23]consectetur adipisicing elit, 
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+
+          <pre class="prettyprint lang-ml linenums"><code>&lt;p&gt;Lorem ipsum dolor sit amet, &lt;span id="pagenum_23" class="pagenum" title="23" epub:type="pagebreak"&gt;23&lt;/span&gt;consectetur adipisicing elit, &lt;/p&gt;
+</code></pre>
+
+            <p class="bridgehead">What you see</p>
+
+          <div class="well"> 
+              <p>Lorem ipsum dolor sit amet, <span id="pagenum_23" class="pagenum" title="23" epub:type="pagebreak">23</span>consectetur adipisicing elit, </p>
+          </div>
+
+          <h4><i class="icon-circle-blank"></i> Page number as empty element</h4>
+
+          <p class="bridgehead">What you write</p>
+
+          <pre><code>Lorem ipsum dolor sit amet, [%23]consectetur adipisicing elit, 
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+
+          <pre class="prettyprint lang-ml linenums"><code>&lt;p&gt;Lorem ipsum dolor sit amet, &lt;span id="pagenum_23" class="pagenum" title="23" epub:type="pagebreak"&gt;&lt;/span&gt;consectetur adipisicing elit, &lt;/p&gt;
+</code></pre>
+
+            <p class="bridgehead">What you see</p>
+
+          <div class="well">   
+              <p>Lorem ipsum dolor sit amet, <span id="pagenum_23" class="pagenum" title="23" epub:type="pagebreak"></span>consectetur adipisicing elit, </p>
+          </div>
+
+          <h4><i class="icon-circle-blank"></i> Page number as block element</h4>
+
+          <p class="bridgehead">What you write</p>
+
+          <pre><code>[%%23]
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, 
+</code></pre>
+
+            <p class="bridgehead">What you get</p>
+
+            <pre class="prettyprint lang-ml linenums"><code>&lt;div id="pagenum_23" class="pagenum" title="23" epub:type="pagebreak"&gt;23&lt;/div&gt;  
+ 
+&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, &lt;/p&gt;
+</code></pre>
+
+            <p class="bridgehead">What you see</p>
+
+            <div class="well">
+                <div id="pagenum_23" class="pagenum" title="23" epub:type="pagebreak">23</div>  
+                
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, </p>
+            </div>
+
+          </section>
+
+        </section>
+
+        </div>
+
+
+        <footer class="footer">
+            <p>Copyright © 2013 Hiroshi Takase</p>
+
+            <div id="social-buttons" class="hidden-print">
+              <div class="container">
+                <ul class="unstyled inline">
+                <li class="btn" ><a class="color-inherit" href="#"><i class="icon-twitter"> Twitter</i></a>
+                <li class="btn" ><a class="color-inherit" href="#"><i class="icon-facebook"> Facebook</i></a>
+                <li class="btn" ><a class="color-inherit" href="#"><i class="icon-github"></i> Github</a>
+                <li class="btn" ><a class="color-inherit" href="#"><i class="icon-google-plus"></i> Google+</a>
+                <li class="btn" ><a class="color-inherit" href="#"><i class="icon-envelope"></i> Mail</a>
+                </ul>
+              </div>
+            </div>
+        </footer>
+
+        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+        <script>prettyPrint();</script>
+    </body>
+</html>

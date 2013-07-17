@@ -1,1 +1,0 @@
-Please open the folder "secret_magic_box".

@@ -14,7 +14,7 @@
 # Copyright (c) 2004-2006 John Gruber  
 # <http://daringfireball.net/projects/markdown/>
 #
-namespace Den2\EpubMarkdown;
+namespace Landf;
 
 class EpubMarkdown extends \Michelf\MarkdownExtra
 {

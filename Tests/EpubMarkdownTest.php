@@ -5,8 +5,8 @@ class EpumMarkdownTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->parser = new Den2\EpubMarkdown\EpubMarkdown;
-        $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixture';
+        $this->parser = new Landf\EpubMarkdown;
+        $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures';
     }
 
     public function testAbbr()

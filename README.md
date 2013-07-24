@@ -2,7 +2,7 @@ EPUB Markdown
 =============
 
 a.k.a. でんでんマークダウン  
-(電書妹的Markdown/Den-Den Markdown).
+(電電 Markdown/Den-Den Markdown).
 
 by Hiroshi Takase  
 <http://densho.hatenablog.com/>

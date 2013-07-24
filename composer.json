@@ -1,6 +1,6 @@
 {
-    "name": "den2/epubmarkdown",
-    "description": "just another Markdown dialect for EPUB 3",
+    "name": "landf/epubmarkdown",
+    "description": "Just a little help for them. This is a Markdown dialect optimized for EPUB 3.",
     "type": "library",
     "keywords": ["Markdown", "EPUB"],
     "homepage": "http://conv.denshochan.com/",
@@ -20,6 +20,6 @@
         "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
-        "psr-0": { "Den2\\": "src/" }
+        "psr-0": { "Landf\\": "src/" }
     }
 }

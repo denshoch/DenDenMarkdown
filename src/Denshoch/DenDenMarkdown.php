@@ -1,8 +1,8 @@
 <?php
 #
-# EPUB Markdown - just another Markdown dialect for EPUB 3
+# Den-Den Markdown - just a little help for them.
 #
-# EPUB Markdown
+# Den-Den Markdown
 # Copyright (c) 2013 Hiroshi Takase
 # <http://densho.hatenablog.com/>
 #
@@ -14,9 +14,9 @@
 # Copyright (c) 2004-2006 John Gruber  
 # <http://daringfireball.net/projects/markdown/>
 #
-namespace Landf;
+namespace Denshoch;
 
-class EpubMarkdown extends \Michelf\MarkdownExtra
+class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
     const EPUBMARKDOWN_VERSION = "1.0.0";

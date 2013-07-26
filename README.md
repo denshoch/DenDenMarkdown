@@ -1,10 +1,9 @@
-EPUB Markdown
+Den-Den Markdown
 =============
 
-a.k.a. でんでんマークダウン  
-(電書妹的Markdown/Den-Den Markdown).
+a.k.a でんでんマークダウン / 電電 Markdown
 
-by Hiroshi Takase  
+by Densho Channel  
 <http://densho.hatenablog.com/>
 
 *Densho-chan the spirit of ebook will help your creation!*
@@ -61,8 +60,8 @@ Thanks
 Copyright and License
 ---------------------
 
-EPUB Markdown  
-Copyright (c) 2013 Hiroshi Takase  
+Den-Den Markdown  
+Copyright (c) 2013 Densho Channel  
 <http://densho.hatenablog.com/>  
 All rights reserved.
 

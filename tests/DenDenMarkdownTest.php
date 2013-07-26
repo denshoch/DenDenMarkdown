@@ -1,11 +1,11 @@
 <?php
 require_once 'vendor/autoload.php';
 
-class EpumMarkdownTest extends PHPUnit_Framework_TestCase
+class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->parser = new Landf\EpubMarkdown;
+        $this->parser = new Denshoch\DenDenMarkdown;
         $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures';
     }
 

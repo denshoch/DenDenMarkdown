@@ -1,5 +1,5 @@
 {
-    "name": "landf/epubmarkdown",
+    "name": "denshoch/dendenmarkdown",
     "description": "Just a little help for them. This is a Markdown dialect optimized for EPUB 3.",
     "type": "library",
     "keywords": ["Markdown", "EPUB"],
@@ -8,7 +8,7 @@
     "license": "BSD-3-Clause",
     "authors": [
         {
-            "name": "Hiroshi Takase",
+            "name": "Densho Channel",
             "homepage": "http://densho.hatenablog.com/",
             "role": "Developer"
         }
@@ -20,6 +20,6 @@
         "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
-        "psr-0": { "Landf\\": "src/" }
+        "psr-0": { "Denshoch\\": "src/" }
     }
 }

@@ -791,6 +791,11 @@ class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
       $this->assertTransformation('fenced-code-block-gfm');
     }
 
+    public function testFencedCodeBlockGfmWithClass()
+    {
+      $this->assertTransformation('fenced-code-block-gfm-with-class');
+    }
+
     public function testWithIdAttributeHn()
     {
         $this->assertTransformation('with-id-attribute-hn');

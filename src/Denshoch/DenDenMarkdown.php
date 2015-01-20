@@ -7,11 +7,11 @@
 # <http://densho.hatenablog.com/>
 #
 # PHP Markdown Extra
-# Copyright (c) 2004-2013 Michel Fortin  
+# Copyright (c) 2004-2013 Michel Fortin
 # <http://michelf.com/projects/php-markdown/>
 #
 # Original Markdown
-# Copyright (c) 2004-2006 John Gruber  
+# Copyright (c) 2004-2006 John Gruber
 # <http://daringfireball.net/projects/markdown/>
 #
 namespace Denshoch;
@@ -234,7 +234,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     protected function _doAutoLinks_twitter_callback($matches)
     {
         $account = $matches[1];
-        $link = "<a href=\"http://twitter.com/$account\">@$account</a>";
+        $link = "<a href=\"https://twitter.com/$account\">@$account</a>";
         return $this->hashPart($link);
     }
 

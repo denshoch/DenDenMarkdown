@@ -19,7 +19,7 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const EPUBMARKDOWN_VERSION = "1.0.0";
+    const DENDENMARKDOWN_VERSION = "1.1.0";
 
     public function __construct()
     {

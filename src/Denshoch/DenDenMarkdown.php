@@ -7,11 +7,11 @@
 # <http://densho.hatenablog.com/>
 #
 # PHP Markdown Extra
-# Copyright (c) 2004-2013 Michel Fortin  
+# Copyright (c) 2004-2013 Michel Fortin
 # <http://michelf.com/projects/php-markdown/>
 #
 # Original Markdown
-# Copyright (c) 2004-2006 John Gruber  
+# Copyright (c) 2004-2006 John Gruber
 # <http://daringfireball.net/projects/markdown/>
 #
 namespace Denshoch;
@@ -33,7 +33,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $this->document_gamut += array(
             );
         $this->block_gamut += array(
-            "doBlockTitles" => 11,
+            "doBlockTitles"     => 11,
             "doDocBreaks"       => 20,
             );
         $this->span_gamut += array(
@@ -63,10 +63,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     # Tags where markdown="1" default to span mode:
     protected $contain_span_tags_re = 'p|h[1-6]|li|dd|dt|td|th|legend|address';
-
-    # Tags which must not have their contents modified, no matter where
-    # they appear:
-    protected $clean_tags_re = 'script|math|svg|style';
 
     protected function doBlockTitles($text)
     {

@@ -780,10 +780,15 @@ class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTransformation('phrasing_content_tag_wbr');
     }
-    
-       public function testFencedCodeBlock()
+
+    public function testFencedCodeBlock()
     {
         $this->assertTransformation('fenced-code-block');
+    }
+
+    public function testFencedCodeBlockGfm()
+    {
+      $this->assertTransformation('fenced-code-block-gfm');
     }
 
     public function testWithIdAttributeHn()

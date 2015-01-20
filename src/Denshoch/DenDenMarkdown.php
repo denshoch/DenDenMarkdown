@@ -230,7 +230,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     protected function _doAutoLinks_twitter_callback($matches)
     {
         $account = $matches[1];
-        $link = "<a href=\"http://twitter.com/$account\">@$account</a>";
+        $link = "<a href=\"https://twitter.com/$account\">@$account</a>";
         return $this->hashPart($link);
     }
 

@@ -18,9 +18,13 @@
          timeoutForSmallTests="1"
          timeoutForMediumTests="10"
          timeoutForLargeTests="60"
-         strict="true"
          verbose="false">
+         <testsuites>
          <testsuite name="DenDenMarkdownTest">
          <directory>tests</directory>
          </testsuite>
+         <testsuite name="HarusameTest">
+         <directory>tests</directory>
+         </testsuite>
+         </testsuites>
 </phpunit>

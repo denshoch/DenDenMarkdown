@@ -37,15 +37,48 @@ This library is implementing some features that make writing EPUB content docume
 Requirement
 -----------
 
-This library package requires PHP 5.3 or later.
+This library package requires PHP 5.5 or later.
 
-Before PHP 5.3.7, pcre.backtrack_limit defaults to 100 000, which is too small
+Before PHP 5.5, pcre.backtrack_limit defaults to 100 000, which is too small
 in many situations. You might need to set it to higher values. Later PHP
 releases defaults to 1 000 000, which is usually fine.
 
 This library also requires [Composer][composer] to use dependent library PHP Markdown Extra. Before using this library, install Composer and execute `composer install`.
 
 [composer]: http://getcomposer.org/
+
+Usage
+------
+
+```php
+$parser = new Denshoch\DenDenMarkdown;
+$parser->tarnsform('Hello wolrd!');
+// => <p>Hello wolrd!</p>
+```
+
+### options
+
+You can pass [Harusame](https://github.com/denshoch/harusame) options which automatically add special classes for Tate-Chu-Yoko and text orientation in vertical writing mode. It is disabled by default.
+
+```php
+$options = array("autoTcy"=>true, "tcyDigit" => 3, "autoTextOrientation" => true);
+$parser = new Denshoch\DenDenMarkdown($options);
+$parser.transform('10円玉と100円玉がある♡');
+// => <p><span class="tcy">10</span>円玉と<span class="tcy">100</span>円玉がある<span class="upright">♡</span></p>
+// or
+$parser = new Denshoch\DenDenMarkdown();
+$parser.autoTcy = true;
+$parser.tcyDigit = 3;
+$parser.autoTextOrientation = true;
+$parser.transform('10円玉と100円玉がある♡');
+// => <p><span class="tcy">10</span>円玉と<span class="tcy">100</span>円玉がある<span class="upright">♡</span></p>
+```
+
+| key | type | inital | description |
+| --- | ---  | ---    | ---         |
+| autoTcy | boolean | false | Add `.tcy` class or not. |
+| tcyDigit | integer | 2   | max digits of number to add `.tcy` class. |
+| autoTextOrientation | boolean | false | Add `.upright` and `.sideways` class or not. |
 
 Syntax
 ------

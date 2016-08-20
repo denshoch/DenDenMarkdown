@@ -1,10 +1,11 @@
 <?php
+namespace Denshoch;
 #
 # Den-Den Markdown - just a little help for them.
 #
 # Den-Den Markdown
-# Copyright (c) 2013 Hiroshi Takase
-# <http://densho.hatenablog.com/>
+# Copyright (c) 2013-2016 Densho Channel
+# <http://denshochan.com/>
 #
 # PHP Markdown Extra
 # Copyright (c) 2004-2013 Michel Fortin
@@ -14,36 +15,11 @@
 # Copyright (c) 2004-2006 John Gruber
 # <http://daringfireball.net/projects/markdown/>
 #
-namespace Denshoch;
 
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.1.0";
-
-    public function __construct()
-    {
-    #
-    # Constructor function. Initialize the parser object.
-    #
-
-        $this->escape_chars .= '';
-
-
-        $this->document_gamut += array(
-            );
-        $this->block_gamut += array(
-            "doBlockTitles"     => 11,
-            "doDocBreaks"       => 20,
-            );
-        $this->span_gamut += array(
-            "doPageNums"         =>  9,
-            "doRubies"           => 50,
-            "doTcys"             => 50,
-            );
-
-        parent::__construct();
-    }
+    const DENDENMARKDOWN_VERSION = "1.2.0";
 
     # Option for adding epub:type attribute.
     public $epubtype = true;
@@ -58,11 +34,89 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     # Optional class attribute for pagebreaks.
     public $pagebreak_class = "pagenum";
 
+    public $autoTcy = false;
+
+    public $tcyDigit = 2;
+
+    public $autoTextOrientation = false;
+
+    public function __construct(array $options = null)
+    {
+    #
+    # Constructor function. Initialize the parser object.
+    #
+
+        $this->escape_chars .= '';
+
+        $this->document_gamut += array(
+            );
+        $this->block_gamut += array(
+            "doBlockTitles"     => 11,
+            "doDocBreaks"       => 20,
+            );
+        $this->span_gamut += array(
+            "doPageNums"         =>  9,
+            "doRubies"           => 50,
+            "doTcys"             => 50,
+            );
+
+        parent::__construct();
+ 
+        // Harusame options
+        if (false === is_null($options)){
+
+            if(array_key_exists("autoTcy", $options)){
+                if (is_bool($options["autoTcy"])) {
+                    $this->autoTcy = $options["autoTcy"];
+                } else {
+                    trigger_error("autoTcy should be boolean.");
+                }
+            }
+
+            if(array_key_exists("tcyDigit", $options)){
+                if (is_int($options["tcyDigit"])) {
+                    if ($options["tcyDigit"] < 2) {
+                        trigger_error("tcyDigit should be 2 or greater.", E_USER_ERROR);
+                    } else {
+                        $this->tcyDigit = $options["tcyDigit"];
+                    }
+                } else {
+                    trigger_error("tcyDigit should be int.");
+                }
+            }
+
+            if(array_key_exists("autoTextOrientation", $options)){
+                if (is_bool($options["autoTextOrientation"])) {
+                    $this->autoTextOrientation = $options["autoTextOrientation"];
+                } else {
+                    trigger_error("autoTextOrientation should be boolean.");
+                }
+            }
+        }
+    }
+
     # Tags that are always treated as block tags:
     protected $block_tags_re = 'address|article|aside|blockquote|body|center|dd|details|dialog|dir|div|dl|dt|figcaption|figure|footer|h[1-6]|header|hgroup|hr|html|legend|listing|menu|nav|ol|p|plaintext|pre|section|summary|style|table|ul|xmp';
 
     # Tags where markdown="1" default to span mode:
     protected $contain_span_tags_re = 'p|h[1-6]|li|dd|dt|td|th|legend|address';
+
+    # Override transform()
+    public function transform($text)
+    {
+        $text = parent::transform($text);
+
+        $harusame = new \Denshoch\Harusame(
+            array(
+                "autoTcy" => $this->autoTcy,
+                "tcyDigit" => $this->tcyDigit,
+                "autoTextOrientation" => $this->autoTextOrientation
+            )
+        );
+        $text = $harusame->transform($text);
+        
+        return $text;
+    }
 
     protected function doBlockTitles($text)
     {

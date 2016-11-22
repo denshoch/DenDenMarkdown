@@ -4,7 +4,7 @@
     "type": "library",
     "keywords": ["Markdown", "EPUB"],
     "homepage": "http://conv.denshochan.com/",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -15,7 +15,7 @@
     ],
     "require": {
         "michelf/php-markdown": "1.4.1",
-        "denshoch/harusame": "1.0.1"
+        "denshoch/harusame": "1.0.2"
     },
     "require-dev": {
         "phpunit/phpunit": "4.8.0"

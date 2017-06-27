@@ -1,9 +1,9 @@
 <?php
 namespace Denshoch;
 #
-# Den-Den Markdown - just a little help for them.
+# DenDenMarkdown - just a little help for them.
 #
-# Den-Den Markdown
+# DenDen Markdown
 # Copyright (c) 2013-2016 Densho Channel
 # <http://denshochan.com/>
 #
@@ -19,10 +19,10 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.2.0";
+    const DENDENMARKDOWN_VERSION = "1.2.3";
 
     # Option for adding epub:type attribute.
-    public $epubtype = true;
+    public $epubType = true;
 
     # Optional class attribute for footnote links and backlinks.
     public $fn_link_class = "noteref";
@@ -61,7 +61,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             );
 
         parent::__construct();
- 
+
         // Harusame options
         if (false === is_null($options)){
 
@@ -92,6 +92,14 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     trigger_error("autoTextOrientation should be boolean.");
                 }
             }
+
+            if(array_key_exists("epubType", $options)){
+                if (is_bool($options["epubType"])) {
+                    $this->epubType = $options["epubType"];
+                } else {
+                    trigger_error("epubType should be boolean.");
+                }
+            }
         }
     }
 
@@ -114,7 +122,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             )
         );
         $text = $harusame->transform($text);
-        
+
         return $text;
     }
 
@@ -144,7 +152,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $dummy .= ".$this->optionalheader_class";
         }
         $attr  = $this->doExtraAttributes("p", $dummy);
-        if($this->epubtype){
+        if($this->epubType){
             $attr  .= " epub:type=\"bridgehead\"";
         }
         $block = "<p$attr><b>".$this->runSpanGamut($matches[2])."</b></p>";
@@ -207,7 +215,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr .= " class=\"$class\"";
         }
         $attr .= " title=\"$title\"";
-        if($this->epubtype) {
+        if($this->epubType) {
             $attr .= " epub:type=\"pagebreak\"";
         }
 
@@ -238,7 +246,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr .= " class=\"$class\"";
         }
         $attr .= " title=\"$title\"";
-        if($this->epubtype) {
+        if($this->epubType) {
             $attr .= " epub:type=\"pagebreak\"";
         }
 
@@ -379,7 +387,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         if (!empty($this->footnotes_ordered)) {
             $text .= "\n\n";
             $text .= "<div class=\"footnotes\"";
-            if($this->epubtype) {
+            if($this->epubType) {
                 $text .= " epub:type=\"footnotes\"";
             }
             $text .= ">\n";
@@ -430,7 +438,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
                 $text .= "<li>\n";
                 $text .= "<div id=\"fn_$note_id\" class=\"footnote\"";
-                if($this->epubtype){
+                if($this->epubType){
                     $text .= " epub:type=\"footnote\"";
                 }
                 $text .= ">\n";
@@ -480,7 +488,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $title = $this->encodeAttribute($title);
                 $attr .= " title=\"$title\"";
             }
-            if ($this->epubtype){
+            if ($this->epubType){
                 $attr .= " epub:type=\"noteref\"";
             }
 

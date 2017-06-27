@@ -886,6 +886,30 @@ class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
         $this->assertTransformation('with-multi-attributes-fenced-code-block');
     }
 
+    public function testFootnoteWithoutEpubType()
+    {
+        $this->parser->epubType = false;
+        $this->assertTransformation('footnote-without-epub-type');
+    }
+
+    public function testPageNumberWithoutEpubType()
+    {
+        $this->parser->epubType = false;
+        $this->assertTransformation('page-number-without-epub-type');
+    }
+
+    public function testPageNumberTextWithoutEpubType()
+    {
+        $this->parser->epubType = false;
+        $this->assertTransformation('page-number-text-without-epub-type');
+    }
+
+    public function testPageBreakWithoutEpubType()
+    {
+        $this->parser->epubType = false;
+        $this->assertTransformation('page-break-inline-without-epub-type');
+    }
+
     protected function assertTransformation($fixtureName)
     {
         $sourceFile = $fixtureName . '.md';

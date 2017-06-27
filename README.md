@@ -1,10 +1,8 @@
-Den-Den Markdown
+DenDenMarkdown (でんでんマークダウン)
 =============
 
-a.k.a でんでんマークダウン / 電電 Markdown
-
 by Densho Channel  
-<http://densho.hatenablog.com/>
+<http://denshochan.com/>
 
 *Densho-chan the spirit of ebook will help your creation!*
 
@@ -67,10 +65,10 @@ $parser.transform('10円玉と100円玉がある♡');
 // => <p><span class="tcy">10</span>円玉と<span class="tcy">100</span>円玉がある<span class="upright">♡</span></p>
 // or
 $parser = new Denshoch\DenDenMarkdown();
-$parser.autoTcy = true;
-$parser.tcyDigit = 3;
-$parser.autoTextOrientation = true;
-$parser.transform('10円玉と100円玉がある♡');
+$parser->autoTcy = true;
+$parser->tcyDigit = 3;
+$parser->autoTextOrientation = true;
+$parser->transform('10円玉と100円玉がある♡');
 // => <p><span class="tcy">10</span>円玉と<span class="tcy">100</span>円玉がある<span class="upright">♡</span></p>
 ```
 
@@ -83,7 +81,7 @@ $parser.transform('10円玉と100円玉がある♡');
 Syntax
 ------
 
-Description of EPUB Markdown syntax is available on <http://conv.denshochan.com/markdown>. Sorry, currently Japanese Only.
+Description of EPUB Markdown syntax is available on <http://conv.denshochan.com/markdown>. Sorry, currently Japanese version only.
 
 Thanks
 ------
@@ -93,7 +91,7 @@ Thanks
 Copyright and License
 ---------------------
 
-Den-Den Markdown  
+DenDen Markdown  
 Copyright (c) 2013 Densho Channel  
 <http://densho.hatenablog.com/>  
 All rights reserved.

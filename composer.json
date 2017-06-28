@@ -4,7 +4,7 @@
     "type": "library",
     "keywords": ["Markdown", "EPUB"],
     "homepage": "http://conv.denshochan.com/",
-    "version": "1.2.4",
+    "version": "1.2.5",
     "license": "BSD-3-Clause",
     "authors": [
         {

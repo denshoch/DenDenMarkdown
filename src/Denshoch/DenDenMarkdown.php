@@ -421,16 +421,23 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
 
             $attr = "";
+
             if ($this->fn_backlink_class != "") {
                 $class = $this->fn_backlink_class;
                 $class = $this->encodeAttribute($class);
                 $attr .= " class=\"$class\"";
             }
+
             if ($this->fn_backlink_title != "") {
                 $title = $this->fn_backlink_title;
                 $title = $this->encodeAttribute($title);
                 $attr .= " title=\"$title\"";
             }
+
+            if ($this->dpubRole) {
+                $attr .= " role=\"doc-backlink\"";
+            }
+
             $num = 0;
 
             while (!empty($this->footnotes_ordered)) {

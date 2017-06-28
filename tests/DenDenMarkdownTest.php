@@ -904,10 +904,34 @@ class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
         $this->assertTransformation('page-number-text-without-epub-type');
     }
 
-    public function testPageBreakWithoutEpubType()
+    public function testPageBreakInlineWithoutEpubType()
     {
         $this->parser->epubType = false;
         $this->assertTransformation('page-break-inline-without-epub-type');
+    }
+
+    public function testFootnoteWithoutDpubRole()
+    {
+        $this->parser->dpubRole = false;
+        $this->assertTransformation('footnote-without-dpub-role');
+    }
+
+    public function testPageNumberWithoutDpubRole()
+    {
+        $this->parser->dpubRole = false;
+        $this->assertTransformation('page-number-without-dpub-role');
+    }
+
+    public function testPageNumberTextWithoutDpubrole()
+    {
+        $this->parser->dpubRole = false;
+        $this->assertTransformation('page-number-text-without-dpub-role');
+    }
+
+    public function testPageInlineBreakWithoutDpubRole()
+    {
+        $this->parser->dpubRole = false;
+        $this->assertTransformation('page-break-inline-without-dpub-role');
     }
 
     protected function assertTransformation($fixtureName)

@@ -19,10 +19,13 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.2.3";
+    const DENDENMARKDOWN_VERSION = "1.2.4";
 
     # Option for adding epub:type attribute.
     public $epubType = true;
+
+    # Option for adding DPUB WAI-ARIA role attribute.
+    public $dpubRole = true;
 
     # Optional class attribute for footnote links and backlinks.
     public $fn_link_class = "noteref";
@@ -98,6 +101,14 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $this->epubType = $options["epubType"];
                 } else {
                     trigger_error("epubType should be boolean.");
+                }
+            }
+
+            if(array_key_exists("dpubRole", $options)){
+                if (is_bool($options["dpubRole"])) {
+                    $this->dpubRole = $options["dpubRole"];
+                } else {
+                    trigger_error("dpubRole should be boolean.");
                 }
             }
         }
@@ -219,6 +230,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr .= " epub:type=\"pagebreak\"";
         }
 
+        if($this->dpubRole) {
+            $attr .= " role=\"doc-pagebreak\"";
+        }
+
         $result = "<div$attr>";
         $result .=  $content;
         $result .= "</div>";
@@ -248,6 +263,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $attr .= " title=\"$title\"";
         if($this->epubType) {
             $attr .= " epub:type=\"pagebreak\"";
+        }
+
+        if($this->dpubRole) {
+            $attr .= " role=\"doc-pagebreak\"";
         }
 
         $result = "<span$attr>";
@@ -387,9 +406,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         if (!empty($this->footnotes_ordered)) {
             $text .= "\n\n";
             $text .= "<div class=\"footnotes\"";
+
             if($this->epubType) {
                 $text .= " epub:type=\"footnotes\"";
             }
+
+            if($this->dpubRole) {
+                $text .= " role=\"doc-endnotes\"";
+            }
+
             $text .= ">\n";
             $text .= "<hr". $this->empty_element_suffix ."\n";
             $text .= "<ol>\n\n";
@@ -438,9 +463,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
                 $text .= "<li>\n";
                 $text .= "<div id=\"fn_$note_id\" class=\"footnote\"";
+
                 if($this->epubType){
                     $text .= " epub:type=\"footnote\"";
                 }
+
+                if($this->dpubRole){
+                    $text .= " role=\"doc-endnote\"";
+                }
+
                 $text .= ">\n";
                 $text .= $footnote . "\n";
                 $text .= "</div>\n";
@@ -483,13 +514,19 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $class = $this->encodeAttribute($class);
                 $attr .= " class=\"$class\"";
             }
+
             if ($this->fn_link_title != "") {
                 $title = $this->fn_link_title;
                 $title = $this->encodeAttribute($title);
                 $attr .= " title=\"$title\"";
             }
+
             if ($this->epubType){
                 $attr .= " epub:type=\"noteref\"";
+            }
+
+            if ($this->dpubRole){
+                $attr .= " role=\"doc-noteref\"";
             }
 
             $attr = str_replace("%%", $num, $attr);

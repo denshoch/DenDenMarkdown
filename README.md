@@ -2,7 +2,7 @@ DenDenMarkdown (でんでんマークダウン)
 =============
 
 by Densho Channel  
-<http://denshochan.com/>
+<https://denshochan.com/>
 
 *Densho-chan the spirit of ebook will help your creation!*
 
@@ -81,7 +81,7 @@ $parser->transform('10円玉と100円玉がある♡');
 Syntax
 ------
 
-Description of EPUB Markdown syntax is available on <http://conv.denshochan.com/markdown>. Sorry, currently Japanese version only.
+Description of EPUB Markdown syntax is available on <https://conv.denshochan.com/markdown>. Sorry, currently Japanese version only.
 
 Thanks
 ------

@@ -3,13 +3,13 @@
     "description": "Just a little help for them. This is a Markdown dialect optimized for EPUB 3.",
     "type": "library",
     "keywords": ["Markdown", "EPUB"],
-    "homepage": "http://conv.denshochan.com/",
-    "version": "1.2.5",
+    "homepage": "https://denshochan.com/markdown",
+    "version": "1.2.6",
     "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Densho Channel",
-            "homepage": "http://denshochan.com/",
+            "homepage": "https://denshochan.com/",
             "role": "Developer"
         }
     ],

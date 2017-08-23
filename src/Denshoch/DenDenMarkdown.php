@@ -4,8 +4,8 @@ namespace Denshoch;
 # DenDenMarkdown - just a little help for them.
 #
 # DenDen Markdown
-# Copyright (c) 2013-2016 Densho Channel
-# <http://denshochan.com/>
+# Copyright (c) 2013-2017 Densho Channel
+# <https://denshochan.com/>
 #
 # PHP Markdown Extra
 # Copyright (c) 2004-2013 Michel Fortin
@@ -19,7 +19,7 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.2.4";
+    const DENDENMARKDOWN_VERSION = "1.2.5";
 
     # Option for adding epub:type attribute.
     public $epubType = true;
@@ -124,6 +124,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public function transform($text)
     {
         $text = parent::transform($text);
+
+        $text = \Denshoch\Utils::removeCtrlChars($text); // Remove control chars
 
         $harusame = new \Denshoch\Harusame(
             array(

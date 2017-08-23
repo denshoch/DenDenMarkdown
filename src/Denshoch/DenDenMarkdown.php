@@ -19,7 +19,7 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.2.5";
+    const DENDENMARKDOWN_VERSION = "1.2.7";
 
     # Option for adding epub:type attribute.
     public $epubType = true;

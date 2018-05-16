@@ -14,6 +14,8 @@ class Utils
      */
     public static function removeCtrlChars($text)
     {
+        $text = str_replace("\xe2\x80\xa8", '', $text);
+        $text = str_replace("\xe2\x80\xa9", '', $text);
         return preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/', '', $text);
     }
 }

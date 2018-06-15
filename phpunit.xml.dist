@@ -29,5 +29,11 @@
          <testsuite name="UtilsTest">
          <directory>tests</directory>
          </testsuite>
+         <testsuite name="CustomFootnoteTest">
+         <directory>tests</directory>
+         </testsuite>
+         <testsuite name="CustomPageNumberTest">
+         <directory>tests</directory>
+         </testsuite>
          </testsuites>
 </phpunit>

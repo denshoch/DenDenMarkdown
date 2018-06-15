@@ -19,7 +19,7 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.2.7";
+    const DENDENMARKDOWN_VERSION = "1.2.8";
 
     # Option for adding epub:type attribute.
     public $epubType = true;
@@ -28,14 +28,19 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public $dpubRole = true;
 
     # Optional class attribute for footnote links and backlinks.
-    public $fn_link_class = "noteref";
-    public $fn_backlink_class = "";
+    public $footnoteLinkClass = "noteref";
+    public $footnoteLinkContentPre = "";
+    public $footnoteLinkContentPost = "";
+    public $footnoteBacklinkClass = "";
+    public $footnoteBacklinkContent = "&#9166;";
 
     # Optional class attribute for optional headers.
     public $optionalheader_class = "bridgehead";
 
     # Optional class attribute for pagebreaks.
-    public $pagebreak_class = "pagenum";
+    public $pageNumberClass = "pagenum";
+    public $pageNumberContentPre = "";
+    public $pageNumberContentPost = "";
 
     public $autoTcy = false;
 
@@ -109,6 +114,78 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $this->dpubRole = $options["dpubRole"];
                 } else {
                     trigger_error("dpubRole should be boolean.");
+                }
+            }
+
+            if(array_key_exists("footnoteLinkClass", $options)){
+                if (is_string($options["footnoteLinkClass"])) {
+                    $this->footnoteLinkClass = $options["footnoteLinkClass"];
+                } else {
+                    trigger_error("footnoteLinkClass should be string.");
+                }
+            }
+
+            if(array_key_exists("footnoteLinkContentPre", $options)){
+                if (is_string($options["footnoteLinkContentPre"])) {
+                    $this->footnoteLinkContentPre = $options["footnoteLinkContentPre"];
+                } else {
+                    trigger_error("footnoteLinkContentPre should be string.");
+                }
+            }
+
+            if(array_key_exists("footnoteLinkContentPost", $options)){
+                if (is_string($options["footnoteLinkContentPost"])) {
+                    $this->footnoteLinkContentPost = $options["footnoteLinkContentPost"];
+                } else {
+                    trigger_error("footnoteLinkContentPost should be string.");
+                }
+            }
+
+            if(array_key_exists("footnoteLinkClass", $options)){
+                if (is_string($options["footnoteLinkClass"])) {
+                    $this->footnoteLinkClass = $options["footnoteLinkClass"];
+                } else {
+                    trigger_error("footnoteLinkClass should be string.");
+                }
+            }
+
+            if(array_key_exists("footnoteBacklinkClass", $options)){
+                if (is_string($options["footnoteBacklinkClass"])) {
+                    $this->footnoteBacklinkClass = $options["footnoteBacklinkClass"];
+                } else {
+                    trigger_error("footnoteBacklinkClass should be string.");
+                }
+            }
+
+            if(array_key_exists("footnoteBacklinkContent", $options)){
+                if (is_string($options["footnoteBacklinkContent"])) {
+                    $this->footnoteBacklinkContent = $options["footnoteBacklinkContent"];
+                } else {
+                    trigger_error("footnoteBacklinkContent should be string.");
+                }
+            }
+
+            if(array_key_exists("pageNumberClass", $options)){
+                if (is_string($options["pageNumberClass"])) {
+                    $this->pageNumberClass = $options["pageNumberClass"];
+                } else {
+                    trigger_error("pageNumberClass should be string.");
+                }
+            }
+
+            if(array_key_exists("pageNumberContentPre", $options)){
+                if (is_string($options["pageNumberContentPre"])) {
+                    $this->pageNumberContentPre = $options["pageNumberContentPre"];
+                } else {
+                    trigger_error("pageNumberContentPre should be string.");
+                }
+            }
+
+            if(array_key_exists("pageNumberContentPost", $options)){
+                if (is_string($options["pageNumberContentPost"])) {
+                    $this->pageNumberContentPost = $options["pageNumberContentPost"];
+                } else {
+                    trigger_error("pageNumberContentPost should be string.");
                 }
             }
         }
@@ -213,17 +290,17 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $title = $matches[3];
 
         if ("%" == $matches[2]) {
-            $content = $title;
+            $content = $this->pageNumberContentPre . $title . $this->pageNumberContentPost;
         } else {
             $content = '';
         }
         $title = $this->encodeAttribute($title);
 
         $attr = "";
-        $id = "pagenum_$title";
+        $id = "pagenum_${title}";
         $attr .= " id=\"$id\"";
-        if ($this->pagebreak_class != "") {
-            $class = $this->pagebreak_class;
+        if ($this->pageNumberClass != "") {
+            $class = $this->pageNumberClass;
             $class = $this->encodeAttribute($class);
             $attr .= " class=\"$class\"";
         }
@@ -257,8 +334,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $attr = "";
         $id = "pagenum_$title";
         $attr .= " id=\"$id\"";
-        if ($this->pagebreak_class != "") {
-            $class = $this->pagebreak_class;
+        if ($this->pageNumberClass != "") {
+            $class = $this->pageNumberClass;
             $class = $this->encodeAttribute($class);
             $attr .= " class=\"$class\"";
         }
@@ -424,8 +501,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
             $attr = "";
 
-            if ($this->fn_backlink_class != "") {
-                $class = $this->fn_backlink_class;
+            if ($this->footnoteBacklinkClass != "") {
+                $class = $this->footnoteBacklinkClass;
                 $class = $this->encodeAttribute($class);
                 $attr .= " class=\"$class\"";
             }
@@ -459,9 +536,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $note_id = $this->encodeAttribute($note_id);
 
                 # Prepare backlink, multiple backlinks if multiple references
-                $backlink = "<a href=\"#fnref_$note_id\"$attr>&#9166;</a>";
+                $backlink = "<a href=\"#fnref_$note_id\"$attr>$this->footnoteBacklinkContent</a>";
                 for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#fnref$ref_num_$note_id\"$attr>&#9166;</a>";
+                    $backlink .= " <a href=\"#fnref$ref_num_$note_id\"$attr>$this->footnoteBacklinkContent</a>";
                 }
                 # Add backlink to last paragraph; create new paragraph if needed.
                 if (preg_match('{</p>$}', $footnote)) {
@@ -518,8 +595,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr .= " id=\"fnref_$node_id\"";
             $attr .= " href=\"#fn_$node_id\"";
             $attr .= " rel=\"footnote\"";
-            if ($this->fn_link_class != "") {
-                $class = $this->fn_link_class;
+            if ($this->footnoteLinkClass != "") {
+                $class = $this->footnoteLinkClass;
                 $class = $this->encodeAttribute($class);
                 $attr .= " class=\"$class\"";
             }
@@ -541,7 +618,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr = str_replace("%%", $num, $attr);
 
             return
-                "<a$attr>$num</a>"
+                "<a$attr>$this->footnoteLinkContentPre${num}$this->footnoteLinkContentPost</a>"
                 ;
         }
 

@@ -27,26 +27,28 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     # Option for adding DPUB WAI-ARIA role attribute.
     public $dpubRole = true;
 
-    # Optional class attribute for footnote links and backlinks.
+    # Optional class attributes for footnote links and backlinks.
     public $footnoteLinkClass = "noteref";
     public $footnoteLinkContentPre = "";
     public $footnoteLinkContentPost = "";
     public $footnoteBacklinkClass = "";
     public $footnoteBacklinkContent = "&#9166;";
 
-    # Optional class attribute for optional headers.
+    # Optional class attributes for optional headers.
     public $optionalheader_class = "bridgehead";
 
-    # Optional class attribute for pagebreaks.
+    # Optional class attributes for pagebreaks.
     public $pageNumberClass = "pagenum";
     public $pageNumberContentPre = "";
     public $pageNumberContentPost = "";
 
+    # Optional class attributes for Harusame.
     public $autoTcy = false;
-
     public $tcyDigit = 2;
-
     public $autoTextOrientation = false;
+
+    # Optional class attributes for ruby
+    public $rubyFallback = false;
 
     public function __construct(array $options = null)
     {

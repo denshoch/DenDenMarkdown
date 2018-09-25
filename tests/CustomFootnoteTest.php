@@ -16,12 +16,12 @@ EOT;
         $expected = <<< EOT
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="footnoteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
 
-<div class="footnotes" epub:type="footnotes" role="doc-endnotes">
+<div class="footnotes" epub:type="footnotes">
 <hr />
 <ol>
 
 <li>
-<div id="fn_1" class="footnote" epub:type="footnote" role="doc-endnote">
+<div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
 <p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">&#9166;</a></p>
 </div>
 </li>
@@ -50,12 +50,12 @@ EOT;
         $expected = <<< EOT
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">注1番</a>の段落です。</p>
 
-<div class="footnotes" epub:type="footnotes" role="doc-endnotes">
+<div class="footnotes" epub:type="footnotes">
 <hr />
 <ol>
 
 <li>
-<div id="fn_1" class="footnote" epub:type="footnote" role="doc-endnote">
+<div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
 <p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">&#9166;</a></p>
 </div>
 </li>
@@ -84,12 +84,12 @@ EOT;
         $expected = <<< EOT
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
 
-<div class="footnotes" epub:type="footnotes" role="doc-endnotes">
+<div class="footnotes" epub:type="footnotes">
 <hr />
 <ol>
 
 <li>
-<div id="fn_1" class="footnote" epub:type="footnote" role="doc-endnote">
+<div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
 <p>そして、これが脚注です。&#160;<a href="#fnref_1" class="backlink" role="doc-backlink">&#9166;</a></p>
 </div>
 </li>
@@ -118,12 +118,12 @@ EOT;
         $expected = <<< EOT
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
 
-<div class="footnotes" epub:type="footnotes" role="doc-endnotes">
+<div class="footnotes" epub:type="footnotes">
 <hr />
 <ol>
 
 <li>
-<div id="fn_1" class="footnote" epub:type="footnote" role="doc-endnote">
+<div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
 <p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">もどる</a></p>
 </div>
 </li>

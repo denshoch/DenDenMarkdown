@@ -492,10 +492,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $text .= " epub:type=\"footnotes\"";
             }
 
-            if($this->dpubRole) {
-                $text .= " role=\"doc-endnotes\"";
-            }
-
             $text .= ">\n";
             $text .= "<hr". $this->empty_element_suffix ."\n";
             $text .= "<ol>\n\n";
@@ -557,7 +553,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 }
 
                 if($this->dpubRole){
-                    $text .= " role=\"doc-endnote\"";
+                    $text .= " role=\"doc-footnote\"";
                 }
 
                 $text .= ">\n";

@@ -29,8 +29,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     # Optional class attributes for footnote links and backlinks.
     public $footnoteLinkClass = "noteref";
-    public $footnoteLinkContentPre = "";
-    public $footnoteLinkContentPost = "";
+    public $footnoteLinkContent = "%%";
     public $footnoteBacklinkClass = "";
     public $footnoteBacklinkContent = "&#9166;";
 
@@ -127,19 +126,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 }
             }
 
-            if(array_key_exists("footnoteLinkContentPre", $options)){
-                if (is_string($options["footnoteLinkContentPre"])) {
-                    $this->footnoteLinkContentPre = $options["footnoteLinkContentPre"];
+            if(array_key_exists("footnoteLinkContent", $options)){
+                if (is_string($options["footnoteLinkContent"])) {
+                    $this->footnoteLinkContent = $options["footnoteLinkContent"];
                 } else {
-                    trigger_error("footnoteLinkContentPre should be string.");
-                }
-            }
-
-            if(array_key_exists("footnoteLinkContentPost", $options)){
-                if (is_string($options["footnoteLinkContentPost"])) {
-                    $this->footnoteLinkContentPost = $options["footnoteLinkContentPost"];
-                } else {
-                    trigger_error("footnoteLinkContentPost should be string.");
+                    trigger_error("footnoteLinkContent should be string.");
                 }
             }
 
@@ -530,19 +521,21 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $footnote = preg_replace_callback('{F\x1Afn:(.*?)\x1A:}',
                     array($this, '_appendFootnotes_callback'), $footnote);
 
-                $attr = str_replace("%%", ++$num, $attr);
+                ++$num;
+                $attr = str_replace("%%", $num, $attr);
                 $note_id = $this->encodeAttribute($note_id);
+                $content = str_replace("%%", $num, $this->footnoteBacklinkContent);
 
                 # Prepare backlink, multiple backlinks if multiple references
-                $backlink = "<a href=\"#fnref_$note_id\"$attr>$this->footnoteBacklinkContent</a>";
+                $backlink = "<a href=\"#fnref_${note_id}\"${attr}>${content}</a>";
                 for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#fnref$ref_num_$note_id\"$attr>$this->footnoteBacklinkContent</a>";
+                    $backlink .= " <a href=\"#fnref$ref_num_${note_id}\"${attr}>${content}</a>";
                 }
                 # Add backlink to last paragraph; create new paragraph if needed.
                 if (preg_match('{</p>$}', $footnote)) {
-                    $footnote = substr($footnote, 0, -4) . "&#160;$backlink</p>";
+                    $footnote = substr($footnote, 0, -4) . "&#160;${backlink}</p>";
                 } else {
-                    $footnote .= "\n\n<p>$backlink</p>";
+                    $footnote .= "\n\n<p>${backlink}</p>";
                 }
 
                 $text .= "<li>\n";
@@ -614,9 +607,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             }
 
             $attr = str_replace("%%", $num, $attr);
+            $content = str_replace("%%", $num, $this->footnoteLinkContent);
 
             return
-                "<a$attr>$this->footnoteLinkContentPre${num}$this->footnoteLinkContentPost</a>"
+                "<a${attr}>${content}</a>"
                 ;
         }
 

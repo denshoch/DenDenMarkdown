@@ -39,7 +39,7 @@ EOT;
 
     public function testCustomFootnoteLinkContent()
     {
-    	  $parser = new Denshoch\DenDenMarkdown( array("footnoteLinkContentPre" => "注",  "footnoteLinkContentPost" => "番") );
+    	  $parser = new Denshoch\DenDenMarkdown( array("footnoteLinkContent" => "注%%番") );
 
         $source = <<< EOT
 これは脚注付き[^1]の段落です。
@@ -125,6 +125,36 @@ EOT;
 <li>
 <div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
 <p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">もどる</a></p>
+</div>
+</li>
+
+</ol>
+</div>
+
+
+EOT;
+
+        $actual = $parser->transform($source);
+        $this->assertEquals($expected, $actual);
+
+          $parser = new Denshoch\DenDenMarkdown( array("footnoteBacklinkContent" => "合印%%にもどる" ) );
+
+        $source = <<< EOT
+これは脚注付き[^1]の段落です。
+
+[^1]: そして、これが脚注です。
+EOT;
+
+        $expected = <<< EOT
+<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
+
+<div class="footnotes" epub:type="footnotes">
+<hr />
+<ol>
+
+<li>
+<div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
+<p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">合印1にもどる</a></p>
 </div>
 </li>
 

@@ -47,6 +47,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     # Optional class attributes for ruby
     public $rubyFallback = false;
+    public $rpOpen;
+    public $rpClose;
 
     public function __construct(array $options = null)
     {
@@ -98,6 +100,14 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $this->autoTextOrientation = $options["autoTextOrientation"];
                 } else {
                     trigger_error("autoTextOrientation should be boolean.");
+                }
+            }
+
+            if(array_key_exists("rubyFallback", $options)){
+                if (is_bool($options["rubyFallback"])) {
+                    $this->rubyFallback = $options["rubyFallback"];
+                } else {
+                    trigger_error("rubyFallback should be boolean.");
                 }
             }
 
@@ -172,6 +182,14 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     trigger_error("pageNumberContent should be string.");
                 }
             }
+        }
+
+        if ($this->rubyFallback === true) {
+            $this->rpOpen = "<rp>(</rp>";
+            $this->rpClose = "<rp>)</rp>";
+        } else {
+            $this->rpOpen = "";
+            $this->rpClose = ""; 
         }
     }
 
@@ -422,14 +440,20 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $rbcount = count($rbarray);
         $rtarray = explode("|", $matches[3]);
         $rtcount = count($rtarray);
+
         if ( $rbcount == $rtcount) {
+
             for ($i=0, $idx=0; $i < $rbcount; $i++) {
-                $result = $result.$rbarray[$idx]."<rt>".$rtarray[$idx]."</rt>";
+                $result = "${result}${rbarray[$idx]}{$this->rpOpen}<rt>${rtarray[$idx]}</rt>{$this->rpClose}";
                 $idx++;
             }
+
             $result = $result."</ruby>";
+
         } else {
-            $result = $result.$matches[2]."<rt>".join('', $rtarray)."</rt></ruby>";
+
+            $result = "${result}${matches[2]}{$this->rpOpen}<rt>".join('', $rtarray)."</rt>{$this->rpClose}</ruby>";
+
         }
 
         return $result;

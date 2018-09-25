@@ -27,7 +27,7 @@ EOT;
 
     public function testCustomPageNumberContent()
     {
-        $parser = new Denshoch\DenDenMarkdown( array("pageNumberContentPre" => "第", "pageNumberContentPost" => "ページ" ) );
+        $parser = new Denshoch\DenDenMarkdown( array("pageNumberContent" => "第%%ページ" ) );
 
         $source = <<< EOT
 [%%36]

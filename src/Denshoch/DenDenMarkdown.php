@@ -38,8 +38,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     # Optional class attributes for pagebreaks.
     public $pageNumberClass = "pagenum";
-    public $pageNumberContentPre = "";
-    public $pageNumberContentPost = "";
+    public $pageNumberContent = "%%";
 
     # Optional class attributes for Harusame.
     public $autoTcy = false;
@@ -166,19 +165,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 }
             }
 
-            if(array_key_exists("pageNumberContentPre", $options)){
-                if (is_string($options["pageNumberContentPre"])) {
-                    $this->pageNumberContentPre = $options["pageNumberContentPre"];
+            if(array_key_exists("pageNumberContent", $options)){
+                if (is_string($options["pageNumberContent"])) {
+                    $this->pageNumberContent = $options["pageNumberContent"];
                 } else {
-                    trigger_error("pageNumberContentPre should be string.");
-                }
-            }
-
-            if(array_key_exists("pageNumberContentPost", $options)){
-                if (is_string($options["pageNumberContentPost"])) {
-                    $this->pageNumberContentPost = $options["pageNumberContentPost"];
-                } else {
-                    trigger_error("pageNumberContentPost should be string.");
+                    trigger_error("pageNumberContent should be string.");
                 }
             }
         }
@@ -283,7 +274,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $title = $matches[3];
 
         if ("%" == $matches[2]) {
-            $content = $this->pageNumberContentPre . $title . $this->pageNumberContentPost;
+            $content = str_replace("%%", $title, $this->pageNumberContent);
         } else {
             $content = '';
         }

@@ -45,10 +45,28 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public $tcyDigit = 2;
     public $autoTextOrientation = false;
 
-    # Optional class attributes for ruby
-    public $rubyFallback = false;
-    public $rpOpen;
-    public $rpClose;
+    # Extra variables for ruby annotations
+    public $rubyParenthesisOpen = "";
+    public $rubyParenthesisClose = "";
+    protected $rpOpen;
+    protected $rpClose;
+
+    # Extra variables for custom table markup
+    public $ddmdTable = false;
+
+    # Extra variables for endnotes
+    public $ddmdEndnotes = false;
+    public $endnoteLinkClass = "enref";
+    public $endnoteLinkTitle = "";
+    public $endnoteClass = "endnote";
+    public $endnoteBacklinkClass = "";
+    public $endnoteBacklinkContent = "&#9166;";
+    protected $en_id_prefix = '';
+    protected $endnotes = array();
+    protected $endnotes_ordered = array();
+    protected $endnotes_ref_count = array();
+    protected $endnotes_numbers = array();
+    protected $endnote_counter = 1;
 
     public function __construct(array $options = null)
     {
@@ -59,12 +77,17 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $this->escape_chars .= '';
 
         $this->document_gamut += array(
+            "stripEndnotes" => 16,
+            "appendEndnotes"    => 51,
             );
+
         $this->block_gamut += array(
             "doBlockTitles"     => 11,
             "doDocBreaks"       => 20,
             );
+
         $this->span_gamut += array(
+            "doEndnotes"         => 5,
             "doPageNums"         =>  9,
             "doRubies"           => 50,
             "doTcys"             => 50,
@@ -72,124 +95,100 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         parent::__construct();
 
-        // Harusame options
         if (false === is_null($options)){
 
-            if(array_key_exists("autoTcy", $options)){
-                if (is_bool($options["autoTcy"])) {
-                    $this->autoTcy = $options["autoTcy"];
-                } else {
-                    trigger_error("autoTcy should be boolean.");
-                }
-            }
+            $intProps = [
+                "tcyDigit"
+            ];
 
-            if(array_key_exists("tcyDigit", $options)){
-                if (is_int($options["tcyDigit"])) {
-                    if ($options["tcyDigit"] < 2) {
-                        trigger_error("tcyDigit should be 2 or greater.", E_USER_ERROR);
+            foreach ($intProps as $prop) {
+                
+                if ( array_key_exists( $prop, $options ) ) {
+
+                    if ( is_int( $options[$prop] ) ) {
+
+                        $this->$prop = $options[$prop];
+
                     } else {
-                        $this->tcyDigit = $options["tcyDigit"];
+
+                        trigger_error( "${prop} must be integer." );
+
                     }
-                } else {
-                    trigger_error("tcyDigit should be int.");
                 }
+
             }
 
-            if(array_key_exists("autoTextOrientation", $options)){
-                if (is_bool($options["autoTextOrientation"])) {
-                    $this->autoTextOrientation = $options["autoTextOrientation"];
-                } else {
-                    trigger_error("autoTextOrientation should be boolean.");
+            $boolProps = [
+                "autoTcy",
+                "autoTextOrientation",
+                "epubType",
+                "dpubRole",
+                "ddmdTable",
+                "ddmdEndnotes",
+            ];
+
+            foreach ($boolProps as $prop) {
+                
+                if ( array_key_exists( $prop, $options ) ) {
+
+                    if ( is_bool( $options[$prop] ) ) {
+
+                        $this->$prop = $options[$prop];
+
+                    } else {
+
+                        trigger_error( "${prop} must be boolean." );
+
+                    }
                 }
+
             }
 
-            if(array_key_exists("rubyFallback", $options)){
-                if (is_bool($options["rubyFallback"])) {
-                    $this->rubyFallback = $options["rubyFallback"];
-                } else {
-                    trigger_error("rubyFallback should be boolean.");
+            $stringProps = [
+                "rubyParenthesisOpen",
+                "rubyParenthesisClose",
+                "footnoteLinkClass",
+                "footnoteLinkContent",
+                "footnoteBacklinkClass",
+                "footnoteBacklinkContent",
+                "endnoteLinkClass",
+                "endnoteLinkTitle",
+                "endnoteClass",
+                "endnoteBacklinkClass",
+                "endnoteBacklinkContent",
+                "pageNumberClass",
+                "pageNumberContent",
+            ];
+
+            foreach ($stringProps as $prop) {
+                
+                if ( array_key_exists( $prop, $options ) ) {
+ 
+                    if ( is_string( $options[$prop] ) ) {
+
+                        $this->$prop = $options[$prop];
+
+                    } else {
+
+                        trigger_error( "${prop} must be string." );
+
+                    }
                 }
+
             }
 
-            if(array_key_exists("epubType", $options)){
-                if (is_bool($options["epubType"])) {
-                    $this->epubType = $options["epubType"];
-                } else {
-                    trigger_error("epubType should be boolean.");
-                }
-            }
-
-            if(array_key_exists("dpubRole", $options)){
-                if (is_bool($options["dpubRole"])) {
-                    $this->dpubRole = $options["dpubRole"];
-                } else {
-                    trigger_error("dpubRole should be boolean.");
-                }
-            }
-
-            if(array_key_exists("footnoteLinkClass", $options)){
-                if (is_string($options["footnoteLinkClass"])) {
-                    $this->footnoteLinkClass = $options["footnoteLinkClass"];
-                } else {
-                    trigger_error("footnoteLinkClass should be string.");
-                }
-            }
-
-            if(array_key_exists("footnoteLinkContent", $options)){
-                if (is_string($options["footnoteLinkContent"])) {
-                    $this->footnoteLinkContent = $options["footnoteLinkContent"];
-                } else {
-                    trigger_error("footnoteLinkContent should be string.");
-                }
-            }
-
-            if(array_key_exists("footnoteLinkClass", $options)){
-                if (is_string($options["footnoteLinkClass"])) {
-                    $this->footnoteLinkClass = $options["footnoteLinkClass"];
-                } else {
-                    trigger_error("footnoteLinkClass should be string.");
-                }
-            }
-
-            if(array_key_exists("footnoteBacklinkClass", $options)){
-                if (is_string($options["footnoteBacklinkClass"])) {
-                    $this->footnoteBacklinkClass = $options["footnoteBacklinkClass"];
-                } else {
-                    trigger_error("footnoteBacklinkClass should be string.");
-                }
-            }
-
-            if(array_key_exists("footnoteBacklinkContent", $options)){
-                if (is_string($options["footnoteBacklinkContent"])) {
-                    $this->footnoteBacklinkContent = $options["footnoteBacklinkContent"];
-                } else {
-                    trigger_error("footnoteBacklinkContent should be string.");
-                }
-            }
-
-            if(array_key_exists("pageNumberClass", $options)){
-                if (is_string($options["pageNumberClass"])) {
-                    $this->pageNumberClass = $options["pageNumberClass"];
-                } else {
-                    trigger_error("pageNumberClass should be string.");
-                }
-            }
-
-            if(array_key_exists("pageNumberContent", $options)){
-                if (is_string($options["pageNumberContent"])) {
-                    $this->pageNumberContent = $options["pageNumberContent"];
-                } else {
-                    trigger_error("pageNumberContent should be string.");
-                }
-            }
         }
 
-        if ($this->rubyFallback === true) {
-            $this->rpOpen = "<rp>(</rp>";
-            $this->rpClose = "<rp>)</rp>";
+        if ( $this->rubyParenthesisOpen !== "" && $this->rubyParenthesisClose !== "") {
+
+            $this->rpOpen = "<rp>{$this->rubyParenthesisOpen}</rp>";
+            $this->rpClose = "<rp>{$this->rubyParenthesisClose}</rp>";
+
         } else {
+
             $this->rpOpen = "";
             $this->rpClose = ""; 
+
         }
     }
 
@@ -236,6 +235,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         return $text;
     }
+
     protected function _doBlockTitles_callback($matches) {
         $level = strlen($matches[1]);
         $dummy =& $matches[3];
@@ -502,7 +502,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $text .= "<hr". $this->empty_element_suffix ."\n";
             $text .= "<ol>\n\n";
 
-
             $attr = "";
 
             if ($this->footnoteBacklinkClass != "") {
@@ -630,5 +629,264 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
 
         return "[^".$matches[1]."]";
+    }
+
+    /* == Endnotes code == */
+
+    /**
+     * stripEndnotes
+     *
+     * Strips link definitions from text, stores the URLs and titles in
+     * hash references.
+     * 
+     * @param $input string
+     * @return string
+     */
+    protected function stripEndnotes($text) {
+
+        if ( $this->ddmdEndnotes === false ) {
+            return $text;
+        }
+
+        $less_than_tab = $this->tab_width - 1;
+
+        # Link defs are in the form: [~id]: url "optional title"
+        $text = preg_replace_callback('{
+            ^[ ]{0,'.$less_than_tab.'}\[~(.+?)\][ ]?:  # note_id = $1
+              [ ]*
+              \n?                   # maybe *one* newline
+            (                       # text = $2 (no blank lines allowed)
+                (?:                 
+                    .+              # actual text
+                |
+                    \n              # newlines but 
+                    (?!\[.+?\][ ]?:\s)# negative lookahead for endnote or link definition marker.
+                    (?!\n+[ ]{0,3}\S)# ensure line is not blank and followed 
+                                    # by non-indented content
+                )*
+            )       
+            }xm',
+            array($this, '_stripEndnotes_callback'),
+            $text);
+
+        return $text;
+
+    }
+
+    /**
+     * _stripEndnotes_callback
+     * 
+     * @param $matches array
+     * @return string
+     */
+    protected function _stripEndnotes_callback($matches)
+    {
+        $note_id = $this->en_id_prefix . $matches[1];
+        $this->endnotes[$note_id] = $this->outdent($matches[2]);
+
+        return ''; # String that will replace the block
+    }
+
+    /**
+     * doEndnotes
+     * 
+     * @param $input string
+     * @return string
+     */
+    protected function doEndnotes($text)
+    {
+        if ( $this->ddmdEndnotes === false ) {
+            return $text;
+        }
+
+        $text = preg_replace_callback('{
+            (               # wrap whole match in $1
+              \[
+                ('.$this->nested_brackets_re.')     # link text = $2
+              \]
+
+              [ ]?              # one optional space
+              (?:\n[ ]*)?       # one optional newline followed by spaces
+
+              \[
+                ~(.+?)       # id = $3
+              \]
+
+            )
+            }xs', 
+            array($this, '_doEndnotes_reference_callback'), $text);
+
+        return $text;
+    }
+
+    protected function _doEndnotes_reference_callback($matches)
+    {
+        $whole_match = $matches[1];
+        $link_text = $matches[2];
+        $node_id = $matches[3];
+
+        if (!$this->in_anchor) {
+            return "E\x1Aen:${node_id}\x1A${link_text}\x1A:";
+        }
+
+        return $whole_match;
+    }
+
+    /**
+     * appendEndnotes
+     * 
+     * @param $input string
+     * @return string
+     */
+    protected function appendEndnotes($text)
+    {
+        if ( $this->ddmdEndnotes === false ) {
+            return $text;
+        }
+
+        $text = preg_replace_callback('{E\x1Aen:(.*?)\x1A(.*?)\x1A:}', 
+            array($this, '_appendEndnotes_callback'), $text);
+
+        if ( !empty( $this->endnotes_ordered ) ) {
+            $text .= "\n\n";
+            $text .= "<div class=\"endnotes\"";
+            if($this->epubType) {
+                $text .= " epub:type=\"endnotes\"";
+            }
+            if($this->dpubRole) {
+                $text .=" role=\"doc-endnotes\"";
+            }
+            $text .= ">\n";
+            $text .= "<hr". $this->empty_element_suffix ."\n\n";
+
+            $attr = "";
+
+            if ( $this->endnoteBacklinkClass !== "" ) {
+                $attr .= " class=\"{$this->endnoteBacklinkClass}\"";
+            }
+
+            if ( $this->dpubRole ) {
+                $attr .= " role=\"doc-backlink\"";
+            }
+
+            $num = 0;
+
+            while ( !empty($this->endnotes_ordered ) ) {
+
+                $endnote = reset( $this->endnotes_ordered );
+                $note_id = key( $this->endnotes_ordered );
+                unset( $this->endnotes_ordered[$note_id] );
+                $ref_count = $this->endnotes_ref_count[$note_id];
+                unset( $this->endnotes_ref_count[$note_id] );
+                unset( $this->endnotes[$note_id] );
+
+                $endnote .= "\n";
+                $endnote = $this->runBlockGamut("$endnote\n");
+                $endnote = preg_replace_callback('{E\x1Aen:(.*?)\x1A(.*?)\x1A:}', 
+                    array($this, '_appendEndnotes_callback'), $endnote);
+
+                $attr = str_replace("%%", ++$num, $attr);
+                $note_id = $this->encodeAttribute($note_id);
+
+                $backlink = "<a href=\"#enref:$note_id\"$attr>{$this->endnoteBacklinkContent}</a>";
+
+                for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
+                    $backlink .= " <a href=\"#enref$ref_num:$note_id\"$attr>{$this->endnoteBacklinkContent}</a>";
+                }
+
+                # Add backlink to last paragraph; create new paragraph if needed.
+                if (preg_match('{</p>$}', $endnote)) {
+                    $endnote = substr($endnote, 0, -4) . "&#160;${backlink}</p>";
+                } else {
+                    $endnote .= "\n\n<p>${backlink}</p>";
+                }
+
+                $text .= "<div id=\"en:$note_id\"";
+                if ($this->endnoteClass !== "") {
+                    $text .= " class=\"{$this->endnoteClass}\"";
+                }
+                if ($this->epubType) {
+                    $text .= " epub:type=\"endnote\"";
+                }
+                if ($this->dpubRole) {
+                    $text .= " role=\"doc-endnote\"";
+                }
+                $text .= ">\n";
+                $text .= $endnote . "\n";
+                $text .= "</div>\n\n";
+
+            }
+
+            $text .= "</div>";
+        }
+
+        return $text;
+    }
+
+    /**
+     * _appendEndnotes_callback
+     * リンク元
+     * 
+     * @param $matches array
+     * @return string
+     */
+    protected function _appendEndnotes_callback($matches)
+    {
+
+        $node_id = $this->en_id_prefix . $matches[1];
+        $link_text = $matches[2];
+
+        # Create endnote marker only if it has a corresponding endnote *and*
+        # the end hasn't been used by another marker.
+        if (isset($this->endnotes[$node_id])) {
+
+            $num =& $this->endnotes_numbers[$node_id];
+
+            if (!isset($num)) {
+
+                # Transfer footnote content to the ordered list and give it its
+                # number
+                $this->endnotes_ordered[$node_id] = $this->endnotes[$node_id];
+                $this->endnotes_ref_count[$node_id] = 1;
+                $num = $this->endnote_counter++;
+                $ref_count_mark = '';
+
+            } else {
+
+                $ref_count_mark = $this->endnotes_ref_count[$node_id] += 1;
+
+            }
+
+            $attr = "";
+
+            if ($this->endnoteLinkClass != "") {
+                $class = $this->endnoteLinkClass;
+                $class = $this->encodeAttribute($class);
+                $attr .= " class=\"$class\"";
+            }
+
+            if ($this->endnoteLinkTitle != "") {
+                $title = $this->endnoteLinkTitle;
+                $title = $this->encodeAttribute($title);
+                $attr .= " title=\"$title\"";
+            }
+
+            if ($this->epubType) {
+                $attr .= " epub:type=\"noteref\"";
+            }
+
+            if ($this->dpubRole) {
+                $attr .= " role=\"doc-noteref\"";
+            }
+
+            $attr = str_replace("%%", $num, $attr);
+            $node_id = $this->encodeAttribute($node_id);
+
+            return "<a id=\"enref${ref_count_mark}:${node_id}\" href=\"#en:${node_id}\"${attr}>${link_text}</a>";
+
+        }
+
+        return "[${matches[2]}][~${matches[1]}]";
+
     }
 }

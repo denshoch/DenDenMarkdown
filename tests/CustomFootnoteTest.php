@@ -5,7 +5,7 @@ class CustomFootnoteTest extends PHPUnit_Framework_TestCase
 {
     public function testCustomFootnoteLinkClass()
     {
-    	  $parser = new Denshoch\DenDenMarkdown( array("footnoteLinkClass" => "footnoteref" ) );
+    	$parser = new Denshoch\DenDenMarkdown( array("footnoteLinkClass" => "footnoteref" ) );
 
         $source = <<< EOT
 これは脚注付き[^1]の段落です。

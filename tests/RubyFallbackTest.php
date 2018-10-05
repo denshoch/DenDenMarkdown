@@ -3,9 +3,9 @@ require_once 'vendor/autoload.php';
 
 class RubyFallbackTest extends PHPUnit_Framework_TestCase
 {
-    public function testCustomPageNumberClass()
+    public function testRubyFallback()
     {
-        $parser = new Denshoch\DenDenMarkdown( array("rubyFallback" => true ) );
+        $parser = new Denshoch\DenDenMarkdown( array( "rubyParenthesisOpen" => "(", "rubyParenthesisClose" => ")" ) );
 
         $source = "{電子書籍|でんししょせき}";
 

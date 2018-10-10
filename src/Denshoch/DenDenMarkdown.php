@@ -201,9 +201,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     # Override transform()
     public function transform($text)
     {
-        $text = parent::transform($text);
+        $text = \Denshoch\Utils::removeCtrlChars($text);
 
-        $text = \Denshoch\Utils::removeCtrlChars($text); // Remove control chars
+        $text = parent::transform($text);
 
         $harusame = new \Denshoch\Harusame(
             array(
@@ -212,6 +212,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 "autoTextOrientation" => $this->autoTextOrientation
             )
         );
+
         $text = $harusame->transform($text);
 
         return $text;

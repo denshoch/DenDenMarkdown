@@ -215,6 +215,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         $text = $harusame->transform($text);
 
+        /* Reset Endnotes count */
+        $this->endnotes_ref_count = array();
+        $this->endnotes_numbers = array();
+
         return $text;
     }
 

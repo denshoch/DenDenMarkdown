@@ -147,12 +147,15 @@ EOT;
         $parser = new Denshoch\DenDenMarkdown( 
         	array(
         		"ddmdEndnotes" => true,
+                "endnotesHeadingContent" => "後注",
+                "endnotesHeadingTag" => "h2",
                 "endnoteLinkClass" => "endnote_link_class",
                 "endnoteLinkTitle" => "endnote_link_title",
                 "endnoteClass" => "endnote_class",
                 "endnoteBacklinkClass" => "endnote_backlink_class",
                 "endnoteBacklinkContent" => "endnoteBacklinkContent"
         	) );
+
 	    $source = <<< EOT
 これは後注付き[リンク][~1]の段落です。
 
@@ -164,6 +167,8 @@ EOT;
 
 <div class="endnotes" epub:type="endnotes" role="doc-endnotes">
 <hr />
+
+<h2>後注</h2>
 
 <div id="en:1" class="endnote_class" epub:type="endnote" role="doc-endnote">
 <p>そして、これが後注です。&#160;<a href="#enref:1" class="endnote_backlink_class" role="doc-backlink">endnoteBacklinkContent</a></p>

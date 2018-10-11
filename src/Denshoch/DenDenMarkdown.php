@@ -56,6 +56,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     # Extra variables for endnotes
     public $ddmdEndnotes = false;
+    public $endnotesHeadingContent = "";
+    public $endnotesHeadingTag = "p";
     public $endnoteLinkClass = "enref";
     public $endnoteLinkTitle = "";
     public $endnoteClass = "endnote";
@@ -151,6 +153,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 "footnoteLinkContent",
                 "footnoteBacklinkClass",
                 "footnoteBacklinkContent",
+                "endnotesHeadingContent",
+                "endnotesHeadingTag",
                 "endnoteLinkClass",
                 "endnoteLinkTitle",
                 "endnoteClass",
@@ -763,6 +767,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             }
             $text .= ">\n";
             $text .= "<hr". $this->empty_element_suffix ."\n\n";
+
+            if ($this->endnotesHeadingContent !== "") {
+                $text .= "<{$this->endnotesHeadingTag}>{$this->endnotesHeadingContent}</{$this->endnotesHeadingTag}>\n\n";
+            }
 
             $attr = "";
 

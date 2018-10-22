@@ -27,4 +27,18 @@ EOT;
         $actual = $parser->transform($source);
         $this->assertEquals($expected, $actual);
     }
+
+    public function testRubyParenthesisEscape()
+    {
+        $parser = new Denshoch\DenDenMarkdown( array( "rubyParenthesisOpen" => "<h1>&", "rubyParenthesisClose" => "&</h1>" ) );
+        $source = "{電子書籍|でんししょせき}";
+
+        $expected = <<< EOT
+<p><ruby>電子書籍<rp>&lt;h1&gt;&amp;</rp><rt>でんししょせき</rt><rp>&amp;&lt;/h1&gt;</rp></ruby></p>
+
+EOT;
+
+        $actual = $parser->transform($source);
+        $this->assertEquals($expected, $actual);
+    }
 }

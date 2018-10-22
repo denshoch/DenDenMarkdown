@@ -185,6 +185,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         if ( $this->rubyParenthesisOpen !== "" && $this->rubyParenthesisClose !== "") {
 
+            $this->rubyParenthesisOpen = \htmlspecialchars($this->rubyParenthesisOpen);
+            $this->rubyParenthesisClose = \htmlspecialchars($this->rubyParenthesisClose);
+
             $this->rpOpen = "<rp>{$this->rubyParenthesisOpen}</rp>";
             $this->rpClose = "<rp>{$this->rubyParenthesisClose}</rp>";
 
@@ -302,6 +305,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         if ("%" == $matches[2]) {
             $content = str_replace("%%", $title, $this->pageNumberContent);
+            $content = $this->htmlEscapeWithoutEntityRef($content);
         } else {
             $content = '';
         }
@@ -311,8 +315,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $id = "pagenum_${title}";
         $attr .= " id=\"$id\"";
         if ($this->pageNumberClass != "") {
-            $class = $this->pageNumberClass;
-            $class = $this->encodeAttribute($class);
+            $class = $this->encodeAttribute($this->pageNumberClass);
             $attr .= " class=\"$class\"";
         }
         $attr .= " title=\"$title\"";
@@ -514,8 +517,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr = "";
 
             if ($this->footnoteBacklinkClass != "") {
-                $class = $this->footnoteBacklinkClass;
-                $class = $this->encodeAttribute($class);
+                $class = $this->encodeAttribute($this->footnoteBacklinkClass);
                 $attr .= " class=\"$class\"";
             }
 
@@ -548,6 +550,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $attr = str_replace("%%", $num, $attr);
                 $note_id = $this->encodeAttribute($note_id);
                 $content = str_replace("%%", $num, $this->footnoteBacklinkContent);
+                $content = $this->htmlEscapeWithoutEntityRef($content);
 
                 # Prepare backlink, multiple backlinks if multiple references
                 $backlink = "<a href=\"#fnref_${note_id}\"${attr}>${content}</a>";
@@ -610,9 +613,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr .= " href=\"#fn_$node_id\"";
             $attr .= " rel=\"footnote\"";
             if ($this->footnoteLinkClass != "") {
-                $class = $this->footnoteLinkClass;
-                $class = $this->encodeAttribute($class);
-                $attr .= " class=\"$class\"";
+                $class = $this->encodeAttribute($this->footnoteLinkClass);
+                $attr .= " class=\"${class}\"";
             }
 
             if ($this->fn_link_title != "") {
@@ -631,6 +633,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
             $attr = str_replace("%%", $num, $attr);
             $content = str_replace("%%", $num, $this->footnoteLinkContent);
+            $content = $this->htmlEscapeWithoutEntityRef($content);
 
             return
                 "<a${attr}>${content}</a>"
@@ -769,13 +772,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $text .= "<hr". $this->empty_element_suffix ."\n\n";
 
             if ($this->endnotesHeadingContent !== "") {
-                $text .= "<{$this->endnotesHeadingTag}>{$this->endnotesHeadingContent}</{$this->endnotesHeadingTag}>\n\n";
+                $content = $this->htmlEscapeWithoutEntityRef($this->endnotesHeadingContent);
+                $text .= "<{$this->endnotesHeadingTag}>${content}</{$this->endnotesHeadingTag}>\n\n";
             }
 
             $attr = "";
 
             if ( $this->endnoteBacklinkClass !== "" ) {
-                $attr .= " class=\"{$this->endnoteBacklinkClass}\"";
+                $class = $this->encodeAttribute($this->endnoteBacklinkClass);
+                $attr .= " class=\"${class}\"";
             }
 
             if ( $this->dpubRole ) {
@@ -801,10 +806,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $attr = str_replace("%%", ++$num, $attr);
                 $note_id = $this->encodeAttribute($note_id);
 
-                $backlink = "<a href=\"#enref:$note_id\"$attr>{$this->endnoteBacklinkContent}</a>";
+                $content = $this->htmlEscapeWithoutEntityRef($this->endnoteBacklinkContent);
+
+                $backlink = "<a href=\"#enref:$note_id\"$attr>${content}</a>";
 
                 for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#enref$ref_num:$note_id\"$attr>{$this->endnoteBacklinkContent}</a>";
+                    $backlink .= " <a href=\"#enref$ref_num:$note_id\"$attr>${content}</a>";
                 }
 
                 # Add backlink to last paragraph; create new paragraph if needed.
@@ -816,7 +823,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
                 $text .= "<div id=\"en:$note_id\"";
                 if ($this->endnoteClass !== "") {
-                    $text .= " class=\"{$this->endnoteClass}\"";
+                    $class = $this->encodeAttribute($this->endnoteClass);
+                    $text .= " class=\"${class}\"";
                 }
                 if ($this->epubType) {
                     $text .= " epub:type=\"endnote\"";
@@ -873,14 +881,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr = "";
 
             if ($this->endnoteLinkClass != "") {
-                $class = $this->endnoteLinkClass;
-                $class = $this->encodeAttribute($class);
+                $class = $this->encodeAttribute($this->endnoteLinkClass);
                 $attr .= " class=\"$class\"";
             }
 
             if ($this->endnoteLinkTitle != "") {
-                $title = $this->endnoteLinkTitle;
-                $title = $this->encodeAttribute($title);
+                $title = $this->encodeAttribute($this->endnoteLinkTitle);
                 $attr .= " title=\"$title\"";
             }
 
@@ -901,5 +907,31 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         return "[${matches[2]}][~${matches[1]}]";
 
+    }
+
+    /**
+     * htmlEscapeWithoutEntityRef
+     * 
+     * 実体参照以外に対してhtmlspecialcharsを行う
+     * 
+     * @param $text array
+     * @return string
+     */
+    public function htmlEscapeWithoutEntityRef($text)
+    {
+        $out = "";
+        $reg = '/(&#?[a-z0-9]{2,8};)/i';
+        $arr = \preg_split($reg, $text, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+        foreach($arr as $item) {
+
+            if ( \preg_match($reg, $item) === 1 ) {
+                $out .= $item;
+            } else {
+                $out .= \htmlspecialchars($item);
+            }
+        }
+
+        return $out;
     }
 }

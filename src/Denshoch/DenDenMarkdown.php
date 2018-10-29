@@ -1,5 +1,6 @@
 <?php
 namespace Denshoch;
+
 #
 # DenDenMarkdown - just a little help for them.
 #
@@ -70,11 +71,19 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     protected $endnotes_numbers = array();
     protected $endnote_counter = 1;
 
+    # Extra variables for tables
+    public $tableAlignClassTmpl = "";
+
+    /**
+     * __construct
+     *
+     * Constructor function. Initialize the parser object.
+     */
     public function __construct(array $options = null)
     {
-    #
-    # Constructor function. Initialize the parser object.
-    #
+        /* alias */
+        #$this->table_align_class_tmpl &= $this->tableAlignClassTmpl;
+        #$this->tableAlignClassTmpl &= $this->table_align_class_tmpl;
 
         $this->escape_chars .= '';
 
@@ -97,27 +106,18 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         parent::__construct();
 
-        if (false === is_null($options)){
-
+        if (false === is_null($options)) {
             $intProps = [
                 "tcyDigit"
             ];
-
             foreach ($intProps as $prop) {
-                
-                if ( array_key_exists( $prop, $options ) ) {
-
-                    if ( is_int( $options[$prop] ) ) {
-
+                if (array_key_exists($prop, $options)) {
+                    if (is_int($options[$prop])) {
                         $this->$prop = $options[$prop];
-
                     } else {
-
-                        trigger_error( "${prop} must be integer." );
-
+                        trigger_error("${prop} must be integer.");
                     }
                 }
-
             }
 
             $boolProps = [
@@ -130,20 +130,13 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             ];
 
             foreach ($boolProps as $prop) {
-                
-                if ( array_key_exists( $prop, $options ) ) {
-
-                    if ( is_bool( $options[$prop] ) ) {
-
+                if (array_key_exists($prop, $options)) {
+                    if (is_bool($options[$prop])) {
                         $this->$prop = $options[$prop];
-
                     } else {
-
-                        trigger_error( "${prop} must be boolean." );
-
+                        trigger_error("${prop} must be boolean.");
                     }
                 }
-
             }
 
             $stringProps = [
@@ -162,40 +155,29 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 "endnoteBacklinkContent",
                 "pageNumberClass",
                 "pageNumberContent",
+                "tableAlignClassTmpl"
             ];
 
             foreach ($stringProps as $prop) {
-                
-                if ( array_key_exists( $prop, $options ) ) {
- 
-                    if ( is_string( $options[$prop] ) ) {
-
+                if (array_key_exists($prop, $options)) {
+                    if (is_string($options[$prop])) {
                         $this->$prop = $options[$prop];
-
                     } else {
-
-                        trigger_error( "${prop} must be string." );
-
+                        trigger_error("${prop} must be string.");
                     }
                 }
-
             }
-
         }
 
-        if ( $this->rubyParenthesisOpen !== "" && $this->rubyParenthesisClose !== "") {
-
+        if ($this->rubyParenthesisOpen !== "" && $this->rubyParenthesisClose !== "") {
             $this->rubyParenthesisOpen = \htmlspecialchars($this->rubyParenthesisOpen);
             $this->rubyParenthesisClose = \htmlspecialchars($this->rubyParenthesisClose);
 
             $this->rpOpen = "<rp>{$this->rubyParenthesisOpen}</rp>";
             $this->rpClose = "<rp>{$this->rubyParenthesisClose}</rp>";
-
         } else {
-
             $this->rpOpen = "";
-            $this->rpClose = ""; 
-
+            $this->rpClose = "";
         }
     }
 
@@ -650,7 +632,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      *
      * Strips link definitions from text, stores the URLs and titles in
      * hash references.
-     * 
+     *
      * @param $input string
      * @return string
      */
@@ -668,15 +650,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
               [ ]*
               \n?                   # maybe *one* newline
             (                       # text = $2 (no blank lines allowed)
-                (?:                 
+                (?:
                     .+              # actual text
                 |
-                    \n              # newlines but 
+                    \n              # newlines but
                     (?!\[.+?\][ ]?:\s)# negative lookahead for endnote or link definition marker.
-                    (?!\n+[ ]{0,3}\S)# ensure line is not blank and followed 
+                    (?!\n+[ ]{0,3}\S)# ensure line is not blank and followed
                                     # by non-indented content
                 )*
-            )       
+            )
             }xm',
             array($this, '_stripEndnotes_callback'),
             $text);
@@ -687,7 +669,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     /**
      * _stripEndnotes_callback
-     * 
+     *
      * @param $matches array
      * @return string
      */
@@ -701,7 +683,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     /**
      * doEndnotes
-     * 
+     *
      * @param $input string
      * @return string
      */
@@ -725,7 +707,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
               \]
 
             )
-            }xs', 
+            }xs',
             array($this, '_doEndnotes_reference_callback'), $text);
 
         return $text;
@@ -746,7 +728,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     /**
      * appendEndnotes
-     * 
+     *
      * @param $input string
      * @return string
      */
@@ -756,7 +738,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             return $text;
         }
 
-        $text = preg_replace_callback('{E\x1Aen:(.*?)\x1A(.*?)\x1A:}', 
+        $text = preg_replace_callback('{E\x1Aen:(.*?)\x1A(.*?)\x1A:}',
             array($this, '_appendEndnotes_callback'), $text);
 
         if ( !empty( $this->endnotes_ordered ) ) {
@@ -800,7 +782,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
                 $endnote .= "\n";
                 $endnote = $this->runBlockGamut("$endnote\n");
-                $endnote = preg_replace_callback('{E\x1Aen:(.*?)\x1A(.*?)\x1A:}', 
+                $endnote = preg_replace_callback('{E\x1Aen:(.*?)\x1A(.*?)\x1A:}',
                     array($this, '_appendEndnotes_callback'), $endnote);
 
                 $attr = str_replace("%%", ++$num, $attr);
@@ -835,7 +817,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $text .= ">\n";
                 $text .= $endnote . "\n";
                 $text .= "</div>\n\n";
-
             }
 
             $text .= "</div>";
@@ -847,7 +828,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     /**
      * _appendEndnotes_callback
      * リンク元
-     * 
+     *
      * @param $matches array
      * @return string
      */
@@ -910,10 +891,290 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
+     * doTables
+     *
+     * Form HTML tables. If `ddmdTable` is true, parse DDmdTable syntax.
+     *
+     * @param $text string
+     * @return string
+     */
+    protected function doTables($text)
+    {
+        if ($this->ddmdTable) {
+            return $this->doDDmdTables($text);
+        }
+
+        return parent::doTables($text);
+    }
+
+    /**
+     * doDDmdTables
+     *
+     * Form HTML tables written in DDmdTable syntax.
+     *
+     * @param $text string
+     * @return string
+     */
+    protected function doDDmdTables($text)
+    {
+        $less_than_tab = $this->tab_width - 1;
+
+        /* Find tables with leading pipe */
+        $ls_re = "[ ]{0,$less_than_tab}";
+        $thead_re = '(?P<thead>('.$ls_re.'([|].*[|].*)\n)*)';
+        $ul_re = '(?P<underline>'.$ls_re.'[|][ ]*[-:]+[ ]*[|][-| :]*)\n';
+        $tbody_re = '(?P<tbody>(?>[ ]*[|].*[|].*\n)*)';
+        $nl_re = '(?=\n|\Z)'; # newlines
+        $pattern = '/^'.$thead_re.$ul_re.$tbody_re.$nl_re.'/m';
+
+        $text = preg_replace_callback($pattern, array($this, '_doDDmdTable_leadingpipe_callback'), $text);
+
+        /* Find tables without leading pipe */
+        $thead_re = '(?P<thead>('.$ls_re.'(\S.*[|].*)\n)*)';
+        $ul_re = "(?P<underline>[-:]+[ ]*[|][-| :]*)\n";
+        $tbody_re = '(?P<tbody>(?>.*[|].*\n)*)';
+        $pattern = '/^'.$thead_re.$ls_re.$ul_re.$tbody_re.$nl_re.'/m';
+
+        $text = preg_replace_callback($pattern, array($this, '_doDDmdTable_callback'), $text);
+
+        return $text;
+    }
+
+    /**
+     * _doDDmdTable_leadingpipe_callback
+     *
+     * Form HTML tables written in DDmdTable syntax.
+     *
+     * @param $matches array
+     * @return string
+     */
+    protected function _doDDmdTable_leadingpipe_callback($matches) {
+    
+        $matches['thead'] = preg_replace('/^ *[|]/m', '', $matches['thead']);
+        $matches['underline'] = preg_replace('/^ *[|]/m', '', $matches['underline']);
+        $matches['tbody'] = preg_replace('/^ *[|]/m', '', $matches['tbody']);
+    
+        return $this->_doDDmdTable_callback($matches);
+    }
+
+    /**
+     * _doDDmdTable_callback
+     *
+     * Form HTML tables written in DDmdTable syntax.
+     *
+     * @param $matches array
+     * @return string
+     */
+    protected function _doDDmdTable_callback($matches) {
+
+        $col_count = 0; # col count of first row
+
+        $algn_re = "(?P<algn>(?:\<(?!>)|&lt;&gt;|&gt;|&lt;|(?<!<)\>|\<\>|\=|[()]+(?! )))?";
+        $cspn_re = "(?:\\\\(?P<colspan>[0-9])+)";
+        $rspn_re = "(?:\/(?P<rowspan>[0-9])+)";
+        $spn_re = "(?:${cspn_re}|${rspn_re})*";
+        $cattr = "(?P<cattr>_?${algn_re}${spn_re}\. )";
+
+        # Remove any tailing pipes for each line.
+        $matches['thead'] = preg_replace('/[|] *$/m', '', $matches['thead']);
+        $matches['underline'] = preg_replace('/[|] *$/m', '', $matches['underline']);
+        $matches['tbody'] = preg_replace('/[|] *$/m', '', $matches['tbody']);
+
+        # Get col count of first row
+
+        $thead_rows = explode("\n", trim($matches['thead'], "\n"));
+        $first_row_cells = preg_split('/ *[|] */', $thead_rows[0]);
+
+        foreach ($first_row_cells as $cell) {
+            if( preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch) ){
+                $cspn = (int) $mtch['colspan'];
+                if ($cspn > 1) {
+                    $col_count += $cspn;
+                } else {
+                    $col_count += 1;
+                }
+            } else {
+                $col_count += 1;
+            }
+        }
+
+        # Reading alignement from header underline.
+        $col_algn = [];
+        $separators = preg_split('/ *[|] */', $matches['underline'] );
+        foreach ($separators as $n => $s) {
+            if (preg_match('/^ *-+: *$/', $s))
+                $col_algn[$n] = $this->_doDDmdTable_makeAlignAttr('right');
+            else if (preg_match('/^ *:-+: *$/', $s))
+                $col_algn[$n] = $this->_doDDmdTable_makeAlignAttr('center');
+            else if (preg_match('/^ *:-+ *$/', $s))
+                $col_algn[$n] = $this->_doDDmdTable_makeAlignAttr('left');
+            else
+                $col_algn[$n] = '';
+        }
+
+        # Start write table
+        $text = "<table>\n";
+
+        # Write thead
+        $text .= "<thead>\n";
+
+        foreach ($thead_rows as $row) {
+    
+            $text .= "<tr>\n";
+    
+            $row_cells = preg_split('/ *[|] */', $row);
+    
+            # Process thead cells
+            $c_cnt = 0;
+    
+            foreach ($row_cells as $cell) {
+    
+                $attr = '';
+                $algn = '';
+    
+                if( preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch) ){
+
+                    if (!empty($mtch['algn'])) {
+                        $algn = $this->_doDDmdTable_makeAlignAttr($mtch['algn']);
+                    }
+    
+                    if ( preg_match("/_/", $mtch['cattr']) ) {
+                        $attr .= " scope=\"row\"";
+                    } else {
+                        $attr .= " scope=\"col\"";
+                    }
+    
+                    $cspn = (int) $mtch['colspan'];
+                    if ($cspn > 1) {
+                        $attr .= " colspan=\"${cspn}\"";
+                        $c_cnt += $cspn;
+                    } else {
+                        $c_cnt += 1;
+                    }
+    
+                    $rspn = (int) $mtch['rowspan'];
+                    if ($rspn > 1) {
+                        $attr .= " rowspan=\"${rspn}\"";
+                    }
+    
+                    $cell = $mtch['cell'];
+                } else {
+                    if(empty($algn)) {
+                        $algn = $col_algn[$c_cnt];
+                    }
+                    $attr .= " scope=\"col\"";
+                    $c_cnt += 1;
+                }
+    
+                $text .= "<th${algn}${attr}>";
+                $text .= $this->runSpanGamut(trim($cell));
+                $text .= "</th>\n";
+            }
+    
+            $text .= "</tr>\n";
+    
+        }
+        $text .= "</thead>\n";
+
+        # Write tbody
+        $tbody_rows = explode("\n", trim($matches['tbody'], "\n"));
+
+        $text .= "<tbody>\n";
+    
+        foreach ($tbody_rows as $row) {
+        
+            $text .= "<tr>\n";
+        
+            $row_cells = preg_split('/ *[|] */', $row, $col_count);
+        
+            # Process tbody cells
+            $c_cnt = 0;
+        
+            foreach ($row_cells as $cell) {
+        
+                $tag = 'td';
+                $attr = '';
+                $algn = '';
+        
+                if( preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch) ){
+        
+                    if ( preg_match("/_/", $mtch['cattr']) ) {
+                      $tag = 'th';
+                      $attr = " scope=\"row\"";
+                    }
+    
+                    if (!empty($mtch['algn'])) {
+                        $algn = $this->_doDDmdTable_makeAlignAttr($mtch['algn']);
+                    }
+    
+                    $cspn = (int) $mtch['colspan'];
+                    if ($cspn > 1) {
+                        $attr .= " colspan=\"${cspn}\"";
+                        $c_cnt += $cspn;
+                    } else {
+                        $c_cnt += 1;
+                    }
+        
+                    $rspn = (int) $mtch['rowspan'];
+                    if ($rspn > 1) {
+                        $attr .= " rowspan=\"${rspn}\"";
+                    }
+        
+                    $cell = $mtch['cell'];
+                } else {
+                    if(empty($algn)) {
+                        $algn = $col_algn[$c_cnt];
+                    }
+                    $c_cnt += 1;
+                }
+        
+                $text .= "<${tag}${algn}${attr}>";
+                $text .= $this->runSpanGamut(trim($cell));
+                $text .= "</${tag}>\n";
+            }
+            $text .= "</tr>\n";
+        }
+        $text .= "</tbody>\n";
+        $text .= "</table>";
+
+        return $this->hashBlock($text) . "\n";
+    }
+
+    /**
+     * _doDDmdTable_makeAlignAttr
+     *
+     * Form HTML tables written in DDmdTable syntax.
+     *
+     * @param $matches array
+     * @return string
+     */
+    protected function _doDDmdTable_makeAlignAttr($alignname)
+    {
+        switch ( $alignname ) {
+            case "<":
+                $alignname = "left";
+                break;
+            case ">":
+                $alignname = "right";
+                break;
+            case "=":
+                $alignname = "center";
+                break;
+        }
+
+        if (empty($this->tableAlignClassTmpl)) {
+            return " align=\"$alignname\"";
+        }
+
+        $classname = str_replace('%%', $alignname, $this->tableAlignClassTmpl);
+        return " class=\"$classname\"";
+    }
+
+    /**
      * htmlEscapeWithoutEntityRef
-     * 
+     *
      * 実体参照以外に対してhtmlspecialcharsを行う
-     * 
+     *
      * @param $text array
      * @return string
      */

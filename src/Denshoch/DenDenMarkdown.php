@@ -921,11 +921,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         /* Find tables with leading pipe */
         $ls_re = "[ ]{0,$less_than_tab}";
+        $caption_re = '(?:'.$ls_re.'\|=\.[ ]*(?P<caption>[^|]+?)\n)?';
         $thead_re = '(?P<thead>('.$ls_re.'([|].*[|].*)\n)*)';
         $ul_re = '(?P<underline>'.$ls_re.'[|][ ]*[-:]+[ ]*[|][-| :]*)\n';
         $tbody_re = '(?P<tbody>(?>[ ]*[|].*[|].*\n)*)';
         $nl_re = '(?=\n|\Z)'; # newlines
-        $pattern = '/^'.$thead_re.$ul_re.$tbody_re.$nl_re.'/m';
+        $pattern = '/^'.$caption_re.$thead_re.$ul_re.$tbody_re.$nl_re.'/m';
 
         $text = preg_replace_callback($pattern, array($this, '_doDDmdTable_leadingpipe_callback'), $text);
 
@@ -933,7 +934,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $thead_re = '(?P<thead>('.$ls_re.'(\S.*[|].*)\n)*)';
         $ul_re = "(?P<underline>[-:]+[ ]*[|][-| :]*)\n";
         $tbody_re = '(?P<tbody>(?>.*[|].*\n)*)';
-        $pattern = '/^'.$thead_re.$ls_re.$ul_re.$tbody_re.$nl_re.'/m';
+        $pattern = '/^'.$caption_re.$thead_re.$ls_re.$ul_re.$tbody_re.$nl_re.'/m';
 
         $text = preg_replace_callback($pattern, array($this, '_doDDmdTable_callback'), $text);
 
@@ -966,6 +967,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      * @return string
      */
     protected function _doDDmdTable_callback($matches) {
+
+        var_dump($matches);
 
         $col_count = 0; # col count of first row
 
@@ -1014,6 +1017,13 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         # Start write table
         $text = "<table>\n";
+
+        # Write caption
+        if(!empty($matches['caption'])) {
+            $text .= "<caption>";
+            $text .= $this->runSpanGamut(trim($matches['caption']));
+            $text .= "</caption>\n";
+        }
 
         # Write thead
         $text .= "<thead>\n";

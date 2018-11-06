@@ -30,8 +30,11 @@
         "test": [
             "phpunit"
         ],
-        "lint": [
-            "phpcs --standard=ruleset.xml src/Denshoch/"
+        "phpcs": [
+            "phpcs --standard=ruleset.xml src/Denshoch/ | more"
+        ],
+        "phpcbf": [
+            "phpcbf --standard=ruleset.xml src/Denshoch/"
         ]
     }
 }

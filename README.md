@@ -4,8 +4,6 @@ DenDenMarkdown (でんでんマークダウン)
 by Densho Channel  
 <https://denshochan.com/>
 
-*Densho-chan the spirit of ebook will help your creation!*
-
 ![](https://lh4.googleusercontent.com/-m3cvu_gKtW8/TrauQGoZbHI/AAAAAAAAJdc/ytImJ4o4DcU/s288/sd-07.png)  
 Illustration (c) JCN Inc. & Garakuta.
 
@@ -91,7 +89,7 @@ Thanks
 Copyright and License
 ---------------------
 
-DenDen Markdown  
+DenDenMarkdown  
 Copyright (c) 2013 Densho Channel  
 <http://densho.hatenablog.com/>  
 All rights reserved.

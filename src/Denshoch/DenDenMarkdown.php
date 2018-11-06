@@ -2,7 +2,7 @@
 namespace Denshoch;
 
 #
-# DenDenMarkdown - just a little help for them.
+# DenDenMarkdown
 #
 # DenDen Markdown
 # Copyright (c) 2013-2017 Densho Channel
@@ -20,7 +20,13 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.2.8";
+    const DENDENMARKDOWN_VERSION = "1.3.0";
+
+    /**
+     * Change to `true` to enable line breaks on \n without two trailling spaces
+     * @var boolean
+     */
+    public $hard_wrap = true;
 
     # Option for adding epub:type attribute.
     public $epubType = true;
@@ -260,14 +266,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             }mx',
             "\n".$this->hashBlock("<hr class=\"docbreak\"$this->empty_element_suffix")."\n",
             $text);
-    }
-
-    # GFM Hard Break
-    protected function doHardBreaks($text)
-    {
-        # Do hard breaks:
-        return preg_replace_callback('/ {0,}\n/',
-            array($this, '_doHardBreaks_callback'), $text);
     }
 
     protected function doPageNums($text)
@@ -967,8 +965,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      * @return string
      */
     protected function _doDDmdTable_callback($matches) {
-
-        var_dump($matches);
 
         $col_count = 0; # col count of first row
 

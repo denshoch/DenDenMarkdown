@@ -81,7 +81,11 @@ class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
 
     public function testOlOutOfOrder()
     {
+        $this->parser->enhanced_ordered_list = false;
         $this->assertTransformedFile('ol.html', 'ol-out-of-order.md');
+
+        $this->parser->enhanced_ordered_list = true;
+        $this->assertTransformation('ol-out-of-order');
     }
 
     public function testOlEscape()

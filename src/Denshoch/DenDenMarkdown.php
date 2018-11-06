@@ -23,10 +23,18 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     const DENDENMARKDOWN_VERSION = "1.3.0";
 
     /**
-     * Change to `true` to enable line breaks on \n without two trailling spaces
+     * Alias of $hard_wrap
+     * 
      * @var boolean
      */
-    public $hard_wrap = true;
+    public $hardWrap = true;
+
+    /**
+     * Alias of $enhanced_ordered_list
+     *
+     * @var bool
+     */
+    public $enhancedOrderedList = true;
 
     # Option for adding epub:type attribute.
     public $epubType = true;
@@ -35,9 +43,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public $dpubRole = true;
 
     # Optional class attributes for footnote links and backlinks.
+    public $footnoteIdPrefix = "";
     public $footnoteLinkClass = "noteref";
+
     public $footnoteLinkContent = "%%";
     public $footnoteBacklinkClass = "";
+
     public $footnoteBacklinkContent = "&#9166;";
 
     # Optional class attributes for optional headers.
@@ -65,12 +76,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public $ddmdEndnotes = false;
     public $endnotesHeadingContent = "";
     public $endnotesHeadingTag = "p";
+    public $endnoteIdPrefix = '';
     public $endnoteLinkClass = "enref";
     public $endnoteLinkTitle = "";
     public $endnoteClass = "endnote";
     public $endnoteBacklinkClass = "";
     public $endnoteBacklinkContent = "&#9166;";
-    protected $en_id_prefix = '';
     protected $endnotes = array();
     protected $endnotes_ordered = array();
     protected $endnotes_ref_count = array();
@@ -90,6 +101,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         /* alias */
         #$this->table_align_class_tmpl &= $this->tableAlignClassTmpl;
         #$this->tableAlignClassTmpl &= $this->table_align_class_tmpl;
+        $this->setAlias();
 
         $this->escape_chars .= '';
 
@@ -133,6 +145,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 "dpubRole",
                 "ddmdTable",
                 "ddmdEndnotes",
+                "enhancedOrderedList",
+                "hardWrap",
             ];
 
             foreach ($boolProps as $prop) {
@@ -148,12 +162,14 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $stringProps = [
                 "rubyParenthesisOpen",
                 "rubyParenthesisClose",
+                "footnoteIdPrefix",
                 "footnoteLinkClass",
                 "footnoteLinkContent",
                 "footnoteBacklinkClass",
                 "footnoteBacklinkContent",
                 "endnotesHeadingContent",
                 "endnotesHeadingTag",
+                "endnoteIdPrefix",
                 "endnoteLinkClass",
                 "endnoteLinkTitle",
                 "endnoteClass",
@@ -187,8 +203,26 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
     }
 
+    protected function setAlias() {
+        $alias_pairs = [
+            ["hard_wrap", "hardWrap"],
+            ["enhanced_ordered_list", "enhancedOrderedList"],
+            ["fn_id_prefix", "footnoteIdPrefix"],
+            ["fn_link_class", "footnoteLinkClass"],
+            ["fn_backlink_class", "footnoteBacklinkClass"],
+            ["fn_backlink_html", "footnoteBacklinkContent"],
+            ["table_align_class_tmpl", "tableAlignClassTmpl"]
+        ];
+
+        foreach ($alias_pairs as $pair) {
+            $org = $pair[0];
+            $alias = $pair[1];
+            $this->$org =& $this->$alias;
+        }
+    }
+
     # Tags that are always treated as block tags:
-    protected $block_tags_re = 'address|article|aside|blockquote|body|center|dd|details|dialog|dir|div|dl|dt|figcaption|figure|footer|h[1-6]|header|hgroup|hr|html|legend|listing|menu|nav|ol|p|plaintext|pre|section|summary|style|table|ul|xmp';
+    protected $block_tags_re = 'address|article|aside|blockquote|body|center|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hgroup|hr|html|iframe|legend|listing|menu|nav|ol|p|plaintext|pre|section|style|summary|table|ul|xmp';
 
     # Tags where markdown="1" default to span mode:
     protected $contain_span_tags_re = 'p|h[1-6]|li|dd|dt|td|th|legend|address';
@@ -673,7 +707,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     protected function _stripEndnotes_callback($matches)
     {
-        $note_id = $this->en_id_prefix . $matches[1];
+        $note_id = $this->endnoteIdPrefix . $matches[1];
         $this->endnotes[$note_id] = $this->outdent($matches[2]);
 
         return ''; # String that will replace the block
@@ -833,7 +867,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     protected function _appendEndnotes_callback($matches)
     {
 
-        $node_id = $this->en_id_prefix . $matches[1];
+        $node_id = $this->endnoteIdPrefix . $matches[1];
         $link_text = $matches[2];
 
         # Create endnote marker only if it has a corresponding endnote *and*

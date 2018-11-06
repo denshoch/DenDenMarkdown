@@ -440,6 +440,11 @@ class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
         $this->assertTransformation('block-tag-hn');
     }
 
+    public function testBlockTagIframe()
+    {
+        $this->assertTransformation('block-tag-iframe');
+    }
+
     public function testBlockTagHeader()
     {
         $this->assertTransformation('block-tag-header');
@@ -618,11 +623,6 @@ class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
     public function testPhrasingContentTagI()
     {
         $this->assertTransformation('phrasing_content_tag_i');
-    }
-
-    public function testPhrasingContentTagIframe()
-    {
-        $this->assertTransformation('phrasing_content_tag_iframe');
     }
 
     public function testPhrasingContentTagImg()

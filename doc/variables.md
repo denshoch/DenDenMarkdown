@@ -1,3 +1,30 @@
+# Params
+
+autoTcy
+autoTextOrientation
+ddmdEndnotes
+ddmdTable
+endnoteBacklinkClass
+endnoteBacklinkContent
+endnoteClass
+endnoteIdPrefix
+endnoteLinkClass
+endnoteLinkTitle
+endnotesHeadingContent
+endnotesHeadingTag
+footnoteBacklinkClass
+footnoteBacklinkContent
+footnoteIdPrefix
+footnoteLinkClass
+footnoteLinkContent
+pageNumberClass
+pageNumberContent
+rubyParenthesisClose
+rubyParenthesisOpen
+tableAlignClassTmpl
+tcyDigit
+
+
 # Aliases
 
 | PHP Markdown Extra | DenDenMarkdown | Type | default |

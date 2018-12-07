@@ -91,6 +91,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     # Extra variables for tables
     public $tableAlignClassTmpl = "";
 
+    # pcre.backtrack_limit
+    protected $backtrack_limit = 100000000;
+
     /**
      * __construct
      *
@@ -98,6 +101,13 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     public function __construct(array $options = null)
     {
+        $backtrack_limit = ini_get('pcre.backtrack_limit');
+
+        if ( (integer) $backtrack_limit <= 1000000) {
+            error_log("pcre.backtrack_limit' is low, increase to {$this->backtrack_limit}" );
+            $this->setBacktrakLimit((string) $this->backtrack_limit);
+        }
+
         /* alias */
         #$this->table_align_class_tmpl &= $this->tableAlignClassTmpl;
         #$this->tableAlignClassTmpl &= $this->table_align_class_tmpl;
@@ -222,6 +232,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
     }
 
+    public function setBacktrakLimit(int $limit)
+    {
+        ini_set('pcre.backtrack_limit', $limit);
+    }
+
     # Tags that are always treated as block tags:
     protected $block_tags_re = 'address|article|aside|blockquote|body|center|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hgroup|hr|html|iframe|legend|listing|menu|nav|ol|p|plaintext|pre|section|style|summary|table|ul|xmp';
 
@@ -312,9 +327,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     {
         $pagebreak_block_reg = '/^[ ]{0,3}\[(%)(%?)(.+?)\][ ]*/m';
         $text = preg_replace_callback($pagebreak_block_reg, array(&$this, '_doPageNumsBlock_callback'), $text);
+        $this->checkPregReplaceCallback($text);
 
         $pagebreak_reg = '/\[(%)(%?)(.+?)\]/m';
         $text = preg_replace_callback($pagebreak_reg, array(&$this, '_doPageNums_callback'), $text);
+        $this->checkPregReplaceCallback($text);
 
         return $text;
     }
@@ -577,6 +594,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     array($this, '_appendFootnotes_callback'),
                     $footnote
                 );
+                $this->checkPregReplaceCallback($footnote);
 
                 ++$num;
                 $attr = str_replace("%%", $num, $attr);
@@ -714,6 +732,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             array($this, '_stripEndnotes_callback'),
             $text
         );
+        $this->checkPregReplaceCallback($text);
 
         return $text;
     }
@@ -763,6 +782,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             array($this, '_doEndnotes_reference_callback'),
             $text
         );
+        $this->checkPregReplaceCallback($text);
 
         return $text;
     }
@@ -781,7 +801,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * appendEndnotes
+     * Append Endnotes to text
      *
      * @param $input string
      * @return string
@@ -797,6 +817,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             array($this, '_appendEndnotes_callback'),
             $text
         );
+        $this->checkPregReplaceCallback($text);
 
         if (!empty($this->endnotes_ordered)) {
             $text .= "\n\n";
@@ -829,9 +850,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $num = 0;
 
             while (!empty($this->endnotes_ordered)) {
-                $endnote = reset($this->endnotes_ordered);
-                $note_id = key($this->endnotes_ordered);
-                unset($this->endnotes_ordered[$note_id]);
+                $endnote = reset($this->endnotes_ordered); // get first endnote content
+                $note_id = key($this->endnotes_ordered); // get first endnote id
+                unset($this->endnotes_ordered[$note_id]); // remove endnote from stack
                 $ref_count = $this->endnotes_ref_count[$note_id];
                 unset($this->endnotes_ref_count[$note_id]);
                 unset($this->endnotes[$note_id]);
@@ -880,6 +901,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
             $text .= "</div>";
         }
+        $this->checkPregReplaceCallback($text);
 
         return $text;
     }
@@ -981,6 +1003,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $pattern = '/^'.$caption_re.$thead_re.$ul_re.$tbody_re.$nl_re.'/m';
 
         $text = preg_replace_callback($pattern, array($this, '_doDDmdTable_leadingpipe_callback'), $text);
+        $this->checkPregReplaceCallback($text);
 
         /* Find tables without leading pipe */
         $thead_re = '(?P<thead>('.$ls_re.'(\S.*[|].*)\n)*)';
@@ -989,6 +1012,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $pattern = '/^'.$caption_re.$thead_re.$ls_re.$ul_re.$tbody_re.$nl_re.'/m';
 
         $text = preg_replace_callback($pattern, array($this, '_doDDmdTable_callback'), $text);
+        $this->checkPregReplaceCallback($text);
 
         return $text;
     }
@@ -1003,7 +1027,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     protected function _doDDmdTable_leadingpipe_callback($matches)
     {
-    
         $matches['thead'] = preg_replace('/^ *[|]/m', '', $matches['thead']);
         $matches['underline'] = preg_replace('/^ *[|]/m', '', $matches['underline']);
         $matches['tbody'] = preg_replace('/^ *[|]/m', '', $matches['tbody']);
@@ -1021,7 +1044,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     protected function _doDDmdTable_callback($matches)
     {
-
         $col_count = 0; # col count of first row
 
         $algn_re = "(?P<algn>(?:\<(?!>)|&lt;&gt;|&gt;|&lt;|(?<!<)\>|\<\>|\=|[()]+(?! )))?";
@@ -1092,6 +1114,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             foreach ($row_cells as $cell) {
                 $attr = '';
                 $algn = '';
+                $cell .= ' ';
     
                 if (preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch)) {
                     if (!empty($mtch['algn'])) {
@@ -1120,6 +1143,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $cell = $mtch['cell'];
                 } else {
                     if (empty($algn)) {
+                        if (empty($col_algn[$c_cnt])) {
+                            $col_algn[$c_cnt] = '';
+                        }
                         $algn = $col_algn[$c_cnt];
                     }
                     $attr .= " scope=\"col\"";
@@ -1224,6 +1250,13 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         $classname = str_replace('%%', $alignname, $this->tableAlignClassTmpl);
         return " class=\"$classname\"";
+    }
+
+    protected function checkPregReplaceCallback($text)
+    {
+        if (is_null($text)) {
+            trigger_error("Error occured in preg_replace_callback");
+        }
     }
 
     /**

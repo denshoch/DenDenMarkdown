@@ -14,11 +14,6 @@ class DDmdTableTest extends PHPUnit_Framework_TestCase
         $this->assertTransformation('01');
     }
 
-    public function test02()
-    {
-        $this->assertTransformation('02');
-    }
-
     public function testTableAlignClassTmpl()
     {
     	#$this->parser->tableAlignClassTmpl = "text-%%";

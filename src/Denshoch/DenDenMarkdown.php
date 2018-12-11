@@ -92,7 +92,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public $tableAlignClassTmpl = "";
 
     # pcre.backtrack_limit
-    protected $backtrack_limit = 100000000;
+    protected $backtrack_limit = 2000000;
 
     /**
      * __construct
@@ -101,12 +101,14 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     public function __construct(array $options = null)
     {
+        /*
         $backtrack_limit = ini_get('pcre.backtrack_limit');
 
         if ( (integer) $backtrack_limit <= 1000000) {
             error_log("pcre.backtrack_limit' is low, increase to {$this->backtrack_limit}" );
             $this->setBacktrakLimit((string) $this->backtrack_limit);
         }
+        */
 
         /* alias */
         #$this->table_align_class_tmpl &= $this->tableAlignClassTmpl;
@@ -376,7 +378,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $title = $matches[3];
 
         if ("%" == $matches[2]) {
-            $content = $title;
+            $content = str_replace("%%", $title, $this->pageNumberContent);
         } else {
             $content = '';
         }
@@ -995,10 +997,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         /* Find tables with leading pipe */
         $ls_re = "[ ]{0,$less_than_tab}";
-        $caption_re = '(?:'.$ls_re.'\|=\.[ ]*(?P<caption>[^|]+?)\n)?';
-        $thead_re = '(?P<thead>('.$ls_re.'([|].*[|].*)\n)*)';
-        $ul_re = '(?P<underline>'.$ls_re.'[|][ ]*[-:]+[ ]*[|][-| :]*)\n';
-        $tbody_re = '(?P<tbody>(?>[ ]*[|].*[|].*\n)*)';
+        $caption_re = '(?:'.$ls_re.'\|=\.[ ]*(?<caption>[^|]+?)\n)?';
+        $thead_re = '(?<thead>(?>'.$ls_re.'[|].*[|].*\n)+?)';
+        $ul_re = '(?>(?<underline>'.$ls_re.'[|][ ]*[-:]+[ ]*[|][-| :]*\n))';
+        $tbody_re = '(?<tbody>(?>'.$ls_re.'[|].*[|].*\n)+?)';
         $nl_re = '(?=\n|\Z)'; # newlines
         $pattern = '/^'.$caption_re.$thead_re.$ul_re.$tbody_re.$nl_re.'/m';
 
@@ -1006,9 +1008,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $this->checkPregReplaceCallback($text);
 
         /* Find tables without leading pipe */
-        $thead_re = '(?P<thead>('.$ls_re.'(\S.*[|].*)\n)*)';
-        $ul_re = "(?P<underline>[-:]+[ ]*[|][-| :]*)\n";
-        $tbody_re = '(?P<tbody>(?>.*[|].*\n)*)';
+        $thead_re = '(?<thead>(?>'.$ls_re.'\S.*[|].*\n)+?)';
+        $ul_re = '(?>(?<underline>'.$ls_re.'[-:]+[ ]*[|][-| :]*\n))';
+        $tbody_re = '(?<tbody>(?>'.$ls_re.'.*[|].*\n)+?)';
         $pattern = '/^'.$caption_re.$thead_re.$ls_re.$ul_re.$tbody_re.$nl_re.'/m';
 
         $text = preg_replace_callback($pattern, array($this, '_doDDmdTable_callback'), $text);
@@ -1049,7 +1051,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $algn_re = "(?P<algn>(?:\<(?!>)|&lt;&gt;|&gt;|&lt;|(?<!<)\>|\<\>|\=|[()]+(?! )))?";
         $cspn_re = "(?:\\\\(?P<colspan>[0-9])+)";
         $rspn_re = "(?:\/(?P<rowspan>[0-9])+)";
-        $spn_re = "(?:${cspn_re}|${rspn_re})*";
+        $spn_re = "(?:${cspn_re}|${rspn_re})*?";
         $cattr = "(?P<cattr>_?${algn_re}${spn_re}\. )";
 
         # Remove any tailing pipes for each line.
@@ -1120,11 +1122,13 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     if (!empty($mtch['algn'])) {
                         $algn = $this->_doDDmdTable_makeAlignAttr($mtch['algn']);
                     }
-    
-                    if (preg_match("/_/", $mtch['cattr'])) {
-                        $attr .= " scope=\"row\"";
-                    } else {
-                        $attr .= " scope=\"col\"";
+
+                    if ($cell !== ' ') {
+                        if (preg_match("/_/", $mtch['cattr'])) {
+                            $attr .= " scope=\"row\"";
+                        } else {
+                            $attr .= " scope=\"col\"";
+                        }
                     }
     
                     $cspn = (int) $mtch['colspan'];
@@ -1178,6 +1182,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $tag = 'td';
                 $attr = '';
                 $algn = '';
+                $cell .= ' ';
         
                 if (preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch)) {
                     if (preg_match("/_/", $mtch['cattr'])) {

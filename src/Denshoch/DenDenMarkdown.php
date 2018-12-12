@@ -94,6 +94,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     # pcre.backtrack_limit
     protected $backtrack_limit = 2000000;
 
+    public $targetEpubCheckVersion = "4.1.0";
+
     /**
      * __construct
      *
@@ -189,7 +191,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 "endnoteBacklinkContent",
                 "pageNumberClass",
                 "pageNumberContent",
-                "tableAlignClassTmpl"
+                "tableAlignClassTmpl",
+                "targetEpubCheckVersion"
             ];
 
             foreach ($stringProps as $prop) {
@@ -212,6 +215,19 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         } else {
             $this->rpOpen = "";
             $this->rpClose = "";
+        }
+
+        if (empty($this->targetEpubCheckVersion)) {
+            $this->endnotesEpubType = "endnotes";
+            $this->endnoteEpubType = "endnote";
+        } else {
+            if (version_compare($this->targetEpubCheckVersion, "4.1.0", '<=')) {
+                $this->endnotesEpubType = "rearnotes";
+                $this->endnoteEpubType = "rearnote";
+            } else {
+                $this->endnotesEpubType = "endnotes";
+                $this->endnoteEpubType = "endnote";
+            }
         }
     }
 
@@ -825,7 +841,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $text .= "\n\n";
             $text .= "<div class=\"endnotes\"";
             if ($this->epubType) {
-                $text .= " epub:type=\"endnotes\"";
+                $text .= " epub:type=\"{$this->endnotesEpubType}\"";
             }
             if ($this->dpubRole) {
                 $text .=" role=\"doc-endnotes\"";
@@ -891,7 +907,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $text .= " class=\"${class}\"";
                 }
                 if ($this->epubType) {
-                    $text .= " epub:type=\"endnote\"";
+                    $text .= " epub:type=\"{$this->endnoteEpubType}\"";
                 }
                 if ($this->dpubRole) {
                     $text .= " role=\"doc-endnote\"";

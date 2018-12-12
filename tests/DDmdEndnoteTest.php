@@ -5,7 +5,7 @@ class DDmdEndnoteTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->parser = new Denshoch\DenDenMarkdown( array("ddmdEndnotes" => true) );
+        $this->parser = new Denshoch\DenDenMarkdown( array("ddmdEndnotes" => true, "targetEpubCheckVersion" => "") );
         $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'DDmdEndnote';
     }
 

@@ -1,7 +1,9 @@
 <?php
-require_once 'vendor/autoload.php';
+declare(strict_types=1);
 
-class DenDenMarkdownTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class DenDenMarkdownTest extends TestCase
 {
     public function setUp()
     {

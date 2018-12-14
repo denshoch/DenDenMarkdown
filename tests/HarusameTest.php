@@ -1,7 +1,9 @@
 <?php
-require_once 'vendor/autoload.php';
+declare(strict_types=1);
 
-class HarusameTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class HarusameTest extends TestCase
 {
 	public function setUp()
     {

@@ -1,7 +1,9 @@
 <?php
-require_once 'vendor/autoload.php';
+declare(strict_types=1);
 
-class DDmdTableTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class DDmdTableTest extends TestCase
 {
     public function setUp()
     {
@@ -16,8 +18,8 @@ class DDmdTableTest extends PHPUnit_Framework_TestCase
 
     public function testTableAlignClassTmpl()
     {
-    	#$this->parser->tableAlignClassTmpl = "text-%%";
-        #$this->assertTransformation('testTableAlignClassTmpl');
+    	$this->parser->tableAlignClassTmpl = "text-%%";
+        $this->assertTransformation('testTableAlignClassTmpl');
     }
 
     protected function assertTransformation($fixtureName)

@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 
-require_once 'vendor/autoload.php';
+use PHPUnit\Framework\TestCase;
 
-class UtilsTest extends PHPUnit_Framework_TestCase
+class UtilsTest extends TestCase
 {
     public function testMarkdown()
     {

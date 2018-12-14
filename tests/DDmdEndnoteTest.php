@@ -1,7 +1,9 @@
 <?php
-require_once 'vendor/autoload.php';
+declare(strict_types=1);
 
-class DDmdEndnoteTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class DDmdEndnoteTest extends TestCase
 {
     public function setUp()
     {

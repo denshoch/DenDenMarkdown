@@ -20,7 +20,7 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.3.2";
+    const DENDENMARKDOWN_VERSION = "1.3.3";
 
     /**
      * Alias of $hard_wrap

@@ -1,7 +1,9 @@
 <?php
-require_once 'vendor/autoload.php';
+declare(strict_types=1);
 
-class CustomPageNumberTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class CustomPageNumberTest extends TestCase
 {
     public function testCustomPageNumberClass()
     {

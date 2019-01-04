@@ -1065,8 +1065,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $col_count = 0; # col count of first row
 
         $algn_re = "(?P<algn>(?:\<(?!>)|&lt;&gt;|&gt;|&lt;|(?<!<)\>|\<\>|\=|[()]+(?! )))?";
-        $cspn_re = "(?:\\\\(?P<colspan>[0-9])+)";
-        $rspn_re = "(?:\/(?P<rowspan>[0-9])+)";
+        $cspn_re = "(?:\\\\(?P<colspan>[0-9]+?))";
+        $rspn_re = "(?:\/(?P<rowspan>[0-9]+?))";
         $spn_re = "(?:${cspn_re}|${rspn_re})*?";
         $cattr = "(?P<cattr>_?${algn_re}${spn_re}\. )";
 

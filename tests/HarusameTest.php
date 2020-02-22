@@ -99,12 +99,12 @@ class HarusameTest extends TestCase
 
     public function testHTML()
     {
-        $source =    '<html><head><title>12ああああ34ああ457あああ89</title><body>12ああああ34ああ457あああ89</body></html>';
-        $excpected = '<html><head><title>12ああああ34ああ457あああ89</title><body><span class="tcy">12</span>ああああ<span class="tcy">34</span>ああ457あああ<span class="tcy">89</span></body></html>';
+        $source =    '<html><head><title>12ああああ34ああ457あああ89</title></head><body>12ああああ34ああ457あああ89</body></html>';
+        $excpected = '<html><head><title>12ああああ34ああ457あああ89</title></head><body><span class="tcy">12</span>ああああ<span class="tcy">34</span>ああ457あああ<span class="tcy">89</span></body></html>';
         $this->is_same($source, $excpected);
 
-        $source =   '<html><head><title>÷∴≠≦≧∧∨＜＞‐－</title><body>÷∴≠≦≧∧∨＜＞‐－</body></html>';
-        $excpected = '<html><head><title>÷∴≠≦≧∧∨＜＞‐－</title><body><span class="sideways">÷</span><span class="sideways">∴</span><span class="sideways">≠</span><span class="sideways">≦</span><span class="sideways">≧</span><span class="sideways">∧</span><span class="sideways">∨</span><span class="sideways">＜</span><span class="sideways">＞</span><span class="sideways">‐</span><span class="sideways">－</span></body></html>';
+        $source =   '<html><head><title>÷∴≠≦≧∧∨＜＞‐－</title></head><body>÷∴≠≦≧∧∨＜＞‐－</body></html>';
+        $excpected = '<html><head><title>÷∴≠≦≧∧∨＜＞‐－</title></head><body><span class="sideways">÷</span><span class="sideways">∴</span><span class="sideways">≠</span><span class="sideways">≦</span><span class="sideways">≧</span><span class="sideways">∧</span><span class="sideways">∨</span><span class="sideways">＜</span><span class="sideways">＞</span><span class="sideways">‐</span><span class="sideways">－</span></body></html>';
         $this->is_same($source, $excpected);
     }
 

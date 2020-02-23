@@ -19,23 +19,21 @@ EOT;
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="footnoteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
-<hr />
+<hr/>
 <ol>
 
 <li>
 <div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
-<p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">&#9166;</a></p>
+<p>そして、これが脚注です。 <a href="#fnref_1" role="doc-backlink">⏎</a></p>
 </div>
 </li>
 
 </ol>
 </div>
-
-
 EOT;
 
         $actual = $parser->transform($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(rtrim($expected), $actual);
 
     }
 
@@ -53,23 +51,21 @@ EOT;
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">注1番</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
-<hr />
+<hr/>
 <ol>
 
 <li>
 <div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
-<p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">&#9166;</a></p>
+<p>そして、これが脚注です。 <a href="#fnref_1" role="doc-backlink">⏎</a></p>
 </div>
 </li>
 
 </ol>
 </div>
-
-
 EOT;
 
         $actual = $parser->transform($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(rtrim($expected), $actual);
 
     }
 
@@ -87,23 +83,21 @@ EOT;
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
-<hr />
+<hr/>
 <ol>
 
 <li>
 <div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
-<p>そして、これが脚注です。&#160;<a href="#fnref_1" class="backlink" role="doc-backlink">&#9166;</a></p>
+<p>そして、これが脚注です。 <a href="#fnref_1" class="backlink" role="doc-backlink">⏎</a></p>
 </div>
 </li>
 
 </ol>
 </div>
-
-
 EOT;
 
         $actual = $parser->transform($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(rtrim($expected), $actual);
 
     }
 
@@ -121,23 +115,21 @@ EOT;
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
-<hr />
+<hr/>
 <ol>
 
 <li>
 <div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
-<p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">もどる</a></p>
+<p>そして、これが脚注です。 <a href="#fnref_1" role="doc-backlink">もどる</a></p>
 </div>
 </li>
 
 </ol>
 </div>
-
-
 EOT;
 
         $actual = $parser->transform($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(rtrim($expected), $actual);
 
           $parser = new Denshoch\DenDenMarkdown( array("footnoteBacklinkContent" => "合印%%にもどる" ) );
 
@@ -151,23 +143,21 @@ EOT;
 <p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
-<hr />
+<hr/>
 <ol>
 
 <li>
 <div id="fn_1" class="footnote" epub:type="footnote" role="doc-footnote">
-<p>そして、これが脚注です。&#160;<a href="#fnref_1" role="doc-backlink">合印1にもどる</a></p>
+<p>そして、これが脚注です。 <a href="#fnref_1" role="doc-backlink">合印1にもどる</a></p>
 </div>
 </li>
 
 </ol>
 </div>
-
-
 EOT;
 
         $actual = $parser->transform($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(rtrim($expected), $actual);
 
     }
 }

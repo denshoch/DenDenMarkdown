@@ -33,7 +33,7 @@ class DDmdTableTest extends TestCase
     {
         $expected = $this->fixture($transformedFile);
         $actual = $this->parser->transform($this->fixture($sourceFile));
-        $this->assertSame($expected, $actual);
+        $this->assertSame(rtrim($expected), $actual);
     }
 
     protected function fixture($fileName)

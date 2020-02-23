@@ -19,11 +19,10 @@ EOT;
 <div id="pagenum_36" class="page" title="36" epub:type="pagebreak" role="doc-pagebreak">36</div>
 
 <h2>大見出し</h2>
-
 EOT;
 
         $actual = $parser->transform($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(rtrim($expected), $actual);
         
     }
 
@@ -41,11 +40,10 @@ EOT;
 <div id="pagenum_36" class="pagenum" title="36" epub:type="pagebreak" role="doc-pagebreak">第36ページ</div>
 
 <h2>大見出し</h2>
-
 EOT;
 
         $actual = $parser->transform($source);
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals(rtrim($expected), $actual);
         
     }
 }

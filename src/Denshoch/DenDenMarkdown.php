@@ -94,7 +94,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     # pcre.backtrack_limit
     protected $backtrack_limit = 2000000;
 
-    public $targetEpubCheckVersion = "4.1.0";
+    public $targetEpubCheckVersion = "4.2.0";
 
     /**
      * __construct

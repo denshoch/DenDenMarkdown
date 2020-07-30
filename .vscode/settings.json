@@ -1,0 +1,9 @@
+{
+    "[html]": {
+        "editor.formatOnSave": false
+    },
+    "[markdown]": {
+        "editor.wordWrap": "off",
+        "files.trimTrailingWhitespace": false,
+    },
+}

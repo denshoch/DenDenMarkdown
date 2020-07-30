@@ -23,6 +23,7 @@ DDmdTableは、[PHP Markdown ExtraのTable記法][]をベースにしていま�
 
 | | PHP Markdown Extra | Textile | DDmdTable |
 | :--- | :---: | :---: | :---: |
+| `div`包含 | No | No | Yes |
 | 複数行ヘッダー | No | Yes | Yes |
 | 見出しセル(`th`)指定 | No | Yes | Yes |
 | `tfoot` | No | Yes | No |
@@ -57,6 +58,42 @@ options:
 ```php
 $parser = new \Denshoch\DenDenMarkdown(array("ddmdTable" => true));
 ```
+
+ラッパー
+---------
+
+DDmdTableではアクセシビリティ上の理由から `table` 要素を `div` 要素で囲んでいます。この`div` 要素をここではラッパーと呼びます。
+
+ラッパーのクラス名の初期値は `tbl_wpr` です。
+
+```
+<div class="tbl_wpr">
+<table>
+〜
+</table>
+</div>
+```
+
+ラッパーのクラス名は `ddmdTableWrapperClass` パラメタで指定できます。
+
+```
+options:
+  ddmdTable: true
+  ddmdTableWrapperClass: hoge
+```
+
+```php
+$parser = new \Denshoch\DenDenMarkdown(
+  array(
+    "ddmdTable" => true,
+    "ddmdTableWrapperClass" => "hoge"
+    )
+  );
+```
+
+ラッパーで囲みたくない場合は、`ddmdTableWrapperClass` に空文字 `""` 指定してください。
+
+なお、後続のコード例では簡略化のために、ラッパーを省略しています。
 
 <a name="syntax"></a>
 
@@ -583,7 +620,6 @@ Textileのように、`<`、`=`、`>`の文字を使ってセルごとに行揃�
 </tr>
 </tbody>
 </table>
-
 
 以上
 

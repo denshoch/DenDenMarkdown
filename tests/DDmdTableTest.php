@@ -22,6 +22,28 @@ class DDmdTableTest extends TestCase
         $this->assertTransformation('testTableAlignClassTmpl');
     }
 
+    public function testCustomWrapperClass01()
+    {
+        $this->parser = new Denshoch\DenDenMarkdown( 
+            array(
+                "ddmdTable" => true,
+                "ddmdTableWrapperClass" => "ddmdTable"
+                )
+            );
+        $this->assertTransformation('testCustomWrapperClass01');
+    }
+
+    public function testCustomWrapperClass02()
+    {
+        $this->parser = new Denshoch\DenDenMarkdown( 
+            array(
+                "ddmdTable" => true,
+                "ddmdTableWrapperClass" => ""
+                )
+            );
+        $this->assertTransformation('testCustomWrapperClass02');
+    }
+
     protected function assertTransformation($fixtureName)
     {
         $sourceFile = $fixtureName . '.md';

@@ -71,6 +71,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     # Extra variables for custom table markup
     public $ddmdTable = false;
+    public $ddmdTableWrapperClass = "tbl_wrp";
 
     # Extra variables for endnotes
     public $ddmdEndnotes = false;
@@ -176,6 +177,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $stringProps = [
                 "rubyParenthesisOpen",
                 "rubyParenthesisClose",
+                "ddmdTableWrapperClass",
                 "footnoteIdPrefix",
                 "footnoteLinkClass",
                 "footnoteLinkContent",
@@ -1109,7 +1111,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
 
         # Start write table
-        $text = "<table>\n";
+        $text = "";
+
+        if ($this->ddmdTableWrapperClass !== "") {
+            $text .= "<div";
+            $text .= " class=\"" . \htmlspecialchars($this->ddmdTableWrapperClass) ."\"";
+            $text .=  ">\n";
+        }
+
+        $text .= "<table>\n";
 
         # Write caption
         if (!empty($matches['caption'])) {
@@ -1239,6 +1249,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
         $text .= "</tbody>\n";
         $text .= "</table>";
+
+        if ($this->ddmdTableWrapperClass !== "") {
+            $text .= "\n</div>";
+        }
 
         return $this->hashBlock($text) . "\n";
     }

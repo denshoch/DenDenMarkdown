@@ -23,7 +23,7 @@ DDmdTableは、[PHP Markdown ExtraのTable記法][]をベースにしていま�
 
 | | PHP Markdown Extra | Textile | DDmdTable |
 | :--- | :---: | :---: | :---: |
-| `div`包含 | No | No | Yes |
+| ラッパー | No | No | Yes |
 | 複数行ヘッダー | No | Yes | Yes |
 | 見出しセル(`th`)指定 | No | Yes | Yes |
 | `tfoot` | No | Yes | No |

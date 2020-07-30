@@ -4,6 +4,7 @@ autoTcy
 autoTextOrientation
 ddmdEndnotes
 ddmdTable
+ddmdTableWrapperClass
 endnoteBacklinkClass
 endnoteBacklinkContent
 endnoteClass

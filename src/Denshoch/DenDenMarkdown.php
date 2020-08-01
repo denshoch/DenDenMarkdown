@@ -890,10 +890,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
                 $content = $this->htmlEscapeWithoutEntityRef($this->endnoteBacklinkContent);
 
-                $backlink = "<a href=\"#enref:$note_id\"$attr>${content}</a>";
+                $backlink = "<a href=\"#enref_$note_id\"$attr>${content}</a>";
 
                 for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#enref$ref_num:$note_id\"$attr>${content}</a>";
+                    $backlink .= " <a href=\"#enref$ref_num_$note_id\"$attr>${content}</a>";
                 }
 
                 # Add backlink to last paragraph; create new paragraph if needed.
@@ -903,7 +903,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $endnote .= "\n\n<p>${backlink}</p>";
                 }
 
-                $text .= "<div id=\"en:$note_id\"";
+                $text .= "<div id=\"en_$note_id\"";
                 if ($this->endnoteClass !== "") {
                     $class = $this->encodeAttribute($this->endnoteClass);
                     $text .= " class=\"${class}\"";
@@ -978,7 +978,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr = str_replace("%%", $num, $attr);
             $node_id = $this->encodeAttribute($node_id);
 
-            return "<a id=\"enref${ref_count_mark}:${node_id}\" href=\"#en:${node_id}\"${attr}>${link_text}</a>";
+            return "<a id=\"enref${ref_count_mark}_${node_id}\" href=\"#en_${node_id}\"${attr}>${link_text}</a>";
         }
 
         return "[${matches[2]}][~${matches[1]}]";

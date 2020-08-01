@@ -277,8 +277,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 "autoTextOrientation" => $this->autoTextOrientation
             )
         );
-
-        $text = $harusame->transform($text);
+        $text_org = $text;
+        try {
+            $text = $harusame->transform($text_org);
+        } catch (\ErrorException $e) {
+            fputs(STDERR, $e->getMessage() . "\n");
+            fputs(STDERR, "DenDenMarkdown::transform(): Skip Harusame.\n");
+            $text = $text_org;
+            unset($text_org);
+        }
 
         /* Reset Endnotes count */
         $this->endnotes_ref_count = array();

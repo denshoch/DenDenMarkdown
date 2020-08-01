@@ -15,6 +15,14 @@ class HarusameTest extends TestCase
         $this->parser = new Denshoch\DenDenMarkdown($options);
     }
 
+    public function testInvalidXML()
+    {
+        $source = "<abc>aaa</efg>";
+        $excpected = "<p><abc>aaa</efg></p>";
+
+        $this->is_same($source, $excpected);
+    }
+
     public function testTcy2()
     {
         $source =    '12ああああ34ああ457あああ89';
@@ -105,6 +113,16 @@ class HarusameTest extends TestCase
 
         $source =   '<html><head><title>÷∴≠≦≧∧∨＜＞‐－</title></head><body>÷∴≠≦≧∧∨＜＞‐－</body></html>';
         $excpected = '<html><head><title>÷∴≠≦≧∧∨＜＞‐－</title></head><body><span class="sideways">÷</span><span class="sideways">∴</span><span class="sideways">≠</span><span class="sideways">≦</span><span class="sideways">≧</span><span class="sideways">∧</span><span class="sideways">∨</span><span class="sideways">＜</span><span class="sideways">＞</span><span class="sideways">‐</span><span class="sideways">－</span></body></html>';
+        $this->is_same($source, $excpected);
+    }
+
+    public function testMathml(){
+        $source = '<figure class="mathml" id="illust_index_4"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><msup><mi>W</mi><mo>′</mo></msup><mn>1</mn></msub><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msub><mi>n</mi><mn>1</mn></msub><mo stretchy="false">(</mo><msub><mi>n</mi><mn>1</mn></msub><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>38</mn><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false">(</mo><mn>4</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mn>4</mn><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>38</mn><mo>−</mo><mn>10</mn><mo>=</mo><mn>28</mn></mrow><annotation encoding="TeX">{W\'}_1 - \frac{1}{2}n_1(n_1+1)= 38 - \frac{1}{2}(4)(4+1)=38-10=28</annotation></semantics></math></figure>';
+        $excpected = $source;
+        $this->is_same($source, $excpected);
+
+        $source = '<figure class="mathml"><figcaption>数式: (4.10)</figcaption><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><mi>X</mi><mo>−</mo><mi>E</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo></mrow><mrow><mrow><mi>V</mi><mi>a</mi><mi>r</mi></mrow><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="TeX">Z=\frac{X-E(X)}{{Var}(X)}</annotation></semantics></math></figure>';
+        $excpected = $source;
         $this->is_same($source, $excpected);
     }
 

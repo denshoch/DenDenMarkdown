@@ -16,6 +16,14 @@ class DDmdTableTest extends TestCase
         $this->assertTransformation('01');
     }
 
+    /**
+     * @group t2
+     */
+    public function test02()
+    {
+        $this->assertTransformation('02');
+    }
+
     public function testTableAlignClassTmpl()
     {
     	$this->parser->tableAlignClassTmpl = "text-%%";

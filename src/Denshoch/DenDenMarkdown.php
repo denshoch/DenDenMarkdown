@@ -1088,9 +1088,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         $thead_rows = explode("\n", trim($matches['thead'], "\n"));
         $first_row_cells = preg_split('/ *[|] */', $thead_rows[0]);
-
+        
         foreach ($first_row_cells as $cell) {
+            # add ' ' if column text is empty.
+            $cell = preg_replace('/\.$/', '. ', $cell);
             if (preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch)) {
+                var_dump($mtch);
                 $cspn = (int) $mtch['colspan'];
                 if ($cspn > 1) {
                     $col_count += $cspn;

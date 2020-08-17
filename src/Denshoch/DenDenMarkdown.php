@@ -1093,7 +1093,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             # add ' ' if column text is empty.
             $cell = preg_replace('/\.$/', '. ', $cell);
             if (preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch)) {
-                var_dump($mtch);
                 $cspn = (int) $mtch['colspan'];
                 if ($cspn > 1) {
                     $col_count += $cspn;

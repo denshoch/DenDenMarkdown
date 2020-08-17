@@ -1,0 +1,84 @@
+ddconvVersion: 1.0
+
+titles:
+  - content: 公共図書館における障害者サービスに関する調査研究 (図書館調査研究リポート = NDL research report. 17)
+    fileAs: コウキョウ トショカン ニ オケル ショウガイシャ サービス ニ カンスル チョウサ ケンキュウ　トショカン　チョウサ　ケンキュウ　リポート
+
+creators:
+  - content: 国立国会図書館関西館図書館協力課
+    fileAs: コクリツ　コッカイ　トショカン　カンサイカン　トショカン　キョウリョクカ　
+    role: edt
+
+publishers:
+  - content: 国立国会図書館
+    fileAs: コクリツ　コッカイ　トショカン
+
+date: 2018-12-01
+
+pageDirection: ltr
+
+language: ja
+
+rights: Ⓒ2018 National Diet Library All rights reserved
+
+sources:
+  - content: 978-4-87582-821-1
+    identifierType: isbn
+    sourceOf: pagination
+
+options:
+  #rp要素の始め括弧
+  rubyParenthesisOpen: 《
+  #rp要素の終わり括弧
+  rubyParenthesisClose: 》
+  #table拡張記法を有効化
+  ddmdTable: true
+  #後注記法を有効化
+  ddmdEndnotes: true
+  #後注セクションの見出し
+  endnotesHeadingContent: ""
+  #後注セクションの見出しに使うタグ
+  endnotesHeadingTag: ""
+  # 後注の戻るリンクのテキスト
+  endnoteBacklinkContent: 本文へ戻る⏎
+  #注番号のテキスト(%%があれば番号に置き換えられる)
+  footnoteLinkContent: 注%%
+  #脚注の戻るリンクのテキスト(%%があれば番号に置き換えられる)
+  footnoteBacklinkContent: 本文へ戻る⏎
+  #ページ番号のテキスト(%%があれば番号に置き換えられる)
+  pageNumberContent: 【%%ページ】
+  titlepage: false
+  skipCover: false
+  tocInSpine: false
+  autoTcy: false
+
+
+
+
+a11yMeta:
+  generation: manual
+  mode:
+    - textual
+    - visual
+  modeSufficient:
+    - textual,visual
+    - textual
+  feature:
+    - alternativeText
+    - readingOrder
+    - tableOfContents
+    - printPageNumbers
+    - unlocked
+    - displayTransformability
+    - structuralNavigation
+    - longDescription
+    - annotations
+    - bookmarks
+  hazard:
+    - noFlashingHazard
+    - noMotionSimulationHazard
+    - noSoundHazard
+  summary: このEPUB出版物はWCAG 2.0 Level AAに準拠しています。全ての表、図には代替テキストが提供されているか、長文になる場合は章末か巻末にそれらの長い説明テキスト又は表形式のテキストが挿入され、相互リンクで本文との間を移動できるようになっています。
+  certifiedBy: 国立国会図書館
+  conformsTo: WCAG-AA # WCAG-A | WCAG-AA | WCAG-AAA
+

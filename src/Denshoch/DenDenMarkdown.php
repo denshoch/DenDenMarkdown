@@ -278,6 +278,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             )
         );
         $text_org = $text;
+        // for web app
+        if(!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
         try {
             $text = $harusame->transform($text_org);
         } catch (\ErrorException $e) {

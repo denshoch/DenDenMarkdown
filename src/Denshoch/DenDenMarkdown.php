@@ -906,7 +906,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 }
 
                 # Add backlink to last paragraph; create new paragraph if needed.
-                if (preg_match('{</p>$}', $endnote)) {
+                $para_cnt = preg_match_all('{</p>}', $endnote, $matches);
+                if (preg_match('{</p>$}', $endnote) && $para_cnt === 1) {
                     $endnote = substr($endnote, 0, -4) . "&#160;${backlink}</p>";
                 } else {
                     $endnote .= "\n\n<p>${backlink}</p>";

@@ -121,7 +121,7 @@ class HarusameTest extends TestCase
         $excpected = $source;
         $this->is_same($source, $excpected);
 
-        $source = '<figure class="mathml"><figcaption>数式: (4.10)</figcaption><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><mi>X</mi><mo>−</mo><mi>E</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo></mrow><mrow><mrow><mi>V</mi><mi>a</mi><mi>r</mi></mrow><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="TeX">Z=\frac{X-E(X)}{{Var}(X)}</annotation></semantics></math></figure>';
+        $source = '<figure class="mathml"><figcaption>数式: (4.<span class="tcy">10</span>)</figcaption><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>Z</mi><mo>=</mo><mfrac><mrow><mi>X</mi><mo>−</mo><mi>E</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo></mrow><mrow><mrow><mi>V</mi><mi>a</mi><mi>r</mi></mrow><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="TeX">Z=\frac{X-E(X)}{{Var}(X)}</annotation></semantics></math></figure>';
         $excpected = $source;
         $this->is_same($source, $excpected);
     }

@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.4.2] - 2022-11-25
+
+### Fixed
+- Remove doc-endnote from doc-endnotes items(issue18).
+
 ## [1.4.0] - 2021-10-11
 ### Added
 - Create a new paragraph for backlink if a Endnote has multiple paragraphs.

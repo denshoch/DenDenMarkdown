@@ -921,9 +921,6 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 if ($this->epubType) {
                     $text .= " epub:type=\"{$this->endnoteEpubType}\"";
                 }
-                if ($this->dpubRole) {
-                    $text .= " role=\"doc-endnote\"";
-                }
                 $text .= ">\n";
                 $text .= $endnote . "\n";
                 $text .= "</div>\n\n";

@@ -140,6 +140,7 @@ class DenDenMarkdownTest extends TestCase
         $this->assertTransformation('page-number');
     }
 
+    /** @group pageBreakInline */
     public function testPageBreakInline()
     {
         $this->assertTransformation('page-break-inline');

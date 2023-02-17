@@ -128,6 +128,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $this->block_gamut += array(
             "doBlockTitles"     => 11,
             "doDocBreaks"       => 20,
+            "doBlockPageNums"   => 70,
             );
 
         $this->span_gamut += array(
@@ -352,12 +353,18 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         );
     }
 
-    protected function doPageNums($text)
+    protected function doBlockPageNums($text)
     {
-        $pagebreak_block_reg = '/^[ ]{0,3}\[(%)(%?)(.+?)\][ ]*/m';
+
+        $pagebreak_block_reg = '/^[ ]{0,3}\[(%)(%?)(.+?)\][ ]*\n+/m';
         $text = preg_replace_callback($pagebreak_block_reg, array(&$this, '_doPageNumsBlock_callback'), $text);
         $this->checkPregReplaceCallback($text);
 
+        return $text;
+    }
+
+    protected function doPageNums($text)
+    {
         $pagebreak_reg = '/\[(%)(%?)(.+?)\]/m';
         $text = preg_replace_callback($pagebreak_reg, array(&$this, '_doPageNums_callback'), $text);
         $this->checkPregReplaceCallback($text);
@@ -395,7 +402,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         $result = "<div$attr>";
         $result .=  $content;
-        $result .= "</div>";
+        $result .= "</div>\n\n";
 
         return $this->hashBlock($result);
     }

@@ -402,9 +402,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         $result = "<div$attr>";
         $result .=  $content;
-        $result .= "</div>\n\n";
+        $result .= "</div>";
 
-        return $this->hashBlock($result);
+        return "\n".$this->hashBlock($result)."\n\n";
     }
 
     protected function _doPageNums_callback($matches)

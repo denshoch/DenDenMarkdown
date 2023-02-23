@@ -42,6 +42,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     # Option for adding DPUB WAI-ARIA role attribute.
     public $dpubRole = true;
 
+    # Option fot support Aozora Bunko ruby syntax.
+    public $aozoraRuby = false;
+
     # Optional class attributes for footnote links and backlinks.
     public $footnoteIdPrefix = "";
     public $footnoteLinkClass = "noteref";
@@ -155,6 +158,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             }
 
             $boolProps = [
+                "aozoraRuby",
                 "autoTcy",
                 "autoTextOrientation",
                 "epubType",
@@ -502,6 +506,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     protected function doRubies($text)
     {
+        if ($this->aozoraRuby) {
+            return $this->doRubiesAozora($text);
+        }
+
         $text = preg_replace_callback(
             '{
                 ( (?<!\{) \{ )        # $1: Marker (not preceded by two /)
@@ -526,6 +534,21 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
+    protected function doRubiesAozora($text)
+    {
+        $text = preg_replace_callback(
+            '/｜([^《。、]+?)《([^\s》]+)》/u',
+            array($this,'doRubiesAozora_Callback'),
+            $text
+        );
+        $text = preg_replace_callback(
+            '/｜?([\p{Han}仝々〆〇ヶ]+?|\p{Latin}+?)《([^\s》]+)》/u',
+            array($this,'doRubiesAozora_Callback'),
+            $text
+        );
+        return $text;
+    }
+
     protected function doRubies_Callback($matches)
     {
         $result = "<ruby>";
@@ -544,6 +567,20 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         } else {
             $result = "${result}${matches[2]}{$this->rpOpen}<rt>".join('', $rtarray)."</rt>{$this->rpClose}</ruby>";
         }
+
+        return $result;
+    }
+
+    protected function doRubiesAozora_Callback($matches)
+    {
+        $result = "<ruby>";
+        $result .= $matches[1];
+        $result .= $this->rpOpen;
+        $result .= "<rt>";
+        $result .= $matches[2];
+        $result .= "</rt>";
+        $result .= $this->rpClose;
+        $result .= "</ruby>";
 
         return $result;
     }

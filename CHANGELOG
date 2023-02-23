@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.4.4] - 2023-02-22
+
+### Added
+- Support Aozora Bunko ruby syntax.
+
 ## [1.4.3] - 2023-02-17
 ### Fixed
 - Page num syntax within a paragraph becomes a div(issue19)

@@ -3,7 +3,8 @@
 ## [1.4.5] - 2023-03-05
 
 ### Added
-- New option param autoTcyDigit that takes over autoTcy and tcyDigit.
+- Added a new parameter "autoTcyDigit" that takes over autoTcy and tcyDigit.
+- Added a new parameter "addClass" to allow adding any class to any tag.
 
 ### Added
 - Support Aozora Bunko ruby syntax.

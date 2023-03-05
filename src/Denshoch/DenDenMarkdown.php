@@ -100,6 +100,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     public $targetEpubCheckVersion = "4.2.0";
 
+    # config
+    protected $config = array();
+
     /**
      * __construct
      *
@@ -146,6 +149,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         if (!is_null($options)) {
 
             $options = $this->updateOptions($options);
+            $this->config = array_replace_recursive($this->config, $options);
 
             $intProps = [
                 "autoTcyDigit",
@@ -288,6 +292,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             )
         );
         $text_org = $text;
+
         // for web app
         if(!defined('STDERR')) define('STDERR', fopen('php://stderr', 'wb'));
         try {
@@ -298,6 +303,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $text = $text_org;
             unset($text_org);
         }
+
+        $text = $this->addClass($text);
 
         /* Reset Endnotes count */
         $this->endnotes_ref_count = array();
@@ -1378,6 +1385,17 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
+     * configure
+     *
+     * @param array $config
+     * @return void
+     */
+    public function configue(array $config) :void
+    {
+        $this->config = array_replace_recursive($this->config, $config);
+    }
+
+    /**
      * updateOptions
      *
      * 後方互換性のために$optionsに変更を加える。
@@ -1402,5 +1420,20 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
 
         return $options;
+    }
+
+    /**
+     * addClass
+     * 
+     * @param string $text
+     * @return string
+     */
+    protected function addClass(string $text) :string
+    {
+        if (!array_key_exists('addClass', $this->config)) {
+            return $text;
+        }
+
+        return \Denshoch\HtmlModifier::addClassMultiple($text, $this->config['addClass']);
     }
 }

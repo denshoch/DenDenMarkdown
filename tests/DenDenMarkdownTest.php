@@ -5,6 +5,9 @@ use PHPUnit\Framework\TestCase;
 
 class DenDenMarkdownTest extends TestCase
 {
+    protected $parser;
+    protected $fixtureDir;
+
     public function setUp()
     {
         $this->parser = new Denshoch\DenDenMarkdown;
@@ -942,6 +945,26 @@ class DenDenMarkdownTest extends TestCase
         $this->assertTransformation('page-break-inline-without-dpub-role');
     }
 
+    /** @group testAddClass */
+    public function testAddClass()
+    {
+        $config = array(
+            'addClass' => array(
+                'h1' => 'tobira-midashi',
+                'h2' => 'oo-midashi',
+                'h3' => 'naka-midashi',
+                'h4' => 'ko-midashi',
+            )
+        );
+
+        $this->parser->configue($config);
+        
+        $source = "# 扉見出し\n\n## 大見出し\n\n### 中見出し\n\n#### 小見出し\n\n";
+        $actual = $this->parser->transform($source);
+        $expected = "<h1 class=\"tobira-midashi\">扉見出し</h1>\n\n<h2 class=\"oo-midashi\">大見出し</h2>\n\n<h3 class=\"naka-midashi\">中見出し</h3>\n\n<h4 class=\"ko-midashi\">小見出し</h4>";
+        $this->assertSame($expected, $actual);
+    }
+
     public function testUpdateOptions()
     {
         $reflectionClass = new ReflectionClass('Denshoch\DenDenMarkdown');
@@ -973,7 +996,6 @@ class DenDenMarkdownTest extends TestCase
         );
 
         $this->assertSame($expected, $actual);
-
     }
 
     protected function assertTransformation($fixtureName)

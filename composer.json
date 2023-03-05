@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "michelf/php-markdown": "1.8.0",
+        "michelf/php-markdown": "^1.9.1",
         "myclabs/php-enum": "^1.5",
         "denshoch/utils": "dev-master",
         "denshoch/harusame": ">=2.1.0"

@@ -143,10 +143,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         parent::__construct();
 
-        if (false === is_null($options)) {
+        if (!is_null($options)) {
+
+            $options = $this->updateOptions($options);
+
             $intProps = [
-                "tcyDigit"
+                "autoTcyDigit",
+                "tcyDigit",
             ];
+
             foreach ($intProps as $prop) {
                 if (array_key_exists($prop, $options)) {
                     if (is_int($options[$prop])) {
@@ -1352,7 +1357,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      *
      * 実体参照以外に対してhtmlspecialcharsを行う
      *
-     * @param $text array
+     * @param $text string
      * @return string
      */
     public function htmlEscapeWithoutEntityRef($text)
@@ -1370,5 +1375,32 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
 
         return $out;
+    }
+
+    /**
+     * updateOptions
+     *
+     * 後方互換性のために$optionsに変更を加える。
+     *
+     * @param $options array
+     * @return array
+     */
+    protected function updateOptions(array $options) :array
+    {
+        if (array_key_exists('autoTcyDigit', $options))
+        {
+            if (!is_int($options['autoTcyDigit'])) {
+                trigger_error("autoTcyDigit must be integer.");
+            }
+
+            if ( $options['autoTcyDigit'] === 0) {
+                $options['autoTcy'] = false;
+            } else {
+                $options['autoTcy'] = true;
+                $options['tcyDigit'] = $options['autoTcyDigit'];
+            }
+        }
+
+        return $options;
     }
 }

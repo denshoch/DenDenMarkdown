@@ -942,6 +942,40 @@ class DenDenMarkdownTest extends TestCase
         $this->assertTransformation('page-break-inline-without-dpub-role');
     }
 
+    public function testUpdateOptions()
+    {
+        $reflectionClass = new ReflectionClass('Denshoch\DenDenMarkdown');
+
+        $reflectionMethod = $reflectionClass->getMethod('updateOptions');
+        $reflectionMethod->setAccessible(true);
+
+        $options = array(
+            'autoTcyDigit' => 0
+        );
+
+        $actual = $reflectionMethod->invokeArgs($this->parser, [$options]);
+        $expected = array(
+            'autoTcyDigit' => 0,
+            'autoTcy' => false
+        );
+
+        $this->assertSame($expected, $actual);
+
+        $options = array(
+            'autoTcyDigit' => 2
+        );
+
+        $actual = $reflectionMethod->invokeArgs($this->parser, [$options]);
+        $expected = array(
+            'autoTcyDigit' => 2,
+            'autoTcy' => true,
+            'tcyDigit' => 2
+        );
+
+        $this->assertSame($expected, $actual);
+
+    }
+
     protected function assertTransformation($fixtureName)
     {
         $sourceFile = $fixtureName . '.md';

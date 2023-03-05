@@ -57,23 +57,15 @@ $parser->tarnsform('Hello wolrd!');
 You can pass [Harusame](https://github.com/denshoch/harusame) options which automatically add special classes for Tate-Chu-Yoko and text orientation in vertical writing mode. It is disabled by default.
 
 ```php
-$options = array("autoTcy"=>true, "tcyDigit" => 3, "autoTextOrientation" => true);
+$options = array("autoTcyDigit" => 3, "autoTextOrientation" => true);
 $parser = new Denshoch\DenDenMarkdown($options);
 $parser.transform('10円玉と100円玉がある♡');
-// => <p><span class="tcy">10</span>円玉と<span class="tcy">100</span>円玉がある<span class="upright">♡</span></p>
-// or
-$parser = new Denshoch\DenDenMarkdown();
-$parser->autoTcy = true;
-$parser->tcyDigit = 3;
-$parser->autoTextOrientation = true;
-$parser->transform('10円玉と100円玉がある♡');
 // => <p><span class="tcy">10</span>円玉と<span class="tcy">100</span>円玉がある<span class="upright">♡</span></p>
 ```
 
 | key | type | inital | description |
 | --- | ---  | ---    | ---         |
-| autoTcy | boolean | false | Add `.tcy` class or not. |
-| tcyDigit | integer | 2   | max digits of number to add `.tcy` class. |
+| autoTcyDigit | integer | 0 | max digits of number to add `.tcy` class. |
 | autoTextOrientation | boolean | false | Add `.upright` and `.sideways` class or not. |
 
 Syntax

@@ -20,7 +20,7 @@ namespace Denshoch;
 class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
-    const DENDENMARKDOWN_VERSION = "1.3.3";
+    const DENDENMARKDOWN_VERSION = "1.4.6";
 
     /**
      * Alias of $hard_wrap
@@ -1430,10 +1430,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     protected function addClass(string $text) :string
     {
-        if (!array_key_exists('addClass', $this->config)) {
+        if (!isset($this->config['addClass']) || is_null($this->config['addClass'])) {
             return $text;
         }
-
+        
         return \Denshoch\HtmlModifier::addClassMultiple($text, $this->config['addClass']);
     }
 }

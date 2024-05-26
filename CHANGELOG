@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.4.7] - 2024-05-26
+
+- Add 'md' shorthand for the 'markdown' attribute
+
 ## [1.4.5] - 2023-03-05
 
 ### Added

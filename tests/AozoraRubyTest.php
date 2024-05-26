@@ -5,6 +5,9 @@ use PHPUnit\Framework\TestCase;
 
 class AozoraRubyTest extends TestCase
 {
+    protected $parser;
+    protected $fixtureDir;
+
     public function setUp()
     {
         $this->parser = new Denshoch\DenDenMarkdown( array("aozoraRuby" => true) );

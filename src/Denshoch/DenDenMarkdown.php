@@ -1359,6 +1359,177 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
     }
 
+	/**
+     * Override the parent method to add support for the `markdown="1"` and `md` attribute.
+	 * Parse HTML, calling _HashHTMLBlocks_InMarkdown for block tags.
+	 *
+	 * *   Calls $hash_method to convert any blocks.
+	 * *   Stops when the first opening tag closes.
+	 * *   $md_attr indicate if the use of the `markdown="1"` attribute is allowed.
+	 *     (it is not inside clean tags)
+	 *
+	 * Returns an array of that form: ( processed text , remaining text )
+	 * @param  string $text
+	 * @param  string $hash_method
+	 * @param  bool $md_attr Handle `markdown="1"` and `md` attribute
+	 * @return array
+	 */
+	protected function _hashHTMLBlocks_inHTML($text, $hash_method, $md_attr) {
+		if ($text === '') return array('', '');
+
+		// Regex to match `markdown` attribute inside of a tag.
+		$markdown_attr_re = '
+			{
+				\s*			# Eat whitespace before the `markdown` attribute
+				(?:markdown|md) # matche markdown or md attribute
+				\s*=\s*
+				(?>
+					(["\'])		# $1: quote delimiter
+					(.*?)		# $2: attribute value
+					\1			# matching delimiter
+				|
+					([^\s>]*)	# $3: unquoted attribute value
+				)
+				()				# $4: make $3 always defined (avoid warnings)
+			}xs';
+
+		// Regex to match any tag.
+		$tag_re = '{
+				(					# $2: Capture whole tag.
+					</?					# Any opening or closing tag.
+						[\w:$]+			# Tag name.
+						(?:
+							(?=[\s"\'/a-zA-Z0-9])	# Allowed characters after tag name.
+							(?>
+								".*?"		|	# Double quotes (can contain `>`)
+								\'.*?\'   	|	# Single quotes (can contain `>`)
+								.+?				# Anything but quotes and `>`.
+							)*?
+						)?
+					>					# End of tag.
+				|
+					<!--    .*?     -->	# HTML Comment
+				|
+					<\?.*?\?> | <%.*?%>	# Processing instruction
+				|
+					<!\[CDATA\[.*?\]\]>	# CData Block
+				)
+			}xs';
+
+		$original_text = $text;		// Save original text in case of faliure.
+
+		$depth		= 0;	// Current depth inside the tag tree.
+		$block_text	= "";	// Temporary text holder for current text.
+		$parsed		= "";	// Parsed text that will be returned.
+		$base_tag_name_re = '';
+
+		// Get the name of the starting tag.
+		// (This pattern makes $base_tag_name_re safe without quoting.)
+		if (preg_match('/^<([\w:$]*)\b/', $text, $matches))
+			$base_tag_name_re = $matches[1];
+
+		// Loop through every tag until we find the corresponding closing tag.
+		do {
+			// Split the text using the first $tag_match pattern found.
+			// Text before  pattern will be first in the array, text after
+			// pattern will be at the end, and between will be any catches made
+			// by the pattern.
+			$parts = preg_split($tag_re, $text, 2, PREG_SPLIT_DELIM_CAPTURE);
+
+			if (count($parts) < 3) {
+				// End of $text reached with unbalenced tag(s).
+				// In that case, we return original text unchanged and pass the
+				// first character as filtered to prevent an infinite loop in the
+				// parent function.
+				return array($original_text[0], substr($original_text, 1));
+			}
+
+			$block_text .= $parts[0]; // Text before current tag.
+			$tag         = $parts[1]; // Tag to handle.
+			$text        = $parts[2]; // Remaining text after current tag.
+
+			// Check for: Auto-close tag (like <hr/>)
+			//			 Comments and Processing Instructions.
+			if (preg_match('{^</?(?:' . $this->auto_close_tags_re . ')\b}', $tag) ||
+				$tag[1] === '!' || $tag[1] === '?')
+			{
+				// Just add the tag to the block as if it was text.
+				$block_text .= $tag;
+			}
+			else {
+				// Increase/decrease nested tag count. Only do so if
+				// the tag's name match base tag's.
+				if (preg_match('{^</?' . $base_tag_name_re . '\b}', $tag)) {
+					if ($tag[1] === '/') {
+						$depth--;
+					} else if ($tag[strlen($tag)-2] !== '/') {
+						$depth++;
+					}
+				}
+
+				// Check for `markdown="1"` attribute and handle it.
+				if ($md_attr &&
+					preg_match($markdown_attr_re, $tag, $attr_m) &&
+					preg_match('/^1|block|span$/', $attr_m[2] . $attr_m[3]))
+				{
+					// Remove `markdown` attribute from opening tag.
+					$tag = preg_replace($markdown_attr_re, '', $tag);
+
+					// Check if text inside this tag must be parsed in span mode.
+					$mode = $attr_m[2] . $attr_m[3];
+					$span_mode = $mode === 'span' || ($mode !== 'block' &&
+						preg_match('{^<(?:' . $this->contain_span_tags_re . ')\b}', $tag));
+
+					// Calculate indent before tag.
+					if (preg_match('/(?:^|\n)( *?)(?! ).*?$/', $block_text, $matches)) {
+						$strlen = $this->utf8_strlen;
+						$indent = $strlen($matches[1], 'UTF-8');
+					} else {
+						$indent = 0;
+					}
+
+					// End preceding block with this tag.
+					$block_text .= $tag;
+					$parsed .= $this->$hash_method($block_text);
+
+					// Get enclosing tag name for the ParseMarkdown function.
+					// (This pattern makes $tag_name_re safe without quoting.)
+					preg_match('/^<([\w:$]*)\b/', $tag, $matches);
+					$tag_name_re = $matches[1];
+
+					// Parse the content using the HTML-in-Markdown parser.
+					list ($block_text, $text)
+						= $this->_hashHTMLBlocks_inMarkdown($text, $indent,
+							$tag_name_re, $span_mode);
+
+					// Outdent markdown text.
+					if ($indent > 0) {
+						$block_text = preg_replace("/^[ ]{1,$indent}/m", "",
+													$block_text);
+					}
+
+					// Append tag content to parsed text.
+					if (!$span_mode) {
+						$parsed .= "\n\n$block_text\n\n";
+					} else {
+						$parsed .= (string) $block_text;
+					}
+
+					// Start over with a new block.
+					$block_text = "";
+				}
+				else $block_text .= $tag;
+			}
+
+		} while ($depth > 0);
+
+		// Hash last block text that wasn't processed inside the loop.
+		$parsed .= $this->$hash_method($block_text);
+
+		return array($parsed, $text);
+	}
+
+
     /**
      * htmlEscapeWithoutEntityRef
      *

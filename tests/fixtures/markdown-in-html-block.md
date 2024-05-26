@@ -3,3 +3,7 @@
 <div markdown="1">
 **ブロックの中の段落**でもMarkdownが解釈されます。
 </div>
+
+<div md="1">
+**ブロックの中の段落**でもMarkdownが解釈されます。
+</div>

@@ -1602,7 +1602,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     protected function addClass(string $text) :string
     {
         // DOMDocument::loadXML(): Empty string supplied as input を回避するため
-        if ($text === "") {
+        if ( preg_replace('/\s+/', '', $text) === '') {
             return $text;
         }
 

@@ -304,7 +304,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             unset($text_org);
         }
 
-        $text = $this->addClass($text);
+        try {
+            $text = $this->addClass($text);
+        } catch (\ErrorException $e) {
+            fputs(STDERR, $e->getMessage() . "\n");
+            fputs(STDERR, "DenDenMarkdown::transform(): Skip addClass().\n");
+        }
 
         /* Reset Endnotes count */
         $this->endnotes_ref_count = array();

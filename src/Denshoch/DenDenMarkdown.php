@@ -1601,6 +1601,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     protected function addClass(string $text) :string
     {
+        // DOMDocument::loadXML(): Empty string supplied as input を回避するため
+        if ($text === "") {
+            return $text;
+        }
+
         if (!isset($this->config['addClass']) || is_null($this->config['addClass'])) {
             return $text;
         }

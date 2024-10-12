@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.4.8] - 2024-10-13
+
+- Fix issue with empty string causing DOMDocument::loadXML() error
+
 ## [1.4.7] - 2024-05-26
 
 - Add 'md' shorthand for the 'markdown' attribute

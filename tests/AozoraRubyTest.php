@@ -8,8 +8,9 @@ class AozoraRubyTest extends TestCase
     protected $parser;
     protected $fixtureDir;
 
-    public function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->parser = new Denshoch\DenDenMarkdown( array("aozoraRuby" => true) );
         $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'AozoraRuby';
     }

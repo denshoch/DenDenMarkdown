@@ -5,9 +5,13 @@ use PHPUnit\Framework\TestCase;
 
 class DDmdTableTest extends TestCase
 {
-    public function setUp()
+    protected $parser;
+    protected $fixtureDir;
+
+    protected function setUp(): void
     {
-        $this->parser = new Denshoch\DenDenMarkdown( array("ddmdTable" => true) );
+        parent::setUp();
+        $this->parser = new Denshoch\DenDenMarkdown( array("ddmdTables" => true) );
         $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'DDmdTable';
     }
 

@@ -63,7 +63,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     # Optional class attributes for Harusame.
     public $autoTcy = false;
-    public $tcyDigit = 2;
+    public $tcyDigit = 0;
     public $autoTextOrientation = false;
 
     # Extra variables for ruby annotations
@@ -283,6 +283,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $text = \Denshoch\Utils::removeCtrlChars($text);
 
         $text = parent::transform($text);
+
+        if ($this->autoTcy === false) {
+            $this->tcyDigit = 0;
+        }
 
         $harusame = new \Denshoch\Harusame(
             array(

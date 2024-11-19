@@ -5,8 +5,12 @@ use PHPUnit\Framework\TestCase;
 
 class DDmdEndnoteTest extends TestCase
 {
-    public function setUp()
+    protected $parser;
+    protected $fixtureDir;
+
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->parser = new Denshoch\DenDenMarkdown( array("ddmdEndnotes" => true, "targetEpubCheckVersion" => "") );
         $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'DDmdEndnote';
     }

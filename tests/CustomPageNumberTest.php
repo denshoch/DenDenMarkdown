@@ -5,10 +5,18 @@ use PHPUnit\Framework\TestCase;
 
 class CustomPageNumberTest extends TestCase
 {
+    protected $parser;
+    protected $fixtureDir;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->parser = new Denshoch\DenDenMarkdown( array("customPageNumber" => true) );
+        $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'CustomPageNumber';
+    }
+
     public function testCustomPageNumberClass()
     {
-        $parser = new Denshoch\DenDenMarkdown( array("pageNumberClass" => "page" ) );
-
         $source = <<< EOT
 [%%36]
 
@@ -21,15 +29,13 @@ EOT;
 <h2>大見出し</h2>
 EOT;
 
-        $actual = $parser->transform($source);
+        $actual = $this->parser->transform($source);
         $this->assertEquals(rtrim($expected), $actual);
         
     }
 
     public function testCustomPageNumberContent()
     {
-        $parser = new Denshoch\DenDenMarkdown( array("pageNumberContent" => "第%%ページ" ) );
-
         $source = <<< EOT
 [%%36]
 
@@ -42,7 +48,7 @@ EOT;
 <h2>大見出し</h2>
 EOT;
 
-        $actual = $parser->transform($source);
+        $actual = $this->parser->transform($source);
         $this->assertEquals(rtrim($expected), $actual);
         
     }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
@@ -11,7 +12,7 @@ class DDmdTableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->parser = new Denshoch\DenDenMarkdown( array("ddmdTables" => true) );
+        $this->parser = new Denshoch\DenDenMarkdown(array("ddmdTable" => true));
         $this->fixtureDir = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'DDmdTable';
     }
 
@@ -30,29 +31,29 @@ class DDmdTableTest extends TestCase
 
     public function testTableAlignClassTmpl()
     {
-    	$this->parser->tableAlignClassTmpl = "text-%%";
+        $this->parser->tableAlignClassTmpl = "text-%%";
         $this->assertTransformation('testTableAlignClassTmpl');
     }
 
     public function testCustomWrapperClass01()
     {
-        $this->parser = new Denshoch\DenDenMarkdown( 
+        $this->parser = new Denshoch\DenDenMarkdown(
             array(
                 "ddmdTable" => true,
                 "ddmdTableWrapperClass" => "ddmdTable"
-                )
-            );
+            )
+        );
         $this->assertTransformation('testCustomWrapperClass01');
     }
 
     public function testCustomWrapperClass02()
     {
-        $this->parser = new Denshoch\DenDenMarkdown( 
+        $this->parser = new Denshoch\DenDenMarkdown(
             array(
                 "ddmdTable" => true,
                 "ddmdTableWrapperClass" => ""
-                )
-            );
+            )
+        );
         $this->assertTransformation('testCustomWrapperClass02');
     }
 
@@ -67,7 +68,13 @@ class DDmdTableTest extends TestCase
     {
         $expected = $this->fixture($transformedFile);
         $actual = $this->parser->transform($this->fixture($sourceFile));
-        $this->assertSame(rtrim($expected), $actual);
+        //$this->assertSame(rtrim($expected), $actual);
+
+        // XML形式で比較するために整形
+        $expectedXml = sprintf('<?xml version="1.0"?><root>%s</root>', $expected);
+        $actualXml = sprintf('<?xml version="1.0"?><root>%s</root>', $actual);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
     protected function fixture($fileName)

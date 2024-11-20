@@ -962,7 +962,7 @@ class DenDenMarkdownTest extends TestCase
         
         $source = "# 扉見出し\n\n## 大見出し\n\n### 中見出し\n\n#### 小見出し\n\n";
         $actual = $this->parser->transform($source);
-        $expected = "<h1 class=\"tobira-midashi\">扉見出し</h1>\n\n<h2 class=\"oo-midashi\">見出し</h2>\n\n<h3 class=\"naka-midashi\">中見出し</h3>\n\n<h4 class=\"ko-midashi\">小見出し</h4>";
+        $expected = "<h1 class=\"tobira-midashi\">扉見出し</h1>\n\n<h2 class=\"oo-midashi\">大見出し</h2>\n\n<h3 class=\"naka-midashi\">中見出し</h3>\n\n<h4 class=\"ko-midashi\">小見出し</h4>";
         $this->assertSame($expected, $actual);
 
         $source = "\n";

@@ -4,10 +4,11 @@
     "type": "library",
     "keywords": [
         "Markdown",
-        "EPUB"
+        "EPUB",
+        "EPUB3",
+        "Japanese"
     ],
     "homepage": "https://conv.denshochan.com/markdown",
-    "version": "1.4.8.2",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -17,34 +18,46 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": "^7.4",
+        "ext-mbstring": "*",
+        "ext-dom": "*",
         "michelf/php-markdown": "^1.9.1",
-        "myclabs/php-enum": "^1.5",
+        "myclabs/php-enum": "^1.8",
         "denshoch/utils": "dev-master",
-        "denshoch/harusame": ">=2.1.0"
+        "denshoch/harusame": "^2.1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5",
-        "phpstan/phpstan": "^2.0",
-        "squizlabs/php_codesniffer": "^3.3"
+        "phpunit/phpunit": "^9.6",
+        "phpstan/phpstan": "^1.10",
+        "squizlabs/php_codesniffer": "^3.7",
+        "phpstan/phpstan-strict-rules": "^1.5"
     },
     "autoload": {
         "psr-0": {
             "Denshoch\\": "src/"
         }
     },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
     "scripts": {
         "test": [
             "phpunit tests"
         ],
         "phpcs": [
-            "phpcs --standard=ruleset.xml src/Denshoch/ | more"
+            "phpcs --standard=ruleset.xml src/Denshoch/"
         ],
         "phpcbf": [
             "phpcbf --standard=ruleset.xml src/Denshoch/"
         ],
         "phpstan": [
             "phpstan analyse -l 5 src tests"
+        ],
+        "check": [
+            "@phpcs",
+            "@phpstan",
+            "@test"
         ]
     }
 }

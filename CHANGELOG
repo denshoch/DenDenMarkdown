@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.4.9] - 2024-11-20
+
+### Updated
+- Modify noteref markup for footnotes. **Breaking change**
+
 ## [1.4.8] - 2024-10-13
 
 - Fix issue with empty string causing DOMDocument::loadXML() error

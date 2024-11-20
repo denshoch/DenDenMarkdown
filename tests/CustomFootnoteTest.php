@@ -16,7 +16,7 @@ class CustomFootnoteTest extends TestCase
 EOT;
 
         $expected = <<< EOT
-<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="footnoteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
+<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="footnoteref" epub:type="noteref" role="doc-noteref">[1]</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
 <hr/>
@@ -80,7 +80,7 @@ EOT;
 EOT;
 
         $expected = <<< EOT
-<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
+<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">[1]</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
 <hr/>
@@ -112,7 +112,7 @@ EOT;
 EOT;
 
         $expected = <<< EOT
-<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
+<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">[1]</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
 <hr/>
@@ -140,7 +140,7 @@ EOT;
 EOT;
 
         $expected = <<< EOT
-<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">1</a>の段落です。</p>
+<p>これは脚注付き<a id="fnref_1" href="#fn_1" rel="footnote" class="noteref" epub:type="noteref" role="doc-noteref">[1]</a>の段落です。</p>
 
 <div class="footnotes" epub:type="footnotes">
 <hr/>

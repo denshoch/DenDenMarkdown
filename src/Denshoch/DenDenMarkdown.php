@@ -49,7 +49,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public $footnoteIdPrefix = "";
     public $footnoteLinkClass = "noteref";
 
-    public $footnoteLinkContent = "%%";
+    public $footnoteLinkContent = "[%%]";
     public $footnoteBacklinkClass = "";
 
     public $footnoteBacklinkContent = "&#9166;";

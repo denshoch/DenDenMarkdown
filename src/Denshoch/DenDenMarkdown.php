@@ -62,6 +62,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public $pageNumberContent = "%%";
 
     # Optional class attributes for Harusame.
+    public $autoTcyDigit = 0;
     public $autoTcy = false;
     public $tcyDigit = 0;
     public $autoTextOrientation = false;
@@ -80,6 +81,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     public $ddmdEndnotes = false;
     public $endnotesHeadingContent = "";
     public $endnotesHeadingTag = "p";
+    public $endnotesEpubType = "endnotes";
+    public $endnoteEpubType = "endnote";
     public $endnoteIdPrefix = '';
     public $endnoteLinkClass = "enref";
     public $endnoteLinkTitle = "";
@@ -268,7 +271,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
     public function setBacktrakLimit(int $limit)
     {
-        ini_set('pcre.backtrack_limit', $limit);
+        ini_set('pcre.backtrack_limit', (string)$limit);
     }
 
     # Tags that are always treated as block tags:
@@ -691,15 +694,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $this->checkPregReplaceCallback($footnote);
 
                 ++$num;
-                $attr = str_replace("%%", $num, $attr);
+                $attr = str_replace("%%", (string)$num, $attr);
                 $note_id = $this->encodeAttribute($note_id);
-                $content = str_replace("%%", $num, $this->footnoteBacklinkContent);
+                $content = str_replace("%%", (string)$num, $this->footnoteBacklinkContent);
                 $content = $this->htmlEscapeWithoutEntityRef($content);
 
                 # Prepare backlink, multiple backlinks if multiple references
                 $backlink = "<a href=\"#fnref_${note_id}\"${attr}>${content}</a>";
                 for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#fnref$ref_num_${note_id}\"${attr}>${content}</a>";
+                    $backlink .= " <a href=\"#fnref${ref_num}_${note_id}\"${attr}>${content}</a>";
                 }
                 # Add backlink to last paragraph; create new paragraph if needed.
                 if (preg_match('{</p>$}', $footnote)) {
@@ -959,7 +962,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $endnote
                 );
 
-                $attr = str_replace("%%", ++$num, $attr);
+                $attr = str_replace("%%", (string)(++$num), $attr);
                 $note_id = $this->encodeAttribute($note_id);
 
                 $content = $this->htmlEscapeWithoutEntityRef($this->endnoteBacklinkContent);
@@ -967,7 +970,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $backlink = "<a href=\"#enref_$note_id\"$attr>${content}</a>";
 
                 for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#enref$ref_num_$note_id\"$attr>${content}</a>";
+                    $backlink .= " <a href=\"#enref${ref_num}_$note_id\"$attr>${content}</a>";
                 }
 
                 # Add backlink to last paragraph; create new paragraph if needed.
@@ -1221,6 +1224,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 if (preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch)) {
                     if (!empty($mtch['algn'])) {
                         $algn = $this->_doDDmdTable_makeAlignAttr($mtch['algn']);
+                    } else {
+                        if (!isset($col_algn[$c_cnt]) || $col_algn[$c_cnt] === '') {
+                            $algn = '';
+                        } else {
+                            $algn = $col_algn[$c_cnt];
+                        }
                     }
 
                     if ($cell !== ' ') {
@@ -1246,10 +1255,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     
                     $cell = $mtch['cell'];
                 } else {
-                    if (empty($algn)) {
-                        if (empty($col_algn[$c_cnt])) {
-                            $col_algn[$c_cnt] = '';
-                        }
+                    if (!isset($col_algn[$c_cnt])) {
+                        $algn = '';
+                    } else {
                         $algn = $col_algn[$c_cnt];
                     }
                     $attr .= " scope=\"col\"";
@@ -1292,6 +1300,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     
                     if (!empty($mtch['algn'])) {
                         $algn = $this->_doDDmdTable_makeAlignAttr($mtch['algn']);
+                    } else {
+                        if (!isset($col_algn[$c_cnt]) || $col_algn[$c_cnt] === '') {
+                            $algn = '';
+                        } else {
+                            $algn = $col_algn[$c_cnt];
+                        }
                     }
     
                     $cspn = (int) $mtch['colspan'];
@@ -1309,7 +1323,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         
                     $cell = $mtch['cell'];
                 } else {
-                    if (empty($algn)) {
+                    if (!isset($col_algn[$c_cnt])) {
+                        $algn = '';
+                    } else {
                         $algn = $col_algn[$c_cnt];
                     }
                     $c_cnt += 1;
@@ -1610,12 +1626,18 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     protected function addClass(string $text) :string
     {
-        // DOMDocument::loadXML(): Empty string supplied as input を回避するため
-        if ( preg_replace('/\s+/', '', $text) === '') {
+        // DOMDocument::loadXML(): Empty string supplied as input を避けるため
+        if (preg_replace('/\s+/', '', $text) === '') {
             return $text;
         }
 
-        if (!isset($this->config['addClass']) || is_null($this->config['addClass'])) {
+        // config['addClass']が設定されていない場合は元のテキストを返す
+        if (!isset($this->config['addClass'])) {
+            return $text;
+        }
+
+        // config['addClass']が配列でない場合は元のテキストを返す
+        if (!is_array($this->config['addClass'])) {
             return $text;
         }
         

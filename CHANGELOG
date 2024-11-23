@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.5.0] - 2024-11-23
+
+### Added
+- Verify compatibility with PHP 8.3.9
+- Add proper type hints for all properties and methods
+- Add detailed PHPDoc comments for better code documentation
+
 ## [1.4.9] - 2024-11-20
 
 ### Updated

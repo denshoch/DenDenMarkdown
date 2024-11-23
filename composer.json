@@ -19,12 +19,13 @@
     ],
     "require": {
         "php": "^7.4 || ^8.0 || ^8.3",
-        "ext-mbstring": "*",
         "ext-dom": "*",
-        "michelf/php-markdown": "^1.9.1",
-        "myclabs/php-enum": "^1.8",
+        "ext-mbstring": "*",
+        "denshoch/harusame": ">=2.2.0",
+        "denshoch/msg-stack": "^0.1.1",
         "denshoch/utils": "dev-master",
-        "denshoch/harusame": "^2.1.0"
+        "michelf/php-markdown": "^1.9.1",
+        "myclabs/php-enum": "^1.8"
     },
     "require-dev": {
         "phpstan/phpstan": "^2.0",

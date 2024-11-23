@@ -25,6 +25,9 @@ class HarusameTest extends TestCase
         $excpected = "<p><abc>aaa</efg></p>";
 
         $this->is_same($source, $excpected);
+        $allMessages = $this->parser->messageStore->getMessages();
+
+        $this->assertEquals($allMessages[0]['code'], 'E_HARUSAME');
     }
 
     public function testTcy2()

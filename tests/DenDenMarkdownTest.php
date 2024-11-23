@@ -971,6 +971,28 @@ class DenDenMarkdownTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
+    public function testAddClassError()
+    {
+        $config = array(
+            'addClass' => array(
+                'h1' => 'tobira-midashi',
+                'h2' => 'oo-midashi',
+                'h3' => 'naka-midashi',
+                'h4' => 'ko-midashi',
+            )
+        );
+
+        $this->parser->configue($config);
+
+        $source = "# 扉見出し\n\n## 大見出し\n\n### 中見出し\n\n#### 小見出し\n\n<abc>aaa</efg>";
+
+        $actual = $this->parser->transform($source);
+        $expected = "<h1>扉見出し</h1>\n\n<h2>大見出し</h2>\n\n<h3>中見出し</h3>\n\n<h4>小見出し</h4>\n\n<p><abc>aaa</efg></p>\n";
+        $this->assertSame($expected, $actual);
+        $allMessages = $this->parser->messageStore->getMessages();
+        $this->assertEquals($allMessages[1]['code'], 'E_ADD_CLASS');
+    }
+
     public function testUpdateOptions()
     {
         $reflectionClass = new ReflectionClass('Denshoch\DenDenMarkdown');

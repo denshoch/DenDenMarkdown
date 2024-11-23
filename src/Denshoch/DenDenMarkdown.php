@@ -1,6 +1,9 @@
 <?php
 namespace Denshoch;
 
+use Denshoch\MsgStack\MessageStore;
+use Denshoch\MsgStack\MessageType;
+
 #
 # DenDenMarkdown
 #
@@ -21,6 +24,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 {
 
     const DENDENMARKDOWN_VERSION = "1.4.9";
+
+
 
     /**
      * Alias of $hard_wrap
@@ -286,6 +291,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     protected $config = array();
 
     /**
+     * @var MessageStore
+     */
+    public $messageStore;
+
+    /**
      * __construct
      *
      * Constructor function. Initialize the parser object.
@@ -427,6 +437,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $this->endnoteEpubType = "endnote";
             }
         }
+
+        $messagesDir = dirname(__FILE__) . '/messages';
+        $this->messageStore = new MessageStore($messagesDir);
+        $this->messageStore->setContinueOnError(true);
     }
 
     /**
@@ -488,25 +502,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         );
         $text_org = $text;
 
-        // for web app
-        if (!defined('STDERR')) {
-            define('STDERR', fopen('php://stderr', 'wb'));
-        }
         try {
             $text = $harusame->transform($text_org);
-        } catch (\ErrorException $e) {
-            fputs(STDERR, $e->getMessage() . "\n");
-            fputs(STDERR, "DenDenMarkdown::transform(): Skip Harusame.\n");
+        } catch (\Exception $e) {
+            $this->messageStore->addMessage(MessageType::ERROR, "E_HARUSAME", [ "message" => $e->getMessage() ]);
             $text = $text_org;
             unset($text_org);
         }
 
-        try {
-            $text = $this->addClass($text);
-        } catch (\ErrorException $e) {
-            fputs(STDERR, $e->getMessage() . "\n");
-            fputs(STDERR, "DenDenMarkdown::transform(): Skip addClass().\n");
-        }
+        $text = $this->addClass($text);
 
         /* Reset Endnotes count */
         $this->endnotes_ref_count = array();
@@ -1900,7 +1904,13 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         if (!is_array($this->config['addClass'])) {
             return $text;
         }
-        
-        return \Denshoch\HtmlModifier::addClassMultiple($text, $this->config['addClass']);
+
+        try {
+            $text = \Denshoch\HtmlModifier::addClassMultiple($text, $this->config['addClass']);
+        } catch (\Exception $e) {
+            $this->messageStore->addMessage(MessageType::ERROR, "E_ADD_CLASS", [ "message" => $e->getMessage() ]);
+        }
+
+        return $text;
     }
 }

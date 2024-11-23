@@ -18,7 +18,7 @@ class UtilsTest extends TestCase
     public function testremoveCtrlChars()
     {
         $parser = new Denshoch\DenDenMarkdown;
-        $source = "あ あ"; # あ&#x2028;あ
+        $source = "ああ"; # あ&#x2028;あ
         $excpected = "<p>ああ</p>";
         $actual = $parser->transform($source);
         $this->assertEquals($excpected, $actual);

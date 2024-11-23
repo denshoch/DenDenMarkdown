@@ -1,0 +1,5 @@
+I001: 'Start processing'
+
+E_HARUSAME: 'Harusame: {message}'
+E_ADD_CLASS: 'addClass: {message}'
+E999: 'Unexpected error: {message}'

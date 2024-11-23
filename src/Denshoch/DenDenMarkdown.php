@@ -36,82 +36,262 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      */
     public $enhancedOrderedList = true;
 
-    # Option for adding epub:type attribute.
+    /**
+     * Option for adding epub:type attribute.
+     * @var bool
+     */
     public $epubType = true;
 
-    # Option for adding DPUB WAI-ARIA role attribute.
+    /**
+     * Option for adding DPUB WAI-ARIA role attribute.
+     * @var bool
+     */
     public $dpubRole = true;
 
-    # Option fot support Aozora Bunko ruby syntax.
+    /**
+     * Option for support Aozora Bunko ruby syntax.
+     * @var bool
+     */
     public $aozoraRuby = false;
 
-    # Optional class attributes for footnote links and backlinks.
+    /**
+     * Optional class attributes for footnote links and backlinks.
+     * @var string
+     */
     public $footnoteIdPrefix = "";
+
+    /**
+     * Optional class for footnote links.
+     * @var string
+     */
     public $footnoteLinkClass = "noteref";
 
+    /**
+     * Content template for footnote links.
+     * @var string
+     */
     public $footnoteLinkContent = "[%%]";
+
+    /**
+     * Optional class for footnote backlinks.
+     * @var string
+     */
     public $footnoteBacklinkClass = "";
 
+    /**
+     * Content template for footnote backlinks.
+     * @var string
+     */
     public $footnoteBacklinkContent = "&#9166;";
 
-    # Optional class attributes for optional headers.
+    /**
+     * Optional class attributes for optional headers.
+     * @var string
+     */
     public $optionalheader_class = "bridgehead";
 
-    # Optional class attributes for pagebreaks.
+    /**
+     * Optional class attributes for pagebreaks.
+     * @var string
+     */
     public $pageNumberClass = "pagenum";
+
+    /**
+     * Content template for page numbers.
+     * @var string
+     */
     public $pageNumberContent = "%%";
 
-    # Optional class attributes for Harusame.
+    /**
+     * Number of digits to automatically convert to tcy.
+     * @var int
+     */
     public $autoTcyDigit = 0;
+
+    /**
+     * Enable automatic tcy conversion.
+     * @var bool
+     */
     public $autoTcy = false;
+
+    /**
+     * Number of digits for tcy conversion.
+     * @var int
+     */
     public $tcyDigit = 0;
+
+    /**
+     * Enable automatic text orientation.
+     * @var bool
+     */
     public $autoTextOrientation = false;
 
     # Extra variables for ruby annotations
+    /**
+     * Opening parenthesis for ruby annotations
+     * @var string
+     */
     public $rubyParenthesisOpen = "";
+
+    /**
+     * Closing parenthesis for ruby annotations
+     * @var string
+     */
     public $rubyParenthesisClose = "";
+
+    /**
+     * Opening ruby parenthesis HTML
+     * @var string|null
+     */
     protected $rpOpen;
+
+    /**
+     * Closing ruby parenthesis HTML
+     * @var string|null
+     */
     protected $rpClose;
 
     # Extra variables for custom table markup
+    /**
+     * Enable custom table markup
+     * @var bool
+     */
     public $ddmdTable = false;
+
+    /**
+     * Class name for table wrapper
+     * @var string
+     */
     public $ddmdTableWrapperClass = "tbl_wrp";
 
     # Extra variables for endnotes
+    /**
+     * Enable endnotes feature
+     * @var bool
+     */
     public $ddmdEndnotes = false;
+
+    /**
+     * Content for endnotes heading
+     * @var string
+     */
     public $endnotesHeadingContent = "";
+
+    /**
+     * HTML tag for endnotes heading
+     * @var string
+     */
     public $endnotesHeadingTag = "p";
+
+    /**
+     * EPUB type for endnotes section
+     * @var string
+     */
     public $endnotesEpubType = "endnotes";
+
+    /**
+     * EPUB type for individual endnote
+     * @var string
+     */
     public $endnoteEpubType = "endnote";
+
+    /**
+     * Prefix for endnote IDs
+     * @var string
+     */
     public $endnoteIdPrefix = '';
+
+    /**
+     * Class for endnote links
+     * @var string
+     */
     public $endnoteLinkClass = "enref";
+
+    /**
+     * Title attribute for endnote links
+     * @var string
+     */
     public $endnoteLinkTitle = "";
+
+    /**
+     * Class for endnotes
+     * @var string
+     */
     public $endnoteClass = "endnote";
+
+    /**
+     * Class for endnote backlinks
+     * @var string
+     */
     public $endnoteBacklinkClass = "";
+
+    /**
+     * Content for endnote backlinks
+     * @var string
+     */
     public $endnoteBacklinkContent = "&#9166;";
+
+    /**
+     * Storage for endnotes
+     * @var array<string, string>
+     */
     protected $endnotes = array();
+
+    /**
+     * Storage for ordered endnotes
+     * @var array<string, string>
+     */
     protected $endnotes_ordered = array();
+
+    /**
+     * Counter for endnote references
+     * @var array<string, int>
+     */
     protected $endnotes_ref_count = array();
+
+    /**
+     * Storage for endnote numbers
+     * @var array<string, int>
+     */
     protected $endnotes_numbers = array();
+
+    /**
+     * Counter for endnotes
+     * @var int
+     */
     protected $endnote_counter = 1;
 
-    # Extra variables for tables
+    /**
+     * Template for table alignment classes
+     * @var string
+     */
     public $tableAlignClassTmpl = "";
 
-    # pcre.backtrack_limit
+    /**
+     * PCRE backtrack limit
+     * @var int
+     */
     protected $backtrack_limit = 2000000;
 
+    /**
+     * Target EPUB check version
+     * @var string
+     */
     public $targetEpubCheckVersion = "4.2.0";
 
-    # config
+    /**
+     * Configuration array
+     * @var array<string, mixed>
+     */
     protected $config = array();
 
     /**
      * __construct
      *
      * Constructor function. Initialize the parser object.
+     * @param array<string, mixed>|null $options Configuration options
      */
-    public function __construct(array $options = null)
+    public function __construct(?array $options = null)
     {
         /*
         $backtrack_limit = ini_get('pcre.backtrack_limit');
@@ -249,7 +429,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
     }
 
-    protected function setAlias()
+    /**
+     * Set aliases for backward compatibility
+     * @return void
+     */
+    protected function setAlias(): void
     {
         $alias_pairs = [
             ["hard_wrap", "hardWrap"],
@@ -268,7 +452,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         }
     }
 
-    public function setBacktrakLimit(int $limit)
+    /**
+     * Set PCRE backtrack limit
+     * @param int $limit The backtrack limit value
+     * @return void
+     */
+    public function setBacktrakLimit(int $limit): void
     {
         ini_set('pcre.backtrack_limit', (string)$limit);
     }
@@ -326,7 +515,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function doBlockTitles($text)
+    /**
+     * Process block titles
+     * @param string $text The text to process
+     * @return string The processed text
+     */
+    protected function doBlockTitles(string $text): string
     {
         # block titles:
         #   .BLOCK TITLE {#title1}
@@ -348,7 +542,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function _doBlockTitles_callback($matches)
+    /**
+     * Callback for processing block titles
+     * @param array<int, string> $matches Regular expression matches
+     * @return string The processed block title
+     */
+    protected function _doBlockTitles_callback(array $matches): string
     {
         $level = strlen($matches[1]);
         $dummy =& $matches[3];
@@ -364,7 +563,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return "\n" . $this->hashBlock($block) . "\n\n";
     }
 
-    protected function doDocBreaks($text)
+    /**
+     * Process document breaks
+     * @param string $text The text to process
+     * @return string The processed text
+     */
+    protected function doDocBreaks(string $text): string
     {
         return preg_replace(
             '{
@@ -382,7 +586,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         );
     }
 
-    protected function doBlockPageNums($text)
+    /**
+     * Process block page numbers
+     * @param string $text The text to process
+     * @return string The processed text
+     */
+    protected function doBlockPageNums(string $text): string
     {
 
         $pagebreak_block_reg = '/^[ ]{0,3}\[(%)(%?)(.+?)\][ ]*\n+/m';
@@ -392,7 +601,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function doPageNums($text)
+    /**
+     * Process inline page numbers
+     * @param string $text The text to process
+     * @return string The processed text
+     */
+    protected function doPageNums(string $text): string
     {
         $pagebreak_reg = '/\[(%)(%?)(.+?)\]/m';
         $text = preg_replace_callback($pagebreak_reg, array(&$this, '_doPageNums_callback'), $text);
@@ -401,7 +615,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function _doPageNumsBlock_callback($matches)
+    /**
+     * Callback for processing block page numbers
+     * @param array<int, string> $matches Regular expression matches
+     * @return string The processed page number block
+     */
+    protected function _doPageNumsBlock_callback(array $matches): string
     {
         $title = $matches[3];
 
@@ -436,7 +655,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return "\n".$this->hashBlock($result)."\n\n";
     }
 
-    protected function _doPageNums_callback($matches)
+    /**
+     * Callback for processing inline page numbers
+     * @param array<int, string> $matches Regular expression matches
+     * @return string The processed page number
+     */
+    protected function _doPageNums_callback(array $matches): string
     {
         $title = $matches[3];
 
@@ -509,15 +733,26 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function _doAutoLinks_twitter_callback($matches)
+    /**
+     * Callback for processing Twitter links
+     * @param array<int, string> $matches Regular expression matches
+     * @return string The processed Twitter link
+     */
+    protected function _doAutoLinks_twitter_callback(array $matches): string
     {
         $account = $matches[1];
         $link = "<a href=\"https://twitter.com/$account\">@$account</a>";
         return $this->hashPart($link);
     }
 
-    //split multibyte chars
-    protected function mb_str_split($str, $enc, $length = 1)
+    /**
+     * Split a string into an array with multibyte support
+     * @param string $str The string to split
+     * @param string $enc The character encoding
+     * @param int $length The length of each split
+     * @return array<int, string>|false The split string array or false on failure
+     */
+    protected function mb_str_split(string $str, string $enc, int $length = 1): array|false
     {
         if ($length <= 0) {
             return false;
@@ -529,7 +764,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $result;
     }
 
-    protected function doRubies($text)
+    /**
+     * Process ruby annotations
+     * @param string $text The text to process
+     * @return string The processed text
+     */
+    protected function doRubies(string $text): string
     {
         if ($this->aozoraRuby) {
             return $this->doRubiesAozora($text);
@@ -559,7 +799,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function doRubiesAozora($text)
+    /**
+     * Process Aozora Bunko style ruby annotations
+     * @param string $text The text to process
+     * @return string The processed text
+     */
+    protected function doRubiesAozora(string $text): string
     {
         $text = preg_replace_callback(
             '/｜([^《。、]+?)《([^\s》]+)》/u',
@@ -574,7 +819,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function doRubies_Callback($matches)
+    /**
+     * Callback for processing ruby annotations
+     * @param array<int, string> $matches Regular expression matches
+     * @return string The processed ruby annotation
+     */
+    protected function doRubies_Callback(array $matches): string
     {
         $result = "<ruby>";
         $rbarray = $this->mb_str_split($matches[2], 'UTF-8');
@@ -596,7 +846,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $result;
     }
 
-    protected function doRubiesAozora_Callback($matches)
+    /**
+     * Callback for processing Aozora Bunko style ruby annotations
+     * @param array<int, string> $matches Regular expression matches
+     * @return string The processed ruby annotation
+     */
+    protected function doRubiesAozora_Callback(array $matches): string
     {
         $result = "<ruby>";
         $result .= $matches[1];
@@ -610,7 +865,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $result;
     }
 
-    protected function doTcys($text)
+    /**
+     * Process tcy (tate-chu-yoko) text
+     * @param string $text The text to process
+     * @return string The processed text
+     */
+    protected function doTcys(string $text): string
     {
         $text = preg_replace(
             '{
@@ -735,7 +995,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function _appendFootnotes_callback($matches)
+    /**
+     * Callback for processing footnotes
+     * @param mixed $matches Regular expression matches
+     * @return string The processed footnote
+     */
+    protected function _appendFootnotes_callback($matches): string
     {
         $node_id = $this->fn_id_prefix . $matches[1];
 
@@ -801,7 +1066,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      * @param $input string
      * @return string
      */
-    protected function stripEndnotes($text)
+    protected function stripEndnotes(string $text): string
     {
 
         if ($this->ddmdEndnotes === false) {
@@ -836,17 +1101,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * _stripEndnotes_callback
-     *
-     * @param $matches array
-     * @return string
+     * Callback for stripping endnotes
+     * @param array<int|string, string> $matches Regular expression matches
+     * @return string Empty string as notes are stored for later use
      */
-    protected function _stripEndnotes_callback($matches)
+    protected function _stripEndnotes_callback(array $matches): string
     {
         $note_id = $this->endnoteIdPrefix . $matches[1];
         $this->endnotes[$note_id] = $this->outdent($matches[2]);
-
-        return ''; # String that will replace the block
+        return '';
     }
 
     /**
@@ -855,7 +1118,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      * @param $input string
      * @return string
      */
-    protected function doEndnotes($text)
+    protected function doEndnotes(string $text): string
     {
         if ($this->ddmdEndnotes === false) {
             return $text;
@@ -885,7 +1148,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return $text;
     }
 
-    protected function _doEndnotes_reference_callback($matches)
+    /**
+     * Callback for processing endnote references
+     * @param array<int, string> $matches Regular expression matches
+     * @return string The processed endnote reference
+     */
+    protected function _doEndnotes_reference_callback(array $matches): string
     {
         $whole_match = $matches[1];
         $link_text = $matches[2];
@@ -904,7 +1172,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      * @param $input string
      * @return string
      */
-    protected function appendEndnotes($text)
+    protected function appendEndnotes(string $text): string
     {
         if ($this->ddmdEndnotes === false) {
             return $text;
@@ -1003,21 +1271,20 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * _appendEndnotes_callback
-     * リンク元
-     *
-     * @param $matches array
-     * @return string
+     * Callback for appending endnotes
+     * @param array<int|string, string> $matches Regular expression matches
+     * @return string The processed endnote
      */
-    protected function _appendEndnotes_callback($matches)
+    protected function _appendEndnotes_callback(array $matches): string
     {
-
         $node_id = $this->endnoteIdPrefix . $matches[1];
         $link_text = $matches[2];
 
-        # Create endnote marker only if it has a corresponding endnote *and*
-        # the end hasn't been used by another marker.
         if (isset($this->endnotes[$node_id])) {
+            # Fix for isset() warning - initialize $num before reference
+            if (!isset($this->endnotes_numbers[$node_id])) {
+                $this->endnotes_numbers[$node_id] = null;
+            }
             $num =& $this->endnotes_numbers[$node_id];
 
             if (!isset($num)) {
@@ -1051,7 +1318,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $attr .= " role=\"doc-noteref\"";
             }
 
-            $attr = str_replace("%%", $num, $attr);
+            $attr = str_replace("%%", (string)(++$num), $attr);
             $node_id = $this->encodeAttribute($node_id);
 
             return "<a id=\"enref${ref_count_mark}_${node_id}\" href=\"#en_${node_id}\"${attr}>${link_text}</a>";
@@ -1085,7 +1352,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
      * @param $text string
      * @return string
      */
-    protected function doDDmdTables($text)
+    protected function doDDmdTables(string $text): string
     {
         $less_than_tab = $this->tab_width - 1;
 
@@ -1114,14 +1381,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * _doDDmdTable_leadingpipe_callback
-     *
-     * Form HTML tables written in DDmdTable syntax.
-     *
-     * @param $matches array
-     * @return string
+     * Callback for processing leading pipe tables
+     * @param array<string, string> $matches Regular expression matches
+     * @return string The processed table
      */
-    protected function _doDDmdTable_leadingpipe_callback($matches)
+    protected function _doDDmdTable_leadingpipe_callback(array $matches): string
     {
         $matches['thead'] = preg_replace('/^ *[|]/m', '', $matches['thead']);
         $matches['underline'] = preg_replace('/^ *[|]/m', '', $matches['underline']);
@@ -1131,14 +1395,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * _doDDmdTable_callback
-     *
-     * Form HTML tables written in DDmdTable syntax.
-     *
-     * @param $matches array
-     * @return string
+     * Callback for processing DDmd tables
+     * @param array<string, string> $matches Regular expression matches
+     * @return string The processed table
      */
-    protected function _doDDmdTable_callback($matches)
+    protected function _doDDmdTable_callback(array $matches): string
     {
         $col_count = 0; # col count of first row
 
@@ -1349,14 +1610,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * _doDDmdTable_makeAlignAttr
-     *
-     * Form HTML tables written in DDmdTable syntax.
-     *
-     * @param $matches array
-     * @return string
+     * Make alignment attribute for table cells
+     * @param string $alignname The alignment name
+     * @return string The alignment attribute
      */
-    protected function _doDDmdTable_makeAlignAttr($alignname)
+    protected function _doDDmdTable_makeAlignAttr(string $alignname): string
     {
         switch ($alignname) {
             case "<":
@@ -1378,7 +1636,13 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return " class=\"$classname\"";
     }
 
-    protected function checkPregReplaceCallback($text)
+    /**
+     * Check if preg_replace_callback succeeded
+     * @param string|null $text The text to check
+     * @return void
+     * @throws \ErrorException if preg_replace_callback failed
+     */
+    protected function checkPregReplaceCallback(?string $text): void
     {
         if (is_null($text)) {
             trigger_error("Error occured in preg_replace_callback");
@@ -1386,22 +1650,19 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * Override the parent method to add support for the `markdown="1"` and `md` attribute.
-     * Parse HTML, calling _HashHTMLBlocks_InMarkdown for block tags.
-     *
-     * *   Calls $hash_method to convert any blocks.
-     * *   Stops when the first opening tag closes.
-     * *   $md_attr indicate if the use of the `markdown="1"` attribute is allowed.
-     *     (it is not inside clean tags)
-     *
-     * Returns an array of that form: ( processed text , remaining text )
-     * @param  string $text
-     * @param  string $hash_method
-     * @param  bool $md_attr Handle `markdown="1"` and `md` attribute
-     * @return array
+     * Process HTML blocks in HTML
+     * @param mixed $text The text to process
+     * @param mixed $hash_method The hash method to use
+     * @param mixed $md_attr Whether to handle markdown attributes
+     * @return array{0: string, 1: string} Processed text and remaining text
      */
-    protected function _hashHTMLBlocks_inHTML($text, $hash_method, $md_attr)
+    protected function _hashHTMLBlocks_inHTML($text, $hash_method, $md_attr): array
     {
+        // Type assertions for better type safety
+        $text = (string)$text;
+        $hash_method = (string)$hash_method;
+        $md_attr = (bool)$md_attr;
+
         if ($text === '') {
             return array('', '');
         }
@@ -1563,16 +1824,12 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         return array($parsed, $text);
     }
 
-
     /**
-     * htmlEscapeWithoutEntityRef
-     *
-     * 実体参照以外に対してhtmlspecialcharsを行う
-     *
-     * @param $text string
-     * @return string
+     * Escape HTML special characters except entity references
+     * @param string $text The text to escape
+     * @return string The escaped text
      */
-    public function htmlEscapeWithoutEntityRef($text)
+    public function htmlEscapeWithoutEntityRef(string $text): string
     {
         $out = "";
         $reg = '/(&#?[a-z0-9]{2,8};)/i';
@@ -1590,25 +1847,21 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * configure
-     *
-     * @param array $config
+     * Configure parser options
+     * @param array<string, mixed> $config Configuration options
      * @return void
      */
-    public function configue(array $config) :void
+    public function configue(array $config): void
     {
         $this->config = array_replace_recursive($this->config, $config);
     }
 
     /**
-     * updateOptions
-     *
-     * 後方互換性のために$optionsに変更を加える。
-     *
-     * @param $options array
-     * @return array
+     * Update options for backward compatibility
+     * @param array<string, mixed> $options Configuration options
+     * @return array<string, mixed> Updated options
      */
-    protected function updateOptions(array $options) :array
+    protected function updateOptions(array $options): array
     {
         if (array_key_exists('autoTcyDigit', $options)) {
             if (!is_int($options['autoTcyDigit'])) {
@@ -1627,12 +1880,11 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     }
 
     /**
-     * addClass
-     *
-     * @param string $text
-     * @return string
+     * Add class to HTML elements
+     * @param string $text The text to process
+     * @return string The processed text
      */
-    protected function addClass(string $text) :string
+    protected function addClass(string $text): string
     {
         // DOMDocument::loadXML(): Empty string supplied as input を避けるため
         if (preg_replace('/\s+/', '', $text) === '') {

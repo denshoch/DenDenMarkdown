@@ -353,7 +353,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     if (is_int($options[$prop])) {
                         $this->$prop = $options[$prop];
                     } else {
-                        trigger_error("${prop} must be integer.");
+                        trigger_error("{$prop} must be integer.");
                     }
                 }
             }
@@ -375,7 +375,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     if (is_bool($options[$prop])) {
                         $this->$prop = $options[$prop];
                     } else {
-                        trigger_error("${prop} must be boolean.");
+                        trigger_error("{$prop} must be boolean.");
                     }
                 }
             }
@@ -408,7 +408,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     if (is_string($options[$prop])) {
                         $this->$prop = $options[$prop];
                     } else {
-                        trigger_error("${prop} must be string.");
+                        trigger_error("{$prop} must be string.");
                     }
                 }
             }
@@ -637,7 +637,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $title = $this->encodeAttribute($title);
 
         $attr = "";
-        $id = "pagenum_${title}";
+        $id = "pagenum_{$title}";
         $attr .= " id=\"$id\"";
         if ($this->pageNumberClass != "") {
             $class = $this->encodeAttribute($this->pageNumberClass);
@@ -838,13 +838,13 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
         if ($rbcount == $rtcount) {
             for ($i=0, $idx=0; $i < $rbcount; $i++) {
-                $result = "${result}${rbarray[$idx]}{$this->rpOpen}<rt>${rtarray[$idx]}</rt>{$this->rpClose}";
+                $result = "{$result}{$rbarray[$idx]}{$this->rpOpen}<rt>{$rtarray[$idx]}</rt>{$this->rpClose}";
                 $idx++;
             }
 
             $result = $result."</ruby>";
         } else {
-            $result = "${result}${matches[2]}{$this->rpOpen}<rt>".join('', $rtarray)."</rt>{$this->rpClose}</ruby>";
+            $result = "{$result}{$matches[2]}{$this->rpOpen}<rt>".join('', $rtarray)."</rt>{$this->rpClose}</ruby>";
         }
 
         return $result;
@@ -965,15 +965,15 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $content = $this->htmlEscapeWithoutEntityRef($content);
 
                 # Prepare backlink, multiple backlinks if multiple references
-                $backlink = "<a href=\"#fnref_${note_id}\"${attr}>${content}</a>";
+                $backlink = "<a href=\"#fnref_{$note_id}\"{$attr}>{$content}</a>";
                 for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#fnref${ref_num}_${note_id}\"${attr}>${content}</a>";
+                    $backlink .= " <a href=\"#fnref{$ref_num}_{$note_id}\"{$attr}>{$content}</a>";
                 }
                 # Add backlink to last paragraph; create new paragraph if needed.
                 if (preg_match('{</p>$}', $footnote)) {
-                    $footnote = substr($footnote, 0, -4) . "&#160;${backlink}</p>";
+                    $footnote = substr($footnote, 0, -4) . "&#160;{$backlink}</p>";
                 } else {
-                    $footnote .= "\n\n<p>${backlink}</p>";
+                    $footnote .= "\n\n<p>{$backlink}</p>";
                 }
 
                 $text .= "<li>\n";
@@ -1030,7 +1030,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr .= " rel=\"footnote\"";
             if ($this->footnoteLinkClass != "") {
                 $class = $this->encodeAttribute($this->footnoteLinkClass);
-                $attr .= " class=\"${class}\"";
+                $attr .= " class=\"{$class}\"";
             }
 
             if ($this->fn_link_title != "") {
@@ -1052,7 +1052,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $content = $this->htmlEscapeWithoutEntityRef($content);
 
             return
-                "<a${attr}>${content}</a>"
+                "<a{$attr}>{$content}</a>"
                 ;
         }
 
@@ -1164,7 +1164,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $node_id = $matches[3];
 
         if (!$this->in_anchor) {
-            return "E\x1Aen:${node_id}\x1A${link_text}\x1A:";
+            return "E\x1Aen:{$node_id}\x1A{$link_text}\x1A:";
         }
 
         return $whole_match;
@@ -1203,14 +1203,14 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
             if ($this->endnotesHeadingContent !== "") {
                 $content = $this->htmlEscapeWithoutEntityRef($this->endnotesHeadingContent);
-                $text .= "<{$this->endnotesHeadingTag}>${content}</{$this->endnotesHeadingTag}>\n\n";
+                $text .= "<{$this->endnotesHeadingTag}>{$content}</{$this->endnotesHeadingTag}>\n\n";
             }
 
             $attr = "";
 
             if ($this->endnoteBacklinkClass !== "") {
                 $class = $this->encodeAttribute($this->endnoteBacklinkClass);
-                $attr .= " class=\"${class}\"";
+                $attr .= " class=\"{$class}\"";
             }
 
             if ($this->dpubRole) {
@@ -1240,24 +1240,24 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
 
                 $content = $this->htmlEscapeWithoutEntityRef($this->endnoteBacklinkContent);
 
-                $backlink = "<a href=\"#enref_$note_id\"$attr>${content}</a>";
+                $backlink = "<a href=\"#enref_$note_id\"$attr>{$content}</a>";
 
                 for ($ref_num = 2; $ref_num <= $ref_count; ++$ref_num) {
-                    $backlink .= " <a href=\"#enref${ref_num}_$note_id\"$attr>${content}</a>";
+                    $backlink .= " <a href=\"#enref{$ref_num}_$note_id\"$attr>{$content}</a>";
                 }
 
                 # Add backlink to last paragraph; create new paragraph if needed.
                 $para_cnt = preg_match_all('{</p>}', $endnote, $matches);
                 if (preg_match('{</p>$}', $endnote) && $para_cnt === 1) {
-                    $endnote = substr($endnote, 0, -4) . "&#160;${backlink}</p>";
+                    $endnote = substr($endnote, 0, -4) . "&#160;{$backlink}</p>";
                 } else {
-                    $endnote .= "\n\n<p>${backlink}</p>";
+                    $endnote .= "\n\n<p>{$backlink}</p>";
                 }
 
                 $text .= "<div id=\"en_$note_id\"";
                 if ($this->endnoteClass !== "") {
                     $class = $this->encodeAttribute($this->endnoteClass);
-                    $text .= " class=\"${class}\"";
+                    $text .= " class=\"{$class}\"";
                 }
                 if ($this->epubType) {
                     $text .= " epub:type=\"{$this->endnoteEpubType}\"";
@@ -1325,10 +1325,10 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
             $attr = str_replace("%%", (string)(++$num), $attr);
             $node_id = $this->encodeAttribute($node_id);
 
-            return "<a id=\"enref${ref_count_mark}_${node_id}\" href=\"#en_${node_id}\"${attr}>${link_text}</a>";
+            return "<a id=\"enref{$ref_count_mark}_{$node_id}\" href=\"#en_{$node_id}\"{$attr}>{$link_text}</a>";
         }
 
-        return "[${matches[2]}][~${matches[1]}]";
+        return "[{$matches[2]}][~{$matches[1]}]";
     }
 
     /**
@@ -1410,8 +1410,8 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         $algn_re = "(?P<algn>(?:\<(?!>)|&lt;&gt;|&gt;|&lt;|(?<!<)\>|\<\>|\=|[()]+(?! )))?";
         $cspn_re = "(?:\\\\(?P<colspan>[0-9]+?))";
         $rspn_re = "(?:\/(?P<rowspan>[0-9]+?))";
-        $spn_re = "(?:${cspn_re}|${rspn_re})*?";
-        $cattr = "(?P<cattr>_?${algn_re}${spn_re}\. )";
+        $spn_re = "(?:{$cspn_re}|{$rspn_re})*?";
+        $cattr = "(?P<cattr>_?{$algn_re}{$spn_re}\. )";
 
         # Remove any tailing pipes for each line.
         $matches['thead'] = preg_replace('/[|] *$/m', '', $matches['thead']);
@@ -1426,7 +1426,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         foreach ($first_row_cells as $cell) {
             # add ' ' if column text is empty.
             $cell = preg_replace('/\.$/', '. ', $cell);
-            if (preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch)) {
+            if (preg_match("/^{$cattr}(?P<cell>.*)/s", $cell, $mtch)) {
                 $cspn = (int) $mtch['colspan'];
                 if ($cspn > 1) {
                     $col_count += $cspn;
@@ -1487,7 +1487,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $algn = '';
                 $cell .= ' ';
     
-                if (preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch)) {
+                if (preg_match("/^{$cattr}(?P<cell>.*)/s", $cell, $mtch)) {
                     if (!empty($mtch['algn'])) {
                         $algn = $this->_doDDmdTable_makeAlignAttr($mtch['algn']);
                     } else {
@@ -1508,7 +1508,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     
                     $cspn = (int) $mtch['colspan'];
                     if ($cspn > 1) {
-                        $attr .= " colspan=\"${cspn}\"";
+                        $attr .= " colspan=\"{$cspn}\"";
                         $c_cnt += $cspn;
                     } else {
                         $c_cnt += 1;
@@ -1516,7 +1516,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     
                     $rspn = (int) $mtch['rowspan'];
                     if ($rspn > 1) {
-                        $attr .= " rowspan=\"${rspn}\"";
+                        $attr .= " rowspan=\"{$rspn}\"";
                     }
     
                     $cell = $mtch['cell'];
@@ -1530,7 +1530,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $c_cnt += 1;
                 }
     
-                $text .= "<th${algn}${attr}>";
+                $text .= "<th{$algn}{$attr}>";
                 $text .= $this->runSpanGamut(trim($cell));
                 $text .= "</th>\n";
             }
@@ -1558,7 +1558,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                 $algn = '';
                 $cell .= ' ';
         
-                if (preg_match("/^${cattr}(?P<cell>.*)/s", $cell, $mtch)) {
+                if (preg_match("/^{$cattr}(?P<cell>.*)/s", $cell, $mtch)) {
                     if (preg_match("/_/", $mtch['cattr'])) {
                         $tag = 'th';
                         $attr = " scope=\"row\"";
@@ -1576,7 +1576,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
     
                     $cspn = (int) $mtch['colspan'];
                     if ($cspn > 1) {
-                        $attr .= " colspan=\"${cspn}\"";
+                        $attr .= " colspan=\"{$cspn}\"";
                         $c_cnt += $cspn;
                     } else {
                         $c_cnt += 1;
@@ -1584,7 +1584,7 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
         
                     $rspn = (int) $mtch['rowspan'];
                     if ($rspn > 1) {
-                        $attr .= " rowspan=\"${rspn}\"";
+                        $attr .= " rowspan=\"{$rspn}\"";
                     }
         
                     $cell = $mtch['cell'];
@@ -1597,9 +1597,9 @@ class DenDenMarkdown extends \Michelf\MarkdownExtra
                     $c_cnt += 1;
                 }
         
-                $text .= "<${tag}${algn}${attr}>";
+                $text .= "<{$tag}{$algn}{$attr}>";
                 $text .= $this->runSpanGamut(trim($cell));
-                $text .= "</${tag}>\n";
+                $text .= "</{$tag}>\n";
             }
             $text .= "</tr>\n";
         }

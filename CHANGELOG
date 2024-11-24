@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.5.0.1] - 2024-11-24
+### Fixed
+- fix: replace deprecated ${var} syntax with {$var} in string interpolation
+
 ## [1.5.0] - 2024-11-23
 
 ### Added

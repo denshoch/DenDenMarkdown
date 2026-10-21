@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.5.2] - 2026-10-21
+### Updated
+- Set Composer's target PHP version to 8.4.
+
 ## [1.5.1.1] - 2024-11-24
 ### Fixed
 - fix: replace deprecated ${var} syntax with {$var} in string interpolation

@@ -1,0 +1,7 @@
+services:
+  php:
+    build: .
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "composer install && composer check"

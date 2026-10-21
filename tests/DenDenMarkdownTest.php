@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 class DenDenMarkdownTest extends TestCase
@@ -139,13 +140,13 @@ class DenDenMarkdownTest extends TestCase
         $this->assertTransformation('docbreak');
     }
 
-    /** @group testPageNumber */
+    #[Group('testPageNumber')]
     public function testPageNumber()
     {
         $this->assertTransformation('page-number');
     }
 
-    /** @group testPageBreakInline */
+    #[Group('testPageBreakInline')]
     public function testPageBreakInline()
     {
         $this->assertTransformation('page-break-inline');
@@ -946,7 +947,7 @@ class DenDenMarkdownTest extends TestCase
         $this->assertTransformation('page-break-inline-without-dpub-role');
     }
 
-    /** @group testAddClass */
+    #[Group('testAddClass')]
     public function testAddClass()
     {
         $config = array(

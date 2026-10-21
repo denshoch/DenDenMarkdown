@@ -33,15 +33,21 @@ This library is implementing some features that make writing EPUB content docume
 Requirement
 -----------
 
-This library package requires PHP 5.5 or later.
+This library supports PHP 7.4 and PHP 8.x.
 
-Before PHP 5.5, pcre.backtrack_limit defaults to 100 000, which is too small
-in many situations. You might need to set it to higher values. Later PHP
-releases defaults to 1 000 000, which is usually fine.
 
 This library also requires [Composer][composer] to use dependent library PHP Markdown Extra. Before using this library, install Composer and execute `composer install`.
 
 [composer]: http://getcomposer.org/
+
+PHP 8.4 checks
+--------------
+
+With Docker Compose, run the project's checks on PHP 8.4:
+
+```sh
+docker compose run --rm php
+```
 
 Usage
 ------

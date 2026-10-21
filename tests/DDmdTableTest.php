@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 
 class DDmdTableTest extends TestCase
@@ -21,9 +22,7 @@ class DDmdTableTest extends TestCase
         $this->assertTransformation('01');
     }
 
-    /**
-     * @group t2
-     */
+    #[Group('t2')]
     public function test02()
     {
         $this->assertTransformation('02');
